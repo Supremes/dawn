@@ -1,0 +1,165 @@
+2025-04-12 14:24:06.405 DEBUG 1 --- [nio-8080-exec-1] o.a.coyote.http11.Http11InputBuffer      : Received [GET /admin/user/menus HTTP/1.1
+User-Agent: PostmanRuntime-ApipostRuntime/1.1.0
+Cache-Control: no-cache
+Accept: */*
+Accept-Encoding: gzip, deflate, br
+Connection: keep-alive
+cookie: JSESSIONID=04208D74FE45EC2AD11E29BBE5248650
+Host: localhost:8080
+
+]
+2025-04-12 14:24:06.434 DEBUG 1 --- [nio-8080-exec-1] org.apache.tomcat.util.http.Parameters   : Set query string encoding to UTF-8
+2025-04-12 14:24:06.436 DEBUG 1 --- [nio-8080-exec-1] o.a.t.util.http.Rfc6265CookieProcessor   : Cookies: Parsing b[]: JSESSIONID=04208D74FE45EC2AD11E29BBE5248650
+2025-04-12 14:24:06.438 DEBUG 1 --- [nio-8080-exec-1] o.a.catalina.connector.CoyoteAdapter     :  Requested cookie session id is 04208D74FE45EC2AD11E29BBE5248650
+2025-04-12 14:24:06.440 DEBUG 1 --- [nio-8080-exec-1] o.a.c.authenticator.AuthenticatorBase    : Security checking request GET /admin/user/menus
+2025-04-12 14:24:06.440 DEBUG 1 --- [nio-8080-exec-1] org.apache.catalina.realm.RealmBase      :   No applicable constraints defined
+2025-04-12 14:24:06.444 DEBUG 1 --- [nio-8080-exec-1] o.a.c.a.jaspic.AuthConfigFactoryImpl     : Loading persistent provider registrations from [/tmp/tomcat.8080.8028220574849510769/conf/jaspic-providers.xml]
+2025-04-12 14:24:06.445 DEBUG 1 --- [nio-8080-exec-1] o.a.c.authenticator.AuthenticatorBase    : Not subject to any constraint
+2025-04-12 14:24:06.447  INFO 1 --- [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-04-12 14:24:06.447  INFO 1 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-04-12 14:24:06.447 DEBUG 1 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected StandardServletMultipartResolver
+2025-04-12 14:24:06.456 DEBUG 1 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+2025-04-12 14:24:06.456  INFO 1 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 9 ms
+2025-04-12 14:24:06.468 DEBUG 1 --- [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : /admin/user/menus at position 1 of 13 in additional filter chain; firing Filter: 'WebAsyncManagerIntegrationFilter'
+2025-04-12 14:24:06.469 DEBUG 1 --- [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : /admin/user/menus at position 2 of 13 in additional filter chain; firing Filter: 'SecurityContextPersistenceFilter'
+2025-04-12 14:24:06.470 DEBUG 1 --- [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : /admin/user/menus at position 3 of 13 in additional filter chain; firing Filter: 'HeaderWriterFilter'
+2025-04-12 14:24:06.472 DEBUG 1 --- [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : /admin/user/menus at position 4 of 13 in additional filter chain; firing Filter: 'LogoutFilter'
+2025-04-12 14:24:06.472 DEBUG 1 --- [nio-8080-exec-1] o.s.s.web.util.matcher.OrRequestMatcher  : Trying to match using Ant [pattern='/logout', GET]
+2025-04-12 14:24:06.472 DEBUG 1 --- [nio-8080-exec-1] o.s.s.w.u.matcher.AntPathRequestMatcher  : Checking match of request : '/admin/user/menus'; against '/logout'
+2025-04-12 14:24:06.472 DEBUG 1 --- [nio-8080-exec-1] o.s.s.web.util.matcher.OrRequestMatcher  : Trying to match using Ant [pattern='/logout', POST]
+2025-04-12 14:24:06.472 DEBUG 1 --- [nio-8080-exec-1] o.s.s.w.u.matcher.AntPathRequestMatcher  : Request 'GET /admin/user/menus' doesn't match 'POST /logout'
+2025-04-12 14:24:06.472 DEBUG 1 --- [nio-8080-exec-1] o.s.s.web.util.matcher.OrRequestMatcher  : Trying to match using Ant [pattern='/logout', PUT]
+2025-04-12 14:24:06.472 DEBUG 1 --- [nio-8080-exec-1] o.s.s.w.u.matcher.AntPathRequestMatcher  : Request 'GET /admin/user/menus' doesn't match 'PUT /logout'
+2025-04-12 14:24:06.472 DEBUG 1 --- [nio-8080-exec-1] o.s.s.web.util.matcher.OrRequestMatcher  : Trying to match using Ant [pattern='/logout', DELETE]
+2025-04-12 14:24:06.472 DEBUG 1 --- [nio-8080-exec-1] o.s.s.w.u.matcher.AntPathRequestMatcher  : Request 'GET /admin/user/menus' doesn't match 'DELETE /logout'
+2025-04-12 14:24:06.472 DEBUG 1 --- [nio-8080-exec-1] o.s.s.web.util.matcher.OrRequestMatcher  : No matches found
+2025-04-12 14:24:06.472 DEBUG 1 --- [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : /admin/user/menus at position 5 of 13 in additional filter chain; firing Filter: 'UsernamePasswordAuthenticationFilter'
+2025-04-12 14:24:06.472 DEBUG 1 --- [nio-8080-exec-1] o.s.s.w.u.matcher.AntPathRequestMatcher  : Request 'GET /admin/user/menus' doesn't match 'POST /users/login'
+2025-04-12 14:24:06.472 DEBUG 1 --- [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : /admin/user/menus at position 6 of 13 in additional filter chain; firing Filter: 'RequestCacheAwareFilter'
+2025-04-12 14:24:06.472 DEBUG 1 --- [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : /admin/user/menus at position 7 of 13 in additional filter chain; firing Filter: 'SecurityContextHolderAwareRequestFilter'
+2025-04-12 14:24:06.473 DEBUG 1 --- [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : /admin/user/menus at position 8 of 13 in additional filter chain; firing Filter: 'AnonymousAuthenticationFilter'
+2025-04-12 14:24:06.474 DEBUG 1 --- [nio-8080-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Populated SecurityContextHolder with anonymous token: 'org.springframework.security.authentication.AnonymousAuthenticationToken@cd0fc04c: Principal: anonymousUser; Credentials: [PROTECTED]; Authenticated: true; Details: org.springframework.security.web.authentication.WebAuthenticationDetails@ffffa64e: RemoteIpAddress: 172.19.0.1; SessionId: null; Granted Authorities: ROLE_ANONYMOUS'
+2025-04-12 14:24:06.474 DEBUG 1 --- [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : /admin/user/menus at position 9 of 13 in additional filter chain; firing Filter: 'SessionManagementFilter'
+2025-04-12 14:24:06.474 DEBUG 1 --- [nio-8080-exec-1] o.s.s.w.session.SessionManagementFilter  : Requested session ID 04208D74FE45EC2AD11E29BBE5248650 is invalid.
+2025-04-12 14:24:06.474 DEBUG 1 --- [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : /admin/user/menus at position 10 of 13 in additional filter chain; firing Filter: 'ExceptionTranslationFilter'
+2025-04-12 14:24:06.474 DEBUG 1 --- [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : /admin/user/menus at position 11 of 13 in additional filter chain; firing Filter: 'JwtAuthenticationTokenFilter'
+2025-04-12 14:24:06.475 DEBUG 1 --- [nio-8080-exec-1] o.s.s.w.a.ExceptionTranslationFilter     : Authentication exception occurred; redirecting to authentication entry point
+
+org.springframework.security.authentication.BadCredentialsException: Invalid or missing JWT token
+        at com.aurora.filter.JwtAuthenticationTokenFilter.doFilterInternal(JwtAuthenticationTokenFilter.java:42) ~[classes!/:na]
+        at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.12.RELEASE.jar!/:5.2.12.RELEASE]
+        at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334) [spring-security-web-5.3.6.RELEASE.jar!/:5.3.6.RELEASE]
+        at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:118) ~[spring-security-web-5.3.6.RELEASE.jar!/:5.3.6.RELEASE]
+        at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334) [spring-security-web-5.3.6.RELEASE.jar!/:5.3.6.RELEASE]
+        at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:137) [spring-security-web-5.3.6.RELEASE.jar!/:5.3.6.RELEASE]
+        at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334) [spring-security-web-5.3.6.RELEASE.jar!/:5.3.6.RELEASE]
+        at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:111) [spring-security-web-5.3.6.RELEASE.jar!/:5.3.6.RELEASE]
+        at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334) [spring-security-web-5.3.6.RELEASE.jar!/:5.3.6.RELEASE]
+        at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:158) [spring-security-web-5.3.6.RELEASE.jar!/:5.3.6.RELEASE]
+        at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334) [spring-security-web-5.3.6.RELEASE.jar!/:5.3.6.RELEASE]
+        at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63) [spring-security-web-5.3.6.RELEASE.jar!/:5.3.6.RELEASE]
+        at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334) [spring-security-web-5.3.6.RELEASE.jar!/:5.3.6.RELEASE]
+        at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:200) [spring-security-web-5.3.6.RELEASE.jar!/:5.3.6.RELEASE]
+        at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334) [spring-security-web-5.3.6.RELEASE.jar!/:5.3.6.RELEASE]
+        at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:116) [spring-security-web-5.3.6.RELEASE.jar!/:5.3.6.RELEASE]
+        at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334) [spring-security-web-5.3.6.RELEASE.jar!/:5.3.6.RELEASE]
+        at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:92) [spring-security-web-5.3.6.RELEASE.jar!/:5.3.6.RELEASE]
+        at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:77) [spring-security-web-5.3.6.RELEASE.jar!/:5.3.6.RELEASE]
+        at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.12.RELEASE.jar!/:5.2.12.RELEASE]
+        at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334) [spring-security-web-5.3.6.RELEASE.jar!/:5.3.6.RELEASE]
+        at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:105) [spring-security-web-5.3.6.RELEASE.jar!/:5.3.6.RELEASE]
+        at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334) [spring-security-web-5.3.6.RELEASE.jar!/:5.3.6.RELEASE]
+        at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:56) [spring-security-web-5.3.6.RELEASE.jar!/:5.3.6.RELEASE]
+        at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.12.RELEASE.jar!/:5.2.12.RELEASE]
+        at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:334) [spring-security-web-5.3.6.RELEASE.jar!/:5.3.6.RELEASE]
+        at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:215) [spring-security-web-5.3.6.RELEASE.jar!/:5.3.6.RELEASE]
+        at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:178) [spring-security-web-5.3.6.RELEASE.jar!/:5.3.6.RELEASE]
+        at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:358) [spring-web-5.2.12.RELEASE.jar!/:5.2.12.RELEASE]
+        at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:271) [spring-web-5.2.12.RELEASE.jar!/:5.2.12.RELEASE]
+        at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) [spring-web-5.2.12.RELEASE.jar!/:5.2.12.RELEASE]
+        at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.12.RELEASE.jar!/:5.2.12.RELEASE]
+        at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) [spring-web-5.2.12.RELEASE.jar!/:5.2.12.RELEASE]
+        at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.12.RELEASE.jar!/:5.2.12.RELEASE]
+        at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.springframework.boot.actuate.metrics.web.servlet.WebMvcMetricsFilter.doFilterInternal(WebMvcMetricsFilter.java:93) [spring-boot-actuator-2.3.7.RELEASE.jar!/:2.3.7.RELEASE]
+        at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.12.RELEASE.jar!/:5.2.12.RELEASE]
+        at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) [spring-web-5.2.12.RELEASE.jar!/:5.2.12.RELEASE]
+        at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119) [spring-web-5.2.12.RELEASE.jar!/:5.2.12.RELEASE]
+        at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:202) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:97) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:542) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:143) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:78) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:374) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:888) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1597) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [na:1.8.0_342]
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [na:1.8.0_342]
+        at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at java.lang.Thread.run(Thread.java:750) [na:1.8.0_342]
+
+2025-04-12 14:24:06.475 DEBUG 1 --- [nio-8080-exec-1] o.s.s.w.a.ExceptionTranslationFilter     : Calling Authentication entry point.
+2025-04-12 14:24:06.486 DEBUG 1 --- [nio-8080-exec-1] o.a.c.loader.WebappClassLoaderBase       : getResourceAsStream(fastjson.properties)
+2025-04-12 14:24:06.486 DEBUG 1 --- [nio-8080-exec-1] o.a.c.loader.WebappClassLoaderBase       :   Delegating to parent classloader org.springframework.boot.loader.LaunchedURLClassLoader@685f4c2e
+2025-04-12 14:24:06.487 DEBUG 1 --- [nio-8080-exec-1] o.a.c.loader.WebappClassLoaderBase       :   Searching local repositories
+2025-04-12 14:24:06.487 DEBUG 1 --- [nio-8080-exec-1] o.a.c.loader.WebappClassLoaderBase       :   --> Resource not found, returning null
+2025-04-12 14:24:06.563 DEBUG 1 --- [nio-8080-exec-1] o.s.s.w.header.writers.HstsHeaderWriter  : Not injecting HSTS header since it did not match the requestMatcher org.springframework.security.web.header.writers.HstsHeaderWriter$SecureRequestMatcher@2f5f471f
+2025-04-12 14:24:06.563 DEBUG 1 --- [nio-8080-exec-1] s.s.w.c.SecurityContextPersistenceFilter : SecurityContextHolder now cleared, as request processing completed
+2025-04-12 14:24:06.567 DEBUG 1 --- [nio-8080-exec-1] o.a.coyote.http11.Http11InputBuffer      : Before fill(): [true], parsingRequestLine: [true], parsingRequestLinePhase: [0], parsingRequestLineStart: [0], byteBuffer.position() [0]
+2025-04-12 14:24:06.567 DEBUG 1 --- [nio-8080-exec-1] o.a.tomcat.util.net.SocketWrapperBase    : Socket: [org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper@3dc46d5d:org.apache.tomcat.util.net.NioChannel@78c6e481:java.nio.channels.SocketChannel[connected local=/172.19.0.2:8080 remote=/172.19.0.1:50944]], Read from buffer: [0]
+2025-04-12 14:24:06.567 DEBUG 1 --- [nio-8080-exec-1] org.apache.tomcat.util.net.NioEndpoint   : Socket: [org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper@3dc46d5d:org.apache.tomcat.util.net.NioChannel@78c6e481:java.nio.channels.SocketChannel[connected local=/172.19.0.2:8080 remote=/172.19.0.1:50944]], Read direct from socket: [0]
+2025-04-12 14:24:06.568 DEBUG 1 --- [nio-8080-exec-1] o.a.coyote.http11.Http11InputBuffer      : Received []
+2025-04-12 14:24:06.568 DEBUG 1 --- [nio-8080-exec-1] o.apache.coyote.http11.Http11Processor   : Socket: [org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper@3dc46d5d:org.apache.tomcat.util.net.NioChannel@78c6e481:java.nio.channels.SocketChannel[connected local=/172.19.0.2:8080 remote=/172.19.0.1:50944]], Status in: [OPEN_READ], State out: [OPEN]
+2025-04-12 14:24:06.568 DEBUG 1 --- [nio-8080-exec-1] org.apache.tomcat.util.net.NioEndpoint   : Registered read interest for [org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper@3dc46d5d:org.apache.tomcat.util.net.NioChannel@78c6e481:java.nio.channels.SocketChannel[connected local=/172.19.0.2:8080 remote=/172.19.0.1:50944]]
+2025-04-12 14:24:06.568 DEBUG 1 --- [nio-8080-exec-1] o.a.coyote.http11.Http11InputBuffer      : Before fill(): [true], parsingRequestLine: [true], parsingRequestLinePhase: [0], parsingRequestLineStart: [0], byteBuffer.position() [0]
+2025-04-12 14:24:06.569 DEBUG 1 --- [nio-8080-exec-1] o.a.tomcat.util.net.SocketWrapperBase    : Socket: [org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper@3dc46d5d:org.apache.tomcat.util.net.NioChannel@78c6e481:java.nio.channels.SocketChannel[connected local=/172.19.0.2:8080 remote=/172.19.0.1:50944]], Read from buffer: [0]
+2025-04-12 14:24:06.569 DEBUG 1 --- [nio-8080-exec-1] o.apache.coyote.http11.Http11Processor   : Error parsing HTTP request header
+
+java.io.EOFException: null
+        at org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper.fillReadBuffer(NioEndpoint.java:1231) ~[tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper.read(NioEndpoint.java:1141) ~[tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.coyote.http11.Http11InputBuffer.fill(Http11InputBuffer.java:795) ~[tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.coyote.http11.Http11InputBuffer.parseRequestLine(Http11InputBuffer.java:359) ~[tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:261) ~[tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:888) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1597) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [na:1.8.0_342]
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [na:1.8.0_342]
+        at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at java.lang.Thread.run(Thread.java:750) [na:1.8.0_342]
+
+2025-04-12 14:24:06.569 DEBUG 1 --- [nio-8080-exec-1] o.apache.coyote.http11.Http11Processor   : Error state [CLOSE_CONNECTION_NOW] reported while processing request
+
+java.io.EOFException: null
+        at org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper.fillReadBuffer(NioEndpoint.java:1231) ~[tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper.read(NioEndpoint.java:1141) ~[tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.coyote.http11.Http11InputBuffer.fill(Http11InputBuffer.java:795) ~[tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.coyote.http11.Http11InputBuffer.parseRequestLine(Http11InputBuffer.java:359) ~[tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:261) ~[tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:888) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1597) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [na:1.8.0_342]
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [na:1.8.0_342]
+        at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) [tomcat-embed-core-9.0.41.jar!/:9.0.41]
+        at java.lang.Thread.run(Thread.java:750) [na:1.8.0_342]
+
+2025-04-12 14:24:06.569 DEBUG 1 --- [nio-8080-exec-1] o.apache.coyote.http11.Http11Processor   : Socket: [org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper@3dc46d5d:org.apache.tomcat.util.net.NioChannel@78c6e481:java.nio.channels.SocketChannel[connected local=/172.19.0.2:8080 remote=/172.19.0.1:50944]], Status in: [OPEN_READ], State out: [CLOSED]
+2025-04-12 14:24:06.570 DEBUG 1 --- [nio-8080-exec-1] o.apache.tomcat.util.threads.LimitLatch  : Counting down[http-nio-8080-exec-1] latch=1
+2025-04-12 14:24:06.570 DEBUG 1 --- [nio-8080-exec-1] org.apache.tomcat.util.net.NioEndpoint   : Calling [org.apache.tomcat.util.net.NioEndpoint@4d9be163].closeSocket([org.apache.tomcat.util.net.NioEndpoint$NioSocketWrapper@3dc46d5d:org.apache.tomcat.util.net.NioChannel@78c6e481:java.nio.channels.SocketChannel[connected local=/172.19.0.2:8080 remote=/172.19.0.1:50944]])
