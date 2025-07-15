@@ -1,0 +1,36 @@
+# Elasticsearch Configuration
+cluster.name: fatcat-cluster
+node.name: fatcat-node-1
+
+# Path settings
+path.data: /usr/share/elasticsearch/data
+path.logs: /usr/share/elasticsearch/logs
+
+# Network settings
+network.host: 0.0.0.0
+http.port: 9200
+transport.tcp.port: 9300
+
+# Discovery settings
+discovery.type: single-node
+
+# Memory settings
+bootstrap.memory_lock: true
+
+# Security settings (disabled for development)
+xpack.security.enabled: false
+xpack.monitoring.collection.enabled: false
+xpack.ml.enabled: false
+xpack.watcher.enabled: false
+
+# Index settings
+action.auto_create_index: true
+action.destructive_requires_name: true
+
+# Threading settings
+thread_pool.write.queue_size: 200
+thread_pool.search.queue_size: 1000
+
+# Cache settings
+indices.memory.index_buffer_size: 20%
+indices.memory.min_index_buffer_size: 48mb
