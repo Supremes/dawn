@@ -5,7 +5,7 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://mysql:3306/aurora?serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    url: jdbc:mysql://mysql:3306/fatcat?serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: root
     password: 123456
     hikari:
@@ -31,10 +31,10 @@ spring:
         max-wait: 10000
 
   rabbitmq:
-    host: rabbit
+    host: rabbitmq
     port: 5672
     username: guest
-    password: guest
+    password: 123456
     listener:
       simple:
         retry:
@@ -89,10 +89,10 @@ upload:
 #    accessKeySecret: OSS配置accessKeySecret
 #    bucketName: OSS配置bucketName
   minio:
-    url: http://minio:9000/
-    endpoint: http://minio:9000
+    url: http://localhost:9000/
+    endpoint: http://localhost:9000
     accesskey: minioadmin
-    secretKey: minioadmin
+    secretKey: Dududu951221
     bucketName: test
 
 website:

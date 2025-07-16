@@ -20,7 +20,7 @@ services:
       - "${MYSQL_PORT:-3306}:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./aurora.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - ./config/mysql/fatcat.sql:/docker-entrypoint-initdb.d/init.sql:ro
       - ./config/mysql/my.cnf:/etc/mysql/conf.d/my.cnf:ro
     networks:
       - fatcat-network
@@ -192,8 +192,8 @@ services:
     container_name: fatcat-nginx
     restart: unless-stopped
     ports:
-      - "${NGINX_HTTP_PORT:-80}:80"
-      - "${NGINX_HTTPS_PORT:-443}:443"
+      - "${NGINX_HTTP_PORT:-8082}:80"
+      # - "${NGINX_HTTPS_PORT:-443}:443"
       - "${NGINX_ADMIN_PORT:-8888}:8888"
     volumes:
       - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
