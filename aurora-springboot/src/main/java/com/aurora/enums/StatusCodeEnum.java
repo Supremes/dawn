@@ -9,10 +9,6 @@ public enum StatusCodeEnum {
 
     SUCCESS(20000, "操作成功"),
 
-    NO_LOGIN(40001, "用户未登录"),
-
-    AUTHORIZED(40300, "没有操作权限"),
-
     SYSTEM_ERROR(50000, "系统异常"),
 
     FAIL(51000, "操作失败"),

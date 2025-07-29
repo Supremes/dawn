@@ -34,24 +34,28 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        UserInfoDTO userLoginDTO = BeanCopyUtil.copyObject(UserUtil.getUserDetailsDTO(), UserInfoDTO.class);
-        if (Objects.nonNull(authentication)) {
-            UserDetailsDTO userDetailsDTO = (UserDetailsDTO) authentication.getPrincipal();
-            String token = tokenService.createToken(userDetailsDTO);
-            userLoginDTO.setToken(token);
-        }
+        UserDetailsDTO userDetailsDTO = (UserDetailsDTO) authentication.getPrincipal();
+        UserInfoDTO userLoginDTO = BeanCopyUtil.copyObject(userDetailsDTO, UserInfoDTO.class);
+        
+        // 生成JWT token
+        String token = tokenService.createToken(userDetailsDTO);
+        userLoginDTO.setToken(token);
+        
+        // 返回登录成功响应
         response.setContentType(CommonConstant.APPLICATION_JSON);
         response.getWriter().write(JSON.toJSONString(ResultVO.ok(userLoginDTO)));
-        updateUserInfo();
+        
+        // 异步更新用户登录信息
+        updateUserInfo(userDetailsDTO);
     }
 
     @Async
-    public void updateUserInfo() {
+    public void updateUserInfo(UserDetailsDTO userDetailsDTO) {
         UserAuth userAuth = UserAuth.builder()
-                .id(UserUtil.getUserDetailsDTO().getId())
-                .ipAddress(UserUtil.getUserDetailsDTO().getIpAddress())
-                .ipSource(UserUtil.getUserDetailsDTO().getIpSource())
-                .lastLoginTime(UserUtil.getUserDetailsDTO().getLastLoginTime())
+                .id(userDetailsDTO.getId())
+                .ipAddress(userDetailsDTO.getIpAddress())
+                .ipSource(userDetailsDTO.getIpSource())
+                .lastLoginTime(userDetailsDTO.getLastLoginTime())
                 .build();
         userAuthMapper.updateById(userAuth);
     }

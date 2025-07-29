@@ -17,6 +17,8 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         response.setContentType(CommonConstant.APPLICATION_JSON);
-        response.getWriter().write(JSON.toJSONString(ResultVO.fail(40001, "用户未登录")));
+        response.setCharacterEncoding("UTF-8");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.getWriter().write(JSON.toJSONString(ResultVO.fail(40001, "用户未登录，请先登录")));
     }
 }

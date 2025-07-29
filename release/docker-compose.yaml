@@ -159,6 +159,8 @@ services:
       MINIO_ENDPOINT: http://minio:9000
       MINIO_ACCESS_KEY: ${MINIO_ROOT_USER:-minioadmin}
       MINIO_SECRET_KEY: ${MINIO_ROOT_PASSWORD:-minioadmin}
+      SPRING_MAIL_USERNAME: ${MAIL_USERNAME:-your_email@163.com}
+      SPRING_MAIL_PASSWORD: ${MAIL_PASSWORD:-your_auth_code}
     ports:
       - "${FATCAT_PORT:-8080}:8080"
       - "${FATCAT_DEBUG_PORT:-5005}:5005"
