@@ -20,7 +20,7 @@ services:
       - "${MYSQL_PORT:-3306}:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./aurora.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - ./config/mysql/fatcat.sql:/docker-entrypoint-initdb.d/init.sql:ro
       - ./config/mysql/my.cnf:/etc/mysql/conf.d/my.cnf:ro
     networks:
       - fatcat-network
@@ -159,6 +159,8 @@ services:
       MINIO_ENDPOINT: http://minio:9000
       MINIO_ACCESS_KEY: ${MINIO_ROOT_USER:-minioadmin}
       MINIO_SECRET_KEY: ${MINIO_ROOT_PASSWORD:-minioadmin}
+      SPRING_MAIL_USERNAME: ${MAIL_USERNAME:-your_email@163.com}
+      SPRING_MAIL_PASSWORD: ${MAIL_PASSWORD:-your_auth_code}
     ports:
       - "${FATCAT_PORT:-8080}:8080"
       - "${FATCAT_DEBUG_PORT:-5005}:5005"
@@ -192,8 +194,8 @@ services:
     container_name: fatcat-nginx
     restart: unless-stopped
     ports:
-      - "${NGINX_HTTP_PORT:-80}:80"
-      - "${NGINX_HTTPS_PORT:-443}:443"
+      - "${NGINX_HTTP_PORT:-8082}:80"
+      # - "${NGINX_HTTPS_PORT:-443}:443"
       - "${NGINX_ADMIN_PORT:-8888}:8888"
     volumes:
       - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf:ro

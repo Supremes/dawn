@@ -16,6 +16,8 @@ public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
         response.setContentType(CommonConstant.APPLICATION_JSON);
-        response.getWriter().write(JSON.toJSONString(ResultVO.fail("权限不足")));
+        response.setCharacterEncoding("UTF-8");
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.getWriter().write(JSON.toJSONString(ResultVO.fail("权限不足，无法访问该资源")));
     }
 }

@@ -62,12 +62,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
         return new AccessDecisionManagerImpl();
     }
 
-//    @Bean
-//    @Override
-//    public AuthenticationManager authenticationManagerBean() throws Exception {
-//        return super.authenticationManagerBean();
-//    }
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -92,21 +86,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 })
                 .anyRequest().permitAll()
                 .and()
-                .csrf().disable().exceptionHandling()
+                .csrf().disable()
+                .exceptionHandling()
                 .authenticationEntryPoint(authenticationEntryPoint)
                 .accessDeniedHandler(accessDeniedHandler)
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        // 添加JWT认证过滤器在UsernamePasswordAuthenticationFilter之前, 这样请求会先尝试用JWT认证，失败后再尝试表单认证
+        // 添加JWT认证过滤器，只在UsernamePasswordAuthenticationFilter之前添加一次
         http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
-        http.addFilterAfter(jwtAuthenticationTokenFilter, ExceptionTranslationFilter.class);
     }
 
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailService).passwordEncoder(passwordEncoder());
+        // 亦可实现AuthenticationProvider 接口来创建自定义用户验证逻辑
+//        auth.authenticationProvider()
     }
 }

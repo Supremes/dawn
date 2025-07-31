@@ -5,7 +5,7 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://mysql:3306/aurora?serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    url: jdbc:mysql://mysql:3306/fatcat?serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: root
     password: 123456
     hikari:
@@ -31,10 +31,11 @@ spring:
         max-wait: 10000
 
   rabbitmq:
-    host: rabbit
+    host: rabbitmq
     port: 5672
     username: guest
-    password: guest
+    password: 123456
+    virtual-host: fatcat
     listener:
       simple:
         retry:
@@ -47,12 +48,12 @@ spring:
       uris: elasticsearch:9200
 
   mail:
-    host: smtp.163.com
-    username: 邮箱
-    password: 密码
+    host: smtp-mail.outlook.com
+    username: ${SPRING_MAIL_USERNAME:邮箱}
+    password: ${SPRING_MAIL_PASSWORD:密码}
     default-encoding: UTF-8
     protocol: smtp
-    port: 465
+    port: 587
     properties:
       mail:
         smtp:
@@ -89,10 +90,10 @@ upload:
 #    accessKeySecret: OSS配置accessKeySecret
 #    bucketName: OSS配置bucketName
   minio:
-    url: http://minio:9000/
-    endpoint: http://minio:9000
+    url: http://localhost:9000/
+    endpoint: http://localhost:9000
     accesskey: minioadmin
-    secretKey: minioadmin
+    secretKey: Dududu951221
     bucketName: test
 
 website:
@@ -111,9 +112,14 @@ logging:
     root: DEBUG
     com:
       aurora: DEBUG
+    org.springframework.security: DEBUG
 
 management:
   endpoints:
     web:
       exposure:
         include: "*"
+  health:
+    show-details: always
+    mail:
+      enabled: false  # 禁用邮件健康检查

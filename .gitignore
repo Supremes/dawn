@@ -22,3 +22,4 @@ target
 aurora-springboot/src/test
 aurora-springboot/target
 release/aurora-springboot-0.0.1.jar
+release/vue

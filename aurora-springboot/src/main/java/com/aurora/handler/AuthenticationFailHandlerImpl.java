@@ -16,11 +16,11 @@ import java.io.IOException;
 @Component
 public class AuthenticationFailHandlerImpl implements AuthenticationFailureHandler {
 
-
     @Override
-    public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException {
-        httpServletResponse.setContentType(CommonConstant.APPLICATION_JSON);
-        httpServletResponse.getWriter().write(JSON.toJSONString(ResultVO.fail(e.getMessage())));
+    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException {
+        response.setContentType(CommonConstant.APPLICATION_JSON);
+        response.setCharacterEncoding("UTF-8");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.getWriter().write(JSON.toJSONString(ResultVO.fail("用户名或密码错误：" + e.getMessage())));
     }
-
 }
