@@ -84,7 +84,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                         return fsi;
                     }
                 })
-                .anyRequest().permitAll()
+                .anyRequest().authenticated() 
                 .and()
                 .csrf().disable()
                 .exceptionHandling()
@@ -94,7 +94,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        // 添加JWT认证过滤器，只在UsernamePasswordAuthenticationFilter之前添加一次
         http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
 

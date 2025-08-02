@@ -2,6 +2,7 @@ package com.aurora.handler;
 
 import com.aurora.model.dto.ResourceRoleDTO;
 import com.aurora.mapper.RoleMapper;
+import com.aurora.util.SecurityUtil;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
@@ -42,18 +43,6 @@ public class FilterInvocationSecurityMetadataSourceImpl implements FilterInvocat
         String method = fi.getRequest().getMethod();
         String url = fi.getRequest().getRequestURI();
         AntPathMatcher antPathMatcher = new AntPathMatcher();
-        
-        // 对于公开访问的路径，返回特殊的配置属性，表示允许匿名访问
-        if (antPathMatcher.match("/actuator/**", url) ||
-            antPathMatcher.match("/swagger-ui/**", url) ||
-            antPathMatcher.match("/swagger-resources/**", url) ||
-            antPathMatcher.match("/v2/api-docs", url) ||
-            antPathMatcher.match("/webjars/**", url) ||
-            antPathMatcher.match("/users/login", url) ||
-            antPathMatcher.match("/users/register", url) ||
-            antPathMatcher.match("/users/code", url)) {
-            return SecurityConfig.createList("ROLE_ANONYMOUS");
-        }
         
         for (ResourceRoleDTO resourceRoleDTO : resourceRoleList) {
             if (antPathMatcher.match(resourceRoleDTO.getUrl(), url) && resourceRoleDTO.getRequestMethod().equals(method)) {

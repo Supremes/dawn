@@ -24,3 +24,10 @@ mkdir -p "$RELEASE_PATH/vue/blog"
 cp -r $PROJECT_PATH/aurora-vue/aurora-admin/dist/* "$RELEASE_PATH/vue/admin"
 cp -r $PROJECT_PATH/aurora-vue/aurora-blog/dist/* "$RELEASE_PATH/vue/blog"
 echo "successfully copied vue files to $RELEASE_PATH/vue"
+
+cd $RELEASE_PATH
+# 重启nginx服务，会重新读取配置
+# 停止并删除nginx容器，然后重新创建
+docker compose down nginx
+docker compose up -d nginx
+echo "Nginx restarted successfully"

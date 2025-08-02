@@ -12,7 +12,9 @@ import com.aurora.util.UserUtil;
 import com.aurora.model.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -40,7 +42,7 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
         // 生成JWT token
         String token = tokenService.createToken(userDetailsDTO);
         userLoginDTO.setToken(token);
-        
+
         // 返回登录成功响应
         response.setContentType(CommonConstant.APPLICATION_JSON);
         response.getWriter().write(JSON.toJSONString(ResultVO.ok(userLoginDTO)));
