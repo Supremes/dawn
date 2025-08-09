@@ -114,12 +114,16 @@ logging:
       aurora: DEBUG
     org.springframework.security: DEBUG
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-  health:
-    show-details: always
-    mail:
-      enabled: false  # 禁用邮件健康检查
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"
+#  health:
+#    show-details: always
+#    mail:
+#      enabled: false  # 禁用邮件健康检查
+
+#management:
+#  endpoints:
+#    enabled-by-default: false

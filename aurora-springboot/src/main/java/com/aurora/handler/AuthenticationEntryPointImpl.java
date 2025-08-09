@@ -16,6 +16,7 @@ import java.io.IOException;
 public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+        // TODO：设计在JwtAuthenticationTokenFilter验证时， token失效重定向到 /users/login 的场景
         response.setContentType(CommonConstant.APPLICATION_JSON);
         response.setCharacterEncoding("UTF-8");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

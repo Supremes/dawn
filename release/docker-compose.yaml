@@ -181,12 +181,12 @@ services:
         condition: service_healthy
       minio:
         condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
-      timeout: 10s
-      interval: 30s
-      retries: 5
-      start_period: 120s
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+    #   timeout: 10s
+    #   interval: 30s
+    #   retries: 5
+    #   start_period: 120s
 
   # Web Server / Reverse Proxy
   nginx:
@@ -205,14 +205,14 @@ services:
       - ./ssl:/etc/nginx/ssl:ro
     networks:
       - fatcat-network
-    depends_on:
-      fatcat:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
-      timeout: 5s
-      interval: 30s
-      retries: 3
+    # depends_on:
+    #   fatcat:
+    #     condition: service_healthy
+    # healthcheck:
+    #   test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+    #   timeout: 5s
+    #   interval: 30s
+    #   retries: 3
 
 # Named Volumes for Data Persistence
 volumes:

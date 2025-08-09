@@ -47,19 +47,19 @@ export default {
           var captcha = new TencentCaptcha(this.config.TENCENT_CAPTCHA, function (res) {
             if (res.ret === 0) {
               that.$router.push({ path: '/' })
-              // let param = new URLSearchParams()
-              // param.append('username', that.loginForm.username)
-              // param.append('password', that.loginForm.password)
-              // that.axios.post('/api/users/login', param).then(({ data }) => {
-              //   if (data.flag) {
-              //     that.$store.commit('login', data.data)
-              //     generaMenu()
-              //     that.$message.success('登录成功')
-              //     that.$router.push({ path: '/' })
-              //   } else {
-              //     that.$message.error(data.message)
-              //   }
-              // })
+              let param = new URLSearchParams()
+              param.append('username', that.loginForm.username)
+              param.append('password', that.loginForm.password)
+              that.axios.post('/api/users/login', param).then(({ data }) => {
+                if (data.flag) {
+                  that.$store.commit('login', data.data)
+                  generaMenu()
+                  that.$message.success('登录成功')
+                  that.$router.push({ path: '/' })
+                } else {
+                  that.$message.error(data.message)
+                }
+              })
             }
           })
           captcha.show()

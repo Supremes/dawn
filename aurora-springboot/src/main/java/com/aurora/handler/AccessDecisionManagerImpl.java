@@ -21,13 +21,6 @@ public class AccessDecisionManagerImpl implements AccessDecisionManager {
             return;
         }
         
-        // 检查是否包含匿名访问权限
-        for (ConfigAttribute item : collection) {
-            if ("ROLE_ANONYMOUS".equals(item.getAttribute())) {
-                return; // 允许匿名访问
-            }
-        }
-        
         List<String> permissionList = authentication.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
