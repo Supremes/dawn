@@ -15,7 +15,6 @@ import java.util.List;
 
 
 @Repository
-@RestControllerAdvice
 public interface ArticleMapper extends BaseMapper<Article> {
 
     List<ArticleCardDTO> listTopAndFeaturedArticles();

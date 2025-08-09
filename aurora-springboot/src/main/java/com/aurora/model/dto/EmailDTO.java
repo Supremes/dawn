@@ -21,4 +21,6 @@ public class EmailDTO {
 
     private String template;
 
+    private String verificationCode;    // 邮件中包含的验证码
+
 }

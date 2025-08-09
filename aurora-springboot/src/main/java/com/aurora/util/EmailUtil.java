@@ -1,8 +1,11 @@
 package com.aurora.util;
 
 import com.aurora.model.dto.EmailDTO;
+import com.aurora.service.RedisService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
@@ -12,6 +15,10 @@ import org.thymeleaf.context.Context;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import static com.aurora.constant.RedisConstant.CODE_EXPIRE_TIME;
+import static com.aurora.constant.RedisConstant.USER_CODE_KEY;
+
+@Slf4j
 @Component
 public class EmailUtil {
 
@@ -23,6 +30,9 @@ public class EmailUtil {
 
     @Autowired
     private TemplateEngine templateEngine;
+
+    @Autowired
+    private RedisService redisService;
 
     public void sendHtmlMail(EmailDTO emailDTO) {
         try {
@@ -36,9 +46,14 @@ public class EmailUtil {
             mimeMessageHelper.setSubject(emailDTO.getSubject());
             mimeMessageHelper.setText(process, true);
             javaMailSender.send(mimeMessage);
-        } catch (MessagingException e) {
+        } catch (MessagingException | MailException e) {
             e.printStackTrace();
+            log.error("验证码邮件发送失败: {}", e.getLocalizedMessage());
+            return;
         }
+        // 发送成功后，redis缓存验证码信息
+        redisService.set(USER_CODE_KEY + emailDTO.getEmail(), emailDTO.getVerificationCode(), CODE_EXPIRE_TIME);
+        log.debug("已发送邮件给注册邮箱:{}, 验证码为:{}", emailDTO.getEmail(),emailDTO.getCommentMap());
     }
 
 }

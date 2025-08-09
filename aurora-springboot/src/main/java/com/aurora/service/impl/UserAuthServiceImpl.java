@@ -83,9 +83,9 @@ public class UserAuthServiceImpl implements UserAuthService {
                 .subject(CommonConstant.CAPTCHA)
                 .template("common.html")
                 .commentMap(map)
+                .verificationCode(code)
                 .build();
         rabbitTemplate.convertAndSend(EMAIL_EXCHANGE, "*", new Message(JSON.toJSONBytes(emailDTO), new MessageProperties()));
-        redisService.set(USER_CODE_KEY + username, code, CODE_EXPIRE_TIME);
     }
 
     @Override
