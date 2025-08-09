@@ -15,6 +15,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
@@ -28,6 +29,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+@Slf4j
 @Service
 public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobService {
 
@@ -43,6 +45,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements JobSe
         scheduler.clear();
         List<Job> jobs = jobMapper.selectList(null);
         for (Job job : jobs) {
+            log.debug("初始化后台job: {}", job.toString());
             ScheduleUtil.createScheduleJob(scheduler, job);
         }
     }

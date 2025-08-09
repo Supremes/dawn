@@ -24,18 +24,30 @@ public class ScheduleUtil {
     }
 
     public static void createScheduleJob(Scheduler scheduler, Job job) throws SchedulerException, TaskException {
+        // 根据job是否并行，获取对应的class对象
         Class<? extends org.quartz.Job> jobClass = getQuartzJobClass(job);
+
+        // 根据job信息创建JobDetail和CronTrigger
         Integer jobId = job.getId();
         String jobGroup = job.getJobGroup();
         JobDetail jobDetail = JobBuilder.newJob(jobClass).withIdentity(getJobKey(jobId, jobGroup)).build();
+
         CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(job.getCronExpression());
         cronScheduleBuilder = handleCronScheduleMisfirePolicy(job, cronScheduleBuilder);
-        CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(getTriggerKey(jobId, jobGroup))
-                .withSchedule(cronScheduleBuilder).build();
+        CronTrigger trigger = TriggerBuilder.newTrigger()
+                .withIdentity(getTriggerKey(jobId, jobGroup))
+                .withSchedule(cronScheduleBuilder)
+                .build();
+
+        // 将job信息传递给Quartz任务执行器，以便在任务实际执行时，能够访问到JOB的信息
         jobDetail.getJobDataMap().put(ScheduleConstant.TASK_PROPERTIES, job);
+
+        // 如果任务已存在，则先删除
         if (scheduler.checkExists(getJobKey(jobId, jobGroup))) {
             scheduler.deleteJob(getJobKey(jobId, jobGroup));
         }
+
+        // 调度任务，若任务状态设置为PAUSE，则暂停任务
         scheduler.scheduleJob(jobDetail, trigger);
         if (job.getStatus().equals(JobStatusEnum.PAUSE.getValue())) {
             scheduler.pauseJob(ScheduleUtil.getJobKey(jobId, jobGroup));

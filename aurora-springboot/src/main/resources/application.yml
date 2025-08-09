@@ -48,24 +48,22 @@ spring:
       uris: elasticsearch:9200
 
   mail:
-    host: smtp-mail.outlook.com
+    host: smtp.163.com
     username: ${SPRING_MAIL_USERNAME:邮箱}
     password: ${SPRING_MAIL_PASSWORD:密码}
+    port: 465 # 对于 SSL 连接
+    protocol: smtps # 使用 ssl
     default-encoding: UTF-8
-    protocol: smtp
-    port: 587
     properties:
       mail:
         smtp:
           auth: true
+          ssl:
+            enable: true # 启用 SSL
           socketFactory:
             class: javax.net.ssl.SSLSocketFactory
-            port: 465
-          ssl:
-            enable: true
-          starttls:
-            enable: true
-            required: true
+          timeout: 5000
+          connectiontimeout: 5000
 
   servlet:
     multipart:
@@ -96,8 +94,9 @@ upload:
     secretKey: Dududu951221
     bucketName: test
 
-website:
-  url: https://junkangd.xmdev.cloud.com
+# 百度SEO推送使用，由于暂无公网域名，这里注释掉
+# website:
+#   url: http://localhost:8082
 
 qq:
   app-id: QQ APPID
@@ -109,10 +108,12 @@ logging:
     name: /logs/app.log # name 优先级大于 path
 #    path: /var/logs/myapp
   level:
-    root: DEBUG
+    root: INFO
     com:
       aurora: DEBUG
     org.springframework.security: DEBUG
+    org.springframework.amqp: DEBUG
+    com.baomidou.mybatisplus: DEBUG
 
 #management:
 #  endpoints:

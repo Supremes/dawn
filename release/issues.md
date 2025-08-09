@@ -77,12 +77,729 @@ sequenceDiagram
 
 ## Filter chain list
 
+```mermaid
+graph TD
+    A[HTTP Request: GET /admin/user/menus] --> B[Spring Security Filter Chain - 12 Filters Total]
+    
+    B --> F1[1. WebAsyncManagerIntegrationFilter]
+    F1 --> F2[2. SecurityContextPersistenceFilter]
+    F2 --> F3[3. HeaderWriterFilter]
+    F3 --> F4[4. LogoutFilter]
+    F4 --> L1{Match Logout Pattern?}
+    L1 -->|No Match| F5[5. JwtAuthenticationTokenFilter]
+    F5 --> R1[Redis Connection & Authentication]
+    R1 --> F6[6. UsernamePasswordAuthenticationFilter]
+    F6 --> L2{Match Login Pattern?}
+    L2 -->|No Match POST /users/login| F7[7. RequestCacheAwareFilter]
+    F7 --> F8[8. SecurityContextHolderAwareRequestFilter]
+    F8 --> F9[9. AnonymousAuthenticationFilter]
+    F9 --> L3{SecurityContext Populated?}
+    L3 -->|Already Authenticated| F10[10. SessionManagementFilter]
+    F10 --> S1[ChangeSessionIdAuthenticationStrategy]
+    S1 --> F11[11. ExceptionTranslationFilter]
+    F11 --> F12[12. FilterSecurityInterceptor]
+    F12 --> A1[Authorization Check]
+    A1 --> A2{Authorities: admin}
+    A2 -->|Authorization Successful| C[Continue to Controller]
+
+```
 
 
 
 
 
+# Exception 处理
+
+## 常用注解
+
+在 Spring Boot 中，处理异常通常有几种常用的注解，它们可以帮助你以更优雅、集中的方式管理应用程序的错误。
+
+### 1. `@ControllerAdvice` 和 `@RestControllerAdvice`
 
 
-# Todo
+
+这是 Spring Boot 异常处理的核心注解。它们让你能够将异常处理逻辑集中在一个类中，而不是分散在各个控制器里。
+
+- **`@ControllerAdvice`**：用于处理所有 `@Controller` 定义的控制器抛出的异常。它可以处理视图（View）渲染或返回 JSON 的异常。
+- **`@RestControllerAdvice`**：它是 `@ControllerAdvice` 和 `@ResponseBody` 的结合体，专门用于处理 RESTful API（即 `@RestController`）抛出的异常。它默认会将处理结果作为 JSON 返回。
+
+这两个注解通常会配合 `@ExceptionHandler` 使用。
+
+### 2. `@ExceptionHandler`
+
+这个注解用于标记一个方法，表示该方法专门用来处理特定类型的异常。它通常用在 `@ControllerAdvice` 或 `@Controller` 注解的类中。
+
+```java
+// 详见ControllerAdviceHandler.java
+@Log4j2
+@RestControllerAdvice
+public class ControllerAdviceHandler {
+
+    @ExceptionHandler(value = BizException.class)
+    public ResultVO<?> errorHandler(BizException e) {
+        return ResultVO.fail(e.getCode(), e.getMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResultVO<?> errorHandler(MethodArgumentNotValidException e) {
+        return ResultVO.fail(StatusCodeEnum.VALID_ERROR.getCode(), Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage());
+    }
+
+    @ExceptionHandler(value = Exception.class)
+    public ResultVO<?> errorHandler(Exception e) {
+        e.printStackTrace();
+        return ResultVO.fail(StatusCodeEnum.SYSTEM_ERROR.getCode(), StatusCodeEnum.SYSTEM_ERROR.getDesc());
+    }
+
+}
+```
+
+# 日志log库
+
+项目中使用到了lombok提供的两个log注解
+
+### @Slf4j
+
+- @Slf4j：日志抽象层（推荐）
+- @Slf4j 是 SLF4J (Simple Logging Facade for Java) 提供的注解。SLF4J 的核心思想是日志门面模式。
+
+SpringBoot 默认使用Logback作为日志框架，且已经将其与SLF4J接口进行集成。若取消切换底层的log实现，需要在pom文件中，排除默认的logback依赖并引入新的Log库依赖（如Log4j2）
+
+
+
+
+
+使用时，只需要在类上加上 `@Slf4j` 注解，它就会自动生成一个名为 `log` 的 `Logger` 对象。
+
+```java
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+public class MyService {
+
+    public void doSomething() {
+        log.info("这是一个 info 级别的日志信息。");
+        log.debug("这是一个 debug 级别的日志信息。");
+    }
+}
+```
+
+### @Log4j2
+
+属于具体的日志实现，是 **Log4j2** 这个具体的日志框架提供的注解。
+
+使用时，通过注解的方式，自动生成一个名为 `log` 的 `Logger` 对象。
+
+
+
+### 对比
+
+在 Spring Boot 和其他 Java 项目中，`@Log4j2` 和 `@Slf4j` 是两个非常常见的注解，它们都用于简化日志记录。不过，它们来自不同的库，并且在使用方式和功能上略有不同。
+
+| 特性       | **@Slf4j**                                   | **@Log4j2**                    |
+| ---------- | -------------------------------------------- | ------------------------------ |
+| **类型**   | **日志门面（接口）**                         | **日志实现（具体框架）**       |
+| **依赖**   | 需要一个具体的底层日志框架                   | 必须依赖 Log4j2                |
+| **灵活性** | 高，可以轻松切换底层框架                     | 低，与 Log4j2 强绑定           |
+| **推荐度** | **高**，Spring Boot 默认推荐 SLF4J + Logback | 如果对 Log4j2 的特定功能有需求 |
+
+
+
+# MySQL数据库梳理
+
+Job表单
+
+- t_job: 存储了后台job的详细信息
+- t_job_log：存储了每次job执行的日志信息
+
+User表单
+
+- t_user_auth:用户的auth信息（用户名及密码信息）
+- t_user_info:用户的基本信息
+- t_user_role: 用户userid和roleid
+
+Role表单
+
+- t_role: 角色的详细信息（分为admin、test、user）
+- t_role_menu: 关联表单 role - menu
+- t_role_resource: 关联表单 role - resource
+
+Menu表单：
+
+
+
+Resource表单：
+
+
+
+## 1. 核心业务表
+
+### 1.1 文章管理模块
+
+#### **t_article（文章表）**
+```sql
+核心字段：
+- id: 主键
+- user_id: 作者ID（外键关联 t_user_info）
+- category_id: 分类ID（外键关联 t_category）
+- article_title: 文章标题
+- article_content: 文章内容
+- is_top: 是否置顶
+- is_featured: 是否推荐
+- status: 状态（1公开 2私密 3草稿）
+- type: 文章类型（1原创 2转载 3翻译）
+```
+
+#### **t_category（分类表）**
+```sql
+核心字段：
+- id: 主键
+- category_name: 分类名称
+```
+
+#### **t_tag（标签表）**
+```sql
+核心字段：
+- id: 主键
+- tag_name: 标签名称
+```
+
+#### **t_article_tag（文章标签关联表）**
+```sql
+核心字段：
+- id: 主键
+- article_id: 文章ID
+- tag_id: 标签ID
+```
+
+**关联关系：**
+- 文章 ↔ 分类：一对多（一个文章属于一个分类，一个分类可以有多篇文章）
+- 文章 ↔ 标签：多对多（通过 t_article_tag 中间表关联）
+- 文章 ↔ 用户：多对一（一个用户可以发布多篇文章）
+
+### 1.2 评论管理模块
+
+#### **t_comment（评论表）**
+```sql
+核心字段：
+- id: 主键
+- user_id: 评论用户ID
+- topic_id: 评论主题ID（文章ID或其他）
+- comment_content: 评论内容
+- reply_user_id: 回复用户ID
+- parent_id: 父评论ID（用于嵌套回复）
+- type: 评论类型（1.文章 2.留言 3.关于我 4.友链 5.说说）
+- is_review: 是否审核
+```
+
+**关联关系：**
+- 支持多级嵌套回复（通过 parent_id 实现树形结构）
+- 关联用户信息和被评论的主题
+
+### 1.3 说说模块
+
+#### **t_talk（说说表）**
+```sql
+核心字段：
+- id: 主键
+- user_id: 用户ID
+- content: 说说内容
+- images: 图片JSON数组
+- is_top: 是否置顶
+- status: 状态（1.公开 2.私密）
+```
+
+## 2. 用户权限管理模块
+
+### 2.1 用户相关表
+
+#### **t_user_info（用户信息表）**
+```sql
+核心字段：
+- id: 主键
+- email: 邮箱
+- nickname: 昵称
+- avatar: 头像
+- intro: 简介
+- is_disable: 是否禁用
+```
+
+#### **t_user_auth（用户认证表）**
+```sql
+核心字段：
+- id: 主键
+- user_info_id: 用户信息ID（外键）
+- username: 用户名
+- password: 密码
+- login_type: 登录类型
+- ip_address: 登录IP
+- last_login_time: 最后登录时间
+```
+
+**设计特点：**
+- 用户信息与认证信息分离，便于扩展多种登录方式
+- 支持邮箱登录、QQ登录等多种认证方式
+
+### 2.2 权限控制表
+
+#### **t_role（角色表）**
+```sql
+核心字段：
+- id: 主键
+- role_name: 角色名（admin、user、test等）
+- is_disable: 是否禁用
+```
+
+#### **t_resource（资源表）**
+```sql
+核心字段：
+- id: 主键
+- resource_name: 资源名
+- url: 权限路径
+- request_method: 请求方式
+- parent_id: 父模块ID
+- is_anonymous: 是否匿名访问
+```
+
+#### **t_menu（菜单表）**
+```sql
+核心字段：
+- id: 主键
+- name: 菜单名
+- path: 菜单路径
+- component: 组件路径
+- icon: 菜单图标
+- parent_id: 父菜单ID
+- is_hidden: 是否隐藏
+```
+
+#### **关联表**
+- **t_user_role**: 用户-角色关联
+- **t_role_menu**: 角色-菜单关联
+- **t_role_resource**: 角色-资源关联
+
+**权限控制架构：**
+```
+用户 → 角色 → 菜单/资源
+     ↓
+   RBAC模型
+```
+
+## 3. 相册管理模块
+
+#### **t_photo_album（相册表）**
+```sql
+核心字段：
+- id: 主键
+- album_name: 相册名
+- album_desc: 相册描述
+- album_cover: 相册封面
+- status: 状态（1公开 2私密）
+```
+
+#### **t_photo（照片表）**
+```sql
+核心字段：
+- id: 主键
+- album_id: 相册ID（外键）
+- photo_name: 照片名
+- photo_src: 照片地址
+- is_delete: 是否删除
+```
+
+**关联关系：**
+- 相册 ↔ 照片：一对多关系
+
+## 4. 系统管理模块
+
+### 4.1 定时任务模块
+
+#### **t_job（定时任务表）**
+```sql
+核心字段：
+- id: 主键
+- job_name: 任务名称
+- job_group: 任务组名
+- invoke_target: 调用目标
+- cron_expression: Cron表达式
+- misfire_policy: 错误策略
+- concurrent: 是否并发执行
+- status: 状态（0暂停 1正常）
+```
+
+#### **t_job_log（任务日志表）**
+```sql
+核心字段：
+- id: 主键
+- job_id: 任务ID
+- job_message: 日志信息
+- status: 执行状态
+- exception_info: 异常信息
+- start_time/end_time: 开始/结束时间
+```
+
+### 4.2 日志管理模块
+
+#### **t_operation_log（操作日志表）**
+```sql
+核心字段：
+- id: 主键
+- opt_module: 操作模块
+- opt_type: 操作类型
+- opt_uri: 操作URL
+- user_id: 操作用户
+- ip_address: 操作IP
+- request_param: 请求参数
+- response_data: 返回数据
+```
+
+#### **t_exception_log（异常日志表）**
+```sql
+核心字段：
+- id: 主键
+- opt_uri: 请求接口
+- exception_info: 异常信息
+- ip_address: IP地址
+```
+
+### 4.3 其他系统表
+
+#### **t_friend_link（友链表）**
+```sql
+核心字段：
+- link_name: 链接名
+- link_avatar: 链接头像
+- link_address: 链接地址
+```
+
+#### **t_website_config（网站配置表）**
+```sql
+核心字段：
+- config: JSON格式配置信息
+```
+
+#### **t_unique_view（访问统计表）**
+```sql
+核心字段：
+- views_count: 访问量
+- create_time: 统计日期
+```
+
+## 5. 数据库设计特点
+
+### 5.1 设计原则
+- **分离关注点**: 用户信息与认证分离，业务数据与系统数据分离
+- **扩展性**: 支持多种登录方式，菜单和资源分离管理
+- **安全性**: 完整的RBAC权限控制体系
+- **可维护性**: 标准化的字段命名，统一的时间戳字段
+
+### 5.2 索引策略
+- 主键使用自增ID
+- 外键字段建立索引
+- 查询频繁的字段建立复合索引
+
+### 5.3 表关联关系总览
+
+```
+文章生态链：
+t_user_info → t_article → t_category
+     ↓           ↓
+t_user_auth  t_article_tag → t_tag
+                ↓
+            t_comment
+
+权限管理链：
+t_user_info → t_user_role → t_role → t_role_menu → t_menu
+                             ↓
+                        t_role_resource → t_resource
+
+相册管理链：
+t_photo_album → t_photo
+
+系统管理链：
+t_job → t_job_log
+t_operation_log
+t_exception_log
+t_website_config
+t_unique_view
+t_friend_link
+```
+
+这个数据库设计体现了现代博客系统的完整功能架构，支持内容管理、用户管理、权限控制、相册管理、定时任务等全方位功能。
+
+# Mybatis-plus
+
+基于你的 `ArticleMapper.xml` 文件，我来详细介绍 MyBatis 中的常用标签：
+
+
+
+> ## 🏷️ **MyBatis 常用标签详解**
+>
+> ### **1. 结果映射标签**
+>
+> #### `<resultMap>` - 结果映射
+>
+> ```xml
+> <resultMap id="ArticleCardDTOResultMap" type="com.aurora.model.dto.ArticleCardDTO">
+>     <!-- 映射规则 -->
+> </resultMap>
+> ```
+>
+> - **作用**: 定义查询结果到 Java 对象的映射关系
+> - **属性**: 
+>   - `id`: 唯一标识符
+>   - `type`: 映射的目标 Java 类型
+>
+> #### `<id>` - 主键映射
+>
+> ```xml
+> <id property="id" column="id"/>
+> ```
+>
+> - **作用**: 映射主键字段，性能更好
+> - **属性**: `property`(Java属性名)，`column`(数据库字段名)
+>
+> #### `<result>` - 普通字段映射
+>
+> ```xml
+> <result property="articleTitle" column="article_title"/>
+> ```
+>
+> - **作用**: 映射普通字段
+> - **属性**: 同 `<id>` 标签
+>
+> #### `<association>` - 一对一关联
+>
+> ```xml
+> <association property="author" javaType="com.aurora.entity.UserInfo">
+>     <result property="nickname" column="author_nickname"/>
+>     <result property="website" column="author_website"/>
+>     <result property="avatar" column="author_avatar"/>
+> </association>
+> ```
+>
+> - **作用**: 映射复杂对象属性
+> - **属性**: `property`(属性名)，`javaType`(关联对象类型)
+>
+> #### `<collection>` - 一对多关联
+>
+> ```xml
+> <collection property="tags" ofType="com.aurora.entity.Tag">
+>     <result property="tagName" column="tag_name"/>
+> </collection>
+> ```
+>
+> - **作用**: 映射集合属性
+> - **属性**: `property`(属性名)，`ofType`(集合元素类型)
+>
+> ### **2. SQL 语句标签**
+>
+> #### `<select>` - 查询语句
+>
+> ```xml
+> <select id="getArticleById" resultMap="ArticleDTOResultMap">
+>     SELECT * FROM t_article WHERE id = #{articleId}
+> </select>
+> ```
+>
+> - **属性**: 
+>   - `id`: 方法名
+>   - `resultMap`: 使用的结果映射
+>   - `resultType`: 直接指定返回类型
+>
+> #### `<insert>` - 插入语句
+>
+> ```xml
+> <insert id="insertArticle" parameterType="com.aurora.entity.Article">
+>     INSERT INTO t_article (title, content) VALUES (#{title}, #{content})
+> </insert>
+> ```
+>
+> #### `<update>` - 更新语句
+>
+> ```xml
+> <update id="updateArticle" parameterType="com.aurora.entity.Article">
+>     UPDATE t_article SET title = #{title} WHERE id = #{id}
+> </update>
+> ```
+>
+> #### `<delete>` - 删除语句
+>
+> ```xml
+> <delete id="deleteArticle" parameterType="int">
+>     DELETE FROM t_article WHERE id = #{id}
+> </delete>
+> ```
+>
+> ### **3. 动态SQL标签**
+>
+> #### `<where>` - 动态WHERE子句
+>
+> ```xml
+> <where>
+>     is_delete = #{conditionVO.isDelete}
+>     <if test="conditionVO.keywords != null">
+>         and article_title like concat('%',#{conditionVO.keywords},'%')
+>     </if>
+> </where>
+> ```
+>
+> - **作用**: 自动添加WHERE关键字，去除多余的AND/OR
+>
+> #### `<if>` - 条件判断
+>
+> ```xml
+> <if test="conditionVO.status != null">
+>     and status = #{conditionVO.status}
+> </if>
+> ```
+>
+> - **作用**: 根据条件动态拼接SQL
+>
+> #### `<choose>` `<when>` `<otherwise>` - 多条件选择
+>
+> ```xml
+> <choose>
+>     <when test="title != null">
+>         AND title = #{title}
+>     </when>
+>     <when test="author != null">
+>         AND author = #{author}
+>     </when>
+>     <otherwise>
+>         AND status = 1
+>     </otherwise>
+> </choose>
+> ```
+>
+> - **作用**: 类似 switch-case 语句
+>
+> #### `<foreach>` - 循环遍历
+>
+> ```xml
+> <foreach collection="ids" item="id" open="(" separator="," close=")">
+>     #{id}
+> </foreach>
+> ```
+>
+> - **作用**: 遍历集合，常用于IN查询
+> - **属性**: 
+>   - `collection`: 集合参数名
+>   - `item`: 当前元素变量名
+>   - `open/close`: 开始/结束字符
+>   - `separator`: 分隔符
+>
+> #### `<set>` - 动态SET子句
+>
+> ```xml
+> <update id="updateArticle">
+>     UPDATE t_article
+>     <set>
+>         <if test="title != null">title = #{title},</if>
+>         <if test="content != null">content = #{content},</if>
+>     </set>
+>     WHERE id = #{id}
+> </update>
+> ```
+>
+> - **作用**: 自动添加SET关键字，去除多余逗号
+>
+> #### `<trim>` - 通用修剪
+>
+> ```xml
+> <trim prefix="WHERE" prefixOverrides="AND |OR ">
+>     <if test="title != null">AND title = #{title}</if>
+>     <if test="status != null">AND status = #{status}</if>
+> </trim>
+> ```
+>
+> - **作用**: 更灵活的字符串修剪
+> - **属性**: 
+>   - `prefix`: 前缀
+>   - `suffix`: 后缀
+>   - `prefixOverrides`: 需要覆盖的前缀
+>   - `suffixOverrides`: 需要覆盖的后缀
+>
+> ### **4. 其他常用标签**
+>
+> #### `<sql>` - SQL片段
+>
+> ```xml
+> <sql id="Base_Column_List">
+>     id, article_title, article_content, create_time
+> </sql>
+> 
+> <select id="selectArticle" resultType="Article">
+>     SELECT <include refid="Base_Column_List"/> FROM t_article
+> </select>
+> ```
+>
+> #### `<include>` - 引用SQL片段
+>
+> ```xml
+> <include refid="Base_Column_List"/>
+> ```
+>
+> #### `<bind>` - 变量绑定
+>
+> ```xml
+> <bind name="pattern" value="'%' + _parameter + '%'"/>
+> SELECT * FROM t_article WHERE title LIKE #{pattern}
+> ```
+>
+> ### **5. 参数传递**
+>
+> #### 单个参数
+>
+> ```xml
+> WHERE id = #{id}
+> ```
+>
+> #### 多个参数
+>
+> ```xml
+> WHERE id = #{param1} AND status = #{param2}
+> ```
+>
+> #### 对象参数
+>
+> ```xml
+> WHERE title = #{article.title}
+> ```
+>
+> #### Map参数
+>
+> ```xml
+> WHERE create_time BETWEEN #{startTime} AND #{endTime}
+> ```
+>
+> ### **6. 实际应用示例**
+>
+> 从你的文件中可以看到这些标签的实际应用：
+>
+> ```xml
+> <!-- 复杂查询映射 -->
+> <select id="listArticlesAdmin" resultMap="articleAdminResultMap">
+>     SELECT a.id, article_title, a.type
+>     FROM t_article a
+>     <where>
+>         is_delete = #{conditionVO.isDelete}
+>         <if test="conditionVO.keywords != null">
+>             and article_title like concat('%',#{conditionVO.keywords},'%')
+>         </if>
+>         <if test="conditionVO.type != null">
+>             and type = #{conditionVO.type}
+>         </if>
+>     </where>
+>     ORDER BY id DESC
+>     LIMIT #{current},#{size}
+> </select>
+> ```
+>
+> 这些标签的组合使用让 MyBatis 能够处理复杂的数据库操作和对象关系映射，是构建灵活数据访问层的核心工具。
+>
+
+
+# TODO
+- [ ] 更改package name 为dawn
 - [ ] 集成Grafana
