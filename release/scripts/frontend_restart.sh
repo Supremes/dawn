@@ -3,11 +3,11 @@ RELEASE_PATH=$PROJECT_PATH/release
 echo "Project path: $PROJECT_PATH"
 echo "Release path: $RELEASE_PATH"
 cd $PROJECT_PATH/dawn-vue/dawn-admin
-npm install
+npm install --no-audit
 npm run build
 
 cd $PROJECT_PATH/dawn-vue/dawn-blog
-npm install
+npm install --no-audit
 npm run build
 
 # 删除旧的vue目录
