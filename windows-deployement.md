@@ -5,7 +5,7 @@ docker run --name mysql --restart=always -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123
 ```
 
 ```shell
-docker run --name mysql --restart=always -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -v /mnt/d/programing/aurora/aurora.sql:/docker-entrypoint-initdb.d/init.sql --network custom-network -d mysql
+docker run --name mysql --restart=always -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -v /mnt/d/programing/dawn/dawn.sql:/docker-entrypoint-initdb.d/init.sql --network custom-network -d mysql
 ```
 
 # redis
@@ -32,5 +32,5 @@ docker run --name elasticsearch -p 9200:9200 \
 # nginx
 
 ```shell
-docker run --name nginx --restart=always -p 80:80 -d -v /mnt/d/programing/aurora/nginx/nginx.conf:/etc/nginx/nginx.conf -v /mnt/d/programing/aurora/release/vue:/usr/local/vue nginx 
+docker run --name nginx --restart=always -p 80:80 -d -v /mnt/d/programing/dawn/nginx/nginx.conf:/etc/nginx/nginx.conf -v /mnt/d/programing/dawn/release/vue:/usr/local/vue nginx 
 ```

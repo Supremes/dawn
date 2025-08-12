@@ -72,7 +72,7 @@ docker run --name mysql --restart=always -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123
 > 下面的命令分别对mysql的日志文件、配置文件、数据文件进行了映射，你也可以自己修改。
 
 ```shell
-docker run -d -p 3306:3306 --restart=always -v /auroras/mysql/log:/var/log/mysql -v /auroras/mysql/data:/var/lib/mysql -v /auroras/mysql/conf:/etc/mysql/conf.d  -e MYSQL_ROOT_PASSWORD=密码  --name mysql mysql
+docker run -d -p 3306:3306 --restart=always -v /dawns/mysql/log:/var/log/mysql -v /dawns/mysql/data:/var/lib/mysql -v /dawns/mysql/conf:/etc/mysql/conf.d  -e MYSQL_ROOT_PASSWORD=密码  --name mysql mysql
 ```
 
 ****
@@ -223,18 +223,18 @@ postman post请求分词测试：`http://服务器IP地址:9200/_analyze`
 
 ```sh
 docker pull zendesk/maxwell //下载MaxWell镜像
-docker run --name maxwell --restart=always  -d  zendesk/maxwell bin/maxwell  --user='root' --password='123456'  --host='172.17.0.3'  --producer=rabbitmq --rabbitmq_user='guest' --rabbitmq_pass='guest' --rabbitmq_host='172.17.0.4' --rabbitmq_port='5672' --rabbitmq_exchange='maxwell_exchange'  --rabbitmq_exchange_type='fanout' --rabbitmq_exchange_durable='true' --filter='exclude: *.*, include: aurora.t_article.article_title = *, include: aurora.t_article.article_content = *, include: aurora.t_article.is_delete = *, include: aurora.t_article.status = *' //运行MaxWell
+docker run --name maxwell --restart=always  -d  zendesk/maxwell bin/maxwell  --user='root' --password='123456'  --host='172.17.0.3'  --producer=rabbitmq --rabbitmq_user='guest' --rabbitmq_pass='guest' --rabbitmq_host='172.17.0.4' --rabbitmq_port='5672' --rabbitmq_exchange='maxwell_exchange'  --rabbitmq_exchange_type='fanout' --rabbitmq_exchange_durable='true' --filter='exclude: *.*, include: dawn.t_article.article_title = *, include: dawn.t_article.article_content = *, include: dawn.t_article.is_delete = *, include: dawn.t_article.status = *' //运行MaxWell
 ```
 
-注意：上述命令中aurora为数据库名称。
+注意：上述命令中dawn为数据库名称。
 
 ```shell
-docker run --name maxwell --restart=always  -d  zendesk/maxwell bin/maxwell  --user='root' --password='123456'  --host='172.17.0.3'  --producer=rabbitmq --rabbitmq_user='guest' --rabbitmq_pass='guest' --rabbitmq_host='172.17.0.4' --rabbitmq_port='5672' --rabbitmq_exchange='maxwell_exchange'  --rabbitmq_exchange_type='fanout' --rabbitmq_exchange_durable='true' --filter='exclude: *.*, include: aurora.t_article.article_title = *, include: aurora.t_article.article_content = *, include: aurora.t_article.is_delete = *, include: aurora.t_article.status = *' //运行MaxWell
+docker run --name maxwell --restart=always  -d  zendesk/maxwell bin/maxwell  --user='root' --password='123456'  --host='172.17.0.3'  --producer=rabbitmq --rabbitmq_user='guest' --rabbitmq_pass='guest' --rabbitmq_host='172.17.0.4' --rabbitmq_port='5672' --rabbitmq_exchange='maxwell_exchange'  --rabbitmq_exchange_type='fanout' --rabbitmq_exchange_durable='true' --filter='exclude: *.*, include: dawn.t_article.article_title = *, include: dawn.t_article.article_content = *, include: dawn.t_article.is_delete = *, include: dawn.t_article.status = *' //运行MaxWell
 ```
 
 ****
 
-## 8.填写aurora-springboot中的yml文件
+## 8.填写dawn-springboot中的yml文件
 
 此处省略，操作比较简单，就是配置一些简单的ip+端口+用户名+密码，前提是服务器上对应的端口已经打开
 
@@ -257,17 +257,17 @@ QQ互联具体情况详见百度
 ```dockerfile
 FROM openjdk:8
 VOLUME /tmp
-ADD aurora-springboot-0.0.1.jar blog.jar
+ADD dawn-springboot-0.0.1.jar blog.jar
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/blog.jar"]
 ```
 
 > 注意：Dockerfile文件只需要上传到指定目录下即可，不需要手动执行其他操作。
 
-5. 编写aurora-start.sh,同时将编写好的aurora-start.sh上传到服务器的/usr/local/docker下面
+5. 编写dawn-start.sh,同时将编写好的dawn-start.sh上传到服务器的/usr/local/docker下面
 
 ```shell
 SOURCE_PATH=/usr/local/docker
-SERVER_NAME=aurora-springboot-0.0.1.jar
+SERVER_NAME=dawn-springboot-0.0.1.jar
 TAG=latest
 SERVER_PORT=8080
 CID=$(docker ps | grep "$SERVER_NAME" | awk '{print $1}')
@@ -288,7 +288,7 @@ echo "开始构建镜像$SERVER_NAME:$TAG"
 cd $SOURCE_PATH
 docker build -t $SERVER_NAME:$TAG .
 echo "成功构建镜像$SERVER_NAME:$TAG"
-docker run --restart=always --name aurora-springboot-0.0.1.jar -d -p 8080:8080 aurora-springboot-0.0.1.jar:latest
+docker run --restart=always --name dawn-springboot-0.0.1.jar -d -p 8080:8080 dawn-springboot-0.0.1.jar:latest
 echo "成功创建并运行容器$SERVER_NAME"
 ```
 
@@ -299,13 +299,13 @@ echo "成功创建并运行容器$SERVER_NAME"
 6. cd到/usr/local/docker下面 ，执行如下命令打包docker镜像文件
 
 ```shell
-sh aurora-start.sh
+sh dawn-start.sh
 ```
 
 7. 启动容器
 
 ```sh
-docker run  --name aurora-springboot-0.0.1.jar -d -p 8080:8080 aurora-springboot-0.0.1.jar:latest
+docker run  --name dawn-springboot-0.0.1.jar -d -p 8080:8080 dawn-springboot-0.0.1.jar:latest
 ```
 
 8. 这样后端项目就可以在服务器上跑起来了
@@ -320,7 +320,7 @@ docker run  --name aurora-springboot-0.0.1.jar -d -p 8080:8080 aurora-springboot
 
 ## 10.打包运行前端项目
 
-1. aurora-blog项目中，更改src/config/config.ts
+1. dawn-blog项目中，更改src/config/config.ts
    
    ```typescript
      captcha: {
@@ -332,7 +332,7 @@ docker run  --name aurora-springboot-0.0.1.jar -d -p 8080:8080 aurora-springboot
      },
    ```
 
-2. aurora-blog项目中，更改public/index.html
+2. dawn-blog项目中，更改public/index.html
    
    ```html
    <script
@@ -341,13 +341,13 @@ docker run  --name aurora-springboot-0.0.1.jar -d -p 8080:8080 aurora-springboot
          data-redirecturi="https://你的前台域名/oauth/login/qq"></script>
    ```
 
-3. 如果你的网站没有打算使用https,将aurora-blog/public/index.html和aurora-admin/public/index.html中下面这一行代码给注释掉
+3. 如果你的网站没有打算使用https,将dawn-blog/public/index.html和dawn-admin/public/index.html中下面这一行代码给注释掉
    
    ```html
    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
    ```
 
-4. 分别到aurora-blog和aurora-admin下面执行如下命令 (推荐关闭vscode的Eslint,本项目没有遵循Eslint的规范)
+4. 分别到dawn-blog和dawn-admin下面执行如下命令 (推荐关闭vscode的Eslint,本项目没有遵循Eslint的规范)
    
    如果下列命令执行报错，可以尝试替换版本
    

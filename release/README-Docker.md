@@ -9,7 +9,7 @@ release/
 ├── docker-compose.yaml          # 主要的 Docker Compose 配置
 ├── .env                        # 环境变量配置文件
 ├── Dockerfile                  # 应用容器构建文件
-├── aurora.sql                  # 数据库初始化脚本
+├── dawn.sql                  # 数据库初始化脚本
 ├── vue/                        # 前端构建文件
 ├── config/                     # 配置文件目录
 │   ├── mysql/
