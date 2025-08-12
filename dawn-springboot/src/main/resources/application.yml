@@ -81,15 +81,9 @@ search:
 
 upload:
   mode: minio
-#  oss:
-#    url: http://Bucket域名/
-#    endpoint: OSS配置endpoint
-#    accessKeyId: OSS配置accessKeyId
-#    accessKeySecret: OSS配置accessKeySecret
-#    bucketName: OSS配置bucketName
   minio:
-    url: http://localhost:9000/
-    endpoint: http://localhost:9000
+    url: http://minio:9000/
+    endpoint: http://minio:9000
     accesskey: minioadmin
     secretKey: Dududu951221
     bucketName: test
