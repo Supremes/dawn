@@ -540,7 +540,7 @@ t_friend_link
 > #### `<resultMap>` - 结果映射
 >
 > ```xml
-> <resultMap id="ArticleCardDTOResultMap" type="com.aurora.model.dto.ArticleCardDTO">
+> <resultMap id="ArticleCardDTOResultMap" type="com.dawn.model.dto.ArticleCardDTO">
 >     <!-- 映射规则 -->
 > </resultMap>
 > ```
@@ -571,7 +571,7 @@ t_friend_link
 > #### `<association>` - 一对一关联
 >
 > ```xml
-> <association property="author" javaType="com.aurora.entity.UserInfo">
+> <association property="author" javaType="com.dawn.entity.UserInfo">
 >     <result property="nickname" column="author_nickname"/>
 >     <result property="website" column="author_website"/>
 >     <result property="avatar" column="author_avatar"/>
@@ -584,7 +584,7 @@ t_friend_link
 > #### `<collection>` - 一对多关联
 >
 > ```xml
-> <collection property="tags" ofType="com.aurora.entity.Tag">
+> <collection property="tags" ofType="com.dawn.entity.Tag">
 >     <result property="tagName" column="tag_name"/>
 > </collection>
 > ```
@@ -610,7 +610,7 @@ t_friend_link
 > #### `<insert>` - 插入语句
 >
 > ```xml
-> <insert id="insertArticle" parameterType="com.aurora.entity.Article">
+> <insert id="insertArticle" parameterType="com.dawn.entity.Article">
 >     INSERT INTO t_article (title, content) VALUES (#{title}, #{content})
 > </insert>
 > ```
@@ -618,7 +618,7 @@ t_friend_link
 > #### `<update>` - 更新语句
 >
 > ```xml
-> <update id="updateArticle" parameterType="com.aurora.entity.Article">
+> <update id="updateArticle" parameterType="com.dawn.entity.Article">
 >     UPDATE t_article SET title = #{title} WHERE id = #{id}
 > </update>
 > ```

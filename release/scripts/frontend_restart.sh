@@ -2,11 +2,11 @@ PROJECT_PATH="$(cd "./../.." && pwd)"
 RELEASE_PATH=$PROJECT_PATH/release
 echo "Project path: $PROJECT_PATH"
 echo "Release path: $RELEASE_PATH"
-cd $PROJECT_PATH/aurora-vue/aurora-admin
+cd $PROJECT_PATH/dawn-vue/dawn-admin
 npm install
 npm run build
 
-cd $PROJECT_PATH/aurora-vue/aurora-blog
+cd $PROJECT_PATH/dawn-vue/dawn-blog
 npm install
 npm run build
 
@@ -21,8 +21,8 @@ fi
 # 复制新的vue目录
 mkdir -p "$RELEASE_PATH/vue/admin"
 mkdir -p "$RELEASE_PATH/vue/blog"
-cp -r $PROJECT_PATH/aurora-vue/aurora-admin/dist/* "$RELEASE_PATH/vue/admin"
-cp -r $PROJECT_PATH/aurora-vue/aurora-blog/dist/* "$RELEASE_PATH/vue/blog"
+cp -r $PROJECT_PATH/dawn-vue/dawn-admin/dist/* "$RELEASE_PATH/vue/admin"
+cp -r $PROJECT_PATH/dawn-vue/dawn-blog/dist/* "$RELEASE_PATH/vue/blog"
 echo "successfully copied vue files to $RELEASE_PATH/vue"
 
 cd $RELEASE_PATH

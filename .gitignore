@@ -19,7 +19,7 @@ yarn-error.log*
 *.sw?
 
 target
-aurora-springboot/src/test
-aurora-springboot/target
-release/aurora-springboot-0.0.1.jar
+dawn-springboot/src/test
+dawn-springboot/target
+release/*.jar
 release/vue
