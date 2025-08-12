@@ -94,9 +94,9 @@ upload:
     secretKey: Dududu951221
     bucketName: test
 
-# 百度SEO推送使用，由于暂无公网域名，这里注释掉
-# website:
-#   url: http://localhost:8082
+# 百度SEO推送使用，由于暂无公网域名，对应的background job无法正常工作
+website:
+  url: http://localhost:8082
 
 qq:
   app-id: QQ APPID
