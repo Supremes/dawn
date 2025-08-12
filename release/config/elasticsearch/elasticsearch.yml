@@ -1,6 +1,6 @@
 # Elasticsearch Configuration
-cluster.name: fatcat-cluster
-node.name: fatcat-node-1
+cluster.name: dawn-cluster
+node.name: dawn-node-1
 
 # Path settings
 path.data: /usr/share/elasticsearch/data
