@@ -1,6 +1,6 @@
-# Fatcat Docker Setup
+# Dawn Docker Setup
 
-这个目录包含了 Fatcat 博客平台的 Docker Compose 配置文件和相关工具。
+这个目录包含了 Dawn 博客平台的 Docker Compose 配置文件和相关工具。
 
 ## 📁 目录结构
 
@@ -23,7 +23,7 @@ release/
 │   ├── backup.sh              # 数据备份脚本
 │   ├── restore.sh             # 数据恢复脚本
 │   ├── generate-ssl.sh        # SSL证书生成脚本
-│   ├── fatcat-start.sh        # 启动脚本
+│   ├── dawn-start.sh        # 启动脚本
 │   ├── replace-vue.sh         # Vue文件替换脚本
 │   └── restart.sh             # 重启脚本
 ├── ssl/                        # SSL证书目录
@@ -87,7 +87,7 @@ docker-compose up -d
 ./scripts/manage.sh logs
 
 # 查看特定服务日志
-./scripts/manage.sh logs fatcat
+./scripts/manage.sh logs dawn
 
 # 构建应用镜像
 ./scripts/manage.sh build
@@ -131,7 +131,7 @@ docker-compose up -d
 - **MinIO**: 对象存储，管理文件上传
 
 ### 应用层
-- **Fatcat App**: Spring Boot 应用，提供 API 和管理界面
+- **Dawn App**: Spring Boot 应用，提供 API 和管理界面
 - **Nginx**: 反向代理和静态文件服务器
 
 ## 🌐 服务访问
@@ -154,8 +154,8 @@ docker-compose up -d
 - `redis_data` - 缓存数据
 - `elasticsearch_data` - 搜索索引
 - `minio_data` - 对象存储
-- `fatcat_logs` - 应用日志
-- `fatcat_uploads` - 用户上传文件
+- `dawn_logs` - 应用日志
+- `dawn_uploads` - 用户上传文件
 
 ## 🔒 安全配置
 
@@ -203,7 +203,7 @@ docker-compose up -d
 ### 日志位置
 
 - **容器日志**: 使用 `docker-compose logs` 查看
-- **应用日志**: 存储在 `fatcat_logs` 卷中
+- **应用日志**: 存储在 `dawn_logs` 卷中
 - **Nginx日志**: 存储在 `nginx_logs` 卷中
 - **系统日志**: 在 `logs/` 目录中
 

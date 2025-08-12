@@ -7,5 +7,5 @@ cd $PROJECT_PATH/dawn-springboot
 mvn clean package
 cd $RELEASE_PATH
 cp ../dawn-springboot/target/dawn-springboot-1.0.jar .
-docker compose up -d --build fatcat
-echo "成功重新创建并运行主程序fatcat"
+docker compose up -d --build dawn
+echo "成功重新创建并运行主程序dawn"
