@@ -12,7 +12,7 @@ public interface CommonConstant {
 
     int BLOGGER_ID = 1;
 
-    int DEFAULT_CONFIG_ID = 3;
+    int DEFAULT_CONFIG_ID = 1;
 
     int DEFAULT_ABOUT_ID = 1;
 

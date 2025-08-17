@@ -21,7 +21,7 @@ public class Knife4jConfig {
     @Bean
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .protocols(Collections.singleton("https"))
+                .protocols(Collections.singleton("http"))
                 .host("localhost")
                 .apiInfo(apiInfo())
                 .select()
@@ -34,8 +34,8 @@ public class Knife4jConfig {
         return new ApiInfoBuilder()
                 .title("dawn文档")
                 .description("dawn")
-                .contact(new Contact("花未眠", "", "1909925152@qq.com"))
-                .termsOfServiceUrl("https://www.linhaojun.top/api")
+                .contact(new Contact("Supremes", "", "1909925152@qq.com"))
+                .termsOfServiceUrl("https://localhost:8082/api")
                 .version("1.0")
                 .build();
     }
