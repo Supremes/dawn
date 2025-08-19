@@ -32,3 +32,21 @@ Resource表单：
 ## TODO
 
 替换成kafka
+
+## 死信队列 + TTL - 延迟队列
+
+- **让“TTL队列”没有消费者，TTL 过期后自动转入“有消费者”的死信队列**
+
+  1. 消息发送到 `ttl_exchange`，进入 `ttl_queue`。
+  2. 消息在 `ttl_queue` 中存活 10 秒（TTL）。
+  3. 消息过期后，自动被转移到死信交换机 `dead_letter_exchange`。
+  4. 死信交换机根据 routing key 转发到 `dead_letter_queue`。
+  5. `DeadLetterConsumer` 消费死信队列中的消息。
+
+- Spring AMQP 使用自动确认（Auto Ack），但处理死信队列时建议手动确认。
+
+  确认过程中，需要涉及到几个概念：
+
+  1. **channel**： 是客户端和服务端之间的通信通道，**每个连接可以创建多个channel**。Consumer通过channel监听消息队列，channel是**非线程安全**的，Spring AMQP默认为每个监听器使用独立的channel
+  2. **deliveryTag**：每次消息投递给Consumer时，会分配一个deliveryTag，该信息用于消息确认（ack）或者拒绝（nack）。同一个channel中的deliveryTag是唯一的
+  3. 消费者在处理完消息后，需要告诉RabbitMQ消息是否处理成功，RabbitMQ根据确认结果决定是否删除消息或者重新投递。
