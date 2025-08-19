@@ -51,7 +51,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
                 .select(UserAuth::getId, UserAuth::getUserInfoId, UserAuth::getUsername, UserAuth::getPassword, UserAuth::getLoginType)
                 .eq(UserAuth::getUsername, username));
         if (Objects.isNull(userAuth)) {
-            throw new BizException("用户不存在!");
+            throw new UsernameNotFoundException("用户不存在!");
         }
         return convertUserDetail(userAuth, request);
     }

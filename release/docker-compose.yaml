@@ -14,7 +14,7 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-123456}
       MYSQL_DATABASE: ${MYSQL_DATABASE:-dawn}
       MYSQL_USER: ${MYSQL_USER:-dawn}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-dawn123}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-123456}
       MYSQL_ROOT_HOST: '%'
     ports:
       - "${MYSQL_PORT:-3306}:3306"
@@ -116,14 +116,14 @@ services:
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
-      MINIO_BROWSER_REDIRECT_URL: ${MINIO_BROWSER_REDIRECT_URL:-http://localhost:9001}
+      MINIO_BROWSER_REDIRECT_URL: ${MINIO_BROWSER_REDIRECT_URL:-http://localhost:9003}
     ports:
       - "${MINIO_API_PORT:-9000}:9000"
-      - "${MINIO_CONSOLE_PORT:-9001}:9001"
+      - "${MINIO_CONSOLE_PORT:-9003}:9003"
     volumes:
       - minio_data:/data
       - minio_config:/root/.minio
-    command: server /data --console-address ":9001"
+    command: server /data --console-address ":9003"
     networks:
       - dawn-network
     healthcheck:
