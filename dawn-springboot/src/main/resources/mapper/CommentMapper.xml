@@ -12,24 +12,20 @@
         c.create_time
         FROM
         t_comment c
-        JOIN t_user_info u ON c.user_id = u.id
+        INNER JOIN t_user_info u ON c.user_id = u.id
         <where>
             <if test="commentVO.topicId != null">
-                topic_id = #{commentVO.topicId}
+                c.topic_id = #{commentVO.topicId}
             </if>
-            AND type = #{commentVO.type}
+            AND c.type = #{commentVO.type}
             AND c.is_review = 1
-            AND parent_id IS NULL
+            AND c.parent_id IS NULL
         </where>
         ORDER BY
         c.id DESC
-        LIMIT #{current},#{size}
+        LIMIT #{size} OFFSET #{current}
     </select>
     <select id="listReplies" resultType="com.dawn.model.dto.ReplyDTO">
-        SELECT
-        *
-        FROM
-        (
         SELECT
         c.user_id,
         u.nickname,
@@ -41,37 +37,33 @@
         c.id,
         c.parent_id,
         c.comment_content,
-        c.create_time,
-        row_number () over ( PARTITION BY parent_id ORDER BY create_time ASC ) row_num
+        c.create_time
         FROM
         t_comment c
-        JOIN t_user_info u ON c.user_id = u.id
-        JOIN t_user_info r ON c.reply_user_id = r.id
+        INNER JOIN t_user_info u ON c.user_id = u.id
+        LEFT JOIN t_user_info r ON c.reply_user_id = r.id
         WHERE
         c.is_review = 1
-        AND
-        parent_id IN
-        (
-        <foreach collection="commentIds" item="commentId" separator=",">
+        AND c.parent_id IN
+        <foreach collection="commentIds" item="commentId" separator="," open="(" close=")">
             #{commentId}
         </foreach>
-        )
-        order by c.create_time desc
-        ) t
+        ORDER BY c.parent_id, c.create_time ASC
     </select>
     <select id="listTopSixComments" resultType="com.dawn.model.dto.CommentDTO">
-        SELECT u.nickname,
-               u.avatar,
-               u.website,
-               c.user_id,
-               c.id,
-               c.comment_content,
-               c.create_time
+        SELECT 
+        u.nickname,
+        u.avatar,
+        u.website,
+        c.user_id,
+        c.id,
+        c.comment_content,
+        c.create_time
         FROM t_comment c
-                 JOIN t_user_info u ON c.user_id = u.id
-        where c.is_review = 1
+        INNER JOIN t_user_info u ON c.user_id = u.id
+        WHERE c.is_review = 1
         ORDER BY c.id DESC
-        LIMIT 0 , 6
+        LIMIT 6
     </select>
     <select id="countComments" resultType="java.lang.Integer">
         SELECT
@@ -112,37 +104,37 @@
                 c.type = #{conditionVO.type}
             </if>
             <if test="conditionVO.isReview != null">
-                and c.is_review = #{conditionVO.isReview}
+                AND c.is_review = #{conditionVO.isReview}
             </if>
             <if test="conditionVO.keywords != null">
-                and u.nickname like concat('%',#{conditionVO.keywords},'%')
+                AND u.nickname LIKE CONCAT('%', #{conditionVO.keywords}, '%')
             </if>
         </where>
         ORDER BY
-        id DESC
-        LIMIT #{current},#{size}
+        c.id DESC
+        LIMIT #{size} OFFSET #{current}
     </select>
     <select id="listCommentCountByTypeAndTopicIds" resultType="com.dawn.model.dto.CommentCountDTO">
         SELECT
-        topic_id as id,
-        COUNT( 1 ) AS comment_count
+        c.topic_id AS id,
+        COUNT(1) AS comment_count
         FROM
-        t_comment
-        WHERE type = #{type}
-        AND
-        topic_id IN
+        t_comment c
+        WHERE c.type = #{type}
+        AND c.topic_id IN
         <foreach open="(" collection="topicIds" item="topicId" separator="," close=")">
             #{topicId}
         </foreach>
         GROUP BY
-        topic_id
+        c.topic_id
     </select>
     <select id="listCommentCountByTypeAndTopicId" resultType="com.dawn.model.dto.CommentCountDTO">
-        SELECT topic_id as id,
-               COUNT(1) AS comment_count
-        FROM t_comment
-        WHERE type = #{type}
-          AND topic_id = #{topicId}
-        GROUP BY topic_id
+        SELECT 
+        c.topic_id AS id,
+        COUNT(1) AS comment_count
+        FROM t_comment c
+        WHERE c.type = #{type}
+          AND c.topic_id = #{topicId}
+        GROUP BY c.topic_id
     </select>
 </mapper>

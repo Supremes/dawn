@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.dawn.constant.CommonConstant.TRUE;
@@ -41,17 +42,20 @@ public class SubscribeConsumer {
 
     @RabbitHandler
     public void process(byte[] data) {
-        Integer articleId = JSON.parseObject(new String(data), Integer.class);
-        Article article = articleService.getOne(new LambdaQueryWrapper<Article>().eq(Article::getId, articleId));
+        Article article = JSON.parseObject(new String(data), Article.class);
         List<UserInfo> users = userInfoService.list(new LambdaQueryWrapper<UserInfo>().eq(UserInfo::getIsSubscribe, TRUE));
-        List<String> emails = users.stream().map(UserInfo::getEmail).collect(Collectors.toList());
-        for (String email : emails) {
+        for (UserInfo user : users) {
+            if (Objects.equals(user.getId(), article.getUserId())) {
+                // 不需要发送邮件给作者本人
+                continue;
+            }
+            String email = user.getEmail();
             EmailDTO emailDTO = new EmailDTO();
             Map<String, Object> map = new HashMap<>();
             emailDTO.setEmail(email);
             emailDTO.setSubject("文章订阅");
             emailDTO.setTemplate("common.html");
-            String url = websiteUrl + "/articles/" + articleId;
+            String url = websiteUrl + "/articles/" + article.getId();
             if (article.getUpdateTime() == null) {
                 map.put("content", "Supremes的个人博客发布了新的文章，"
                         + "<a style=\"text-decoration:none;color:#12addb\" href=\"" + url + "\">点击查看</a>");

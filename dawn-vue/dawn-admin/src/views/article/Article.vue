@@ -295,9 +295,9 @@ export default {
         this.$message.error('文章标签不能为空')
         return false
       }
-      if (this.article.articleCover.trim() == '') {
-        this.$message.error('文章封面不能为空')
-        return false
+      // 如果是草稿状态，修改为公开状态
+      if (this.article.status == 3) {
+        this.article.status = 1;
       }
       this.axios.post('/api/admin/articles', this.article).then(({ data }) => {
         if (data.flag) {

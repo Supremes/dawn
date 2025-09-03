@@ -193,11 +193,7 @@ public Binding bindingEmailDirect() {
 - **灵活路由**：用Topic
 - **复杂条件**：用Headers
 
-## 死信队列 + TTL = 延迟队列
-=======
-## TODO
 
-替换成kafka
 
 ## 死信队列 + TTL - 延迟队列
 

@@ -74,19 +74,7 @@
                u.avatar                        AS author_avatar,
                c.category_name                 AS category_name,
                tag_name
-        FROM (SELECT id,
-                     user_id,
-                     category_id,
-                     article_cover,
-                     article_title,
-                     article_content,
-                     is_top,
-                     is_featured,
-                     is_delete,
-                     status,
-                     create_time,
-                     update_time
-              FROM t_article) a
+              FROM t_article a
                  LEFT JOIN t_article_tag at
                            ON a.id = at.article_id
                  LEFT JOIN t_tag t ON t.id = at.tag_id
@@ -111,28 +99,15 @@
                u.avatar                        AS author_avatar,
                c.category_name                 AS category_name,
                tag_name
-        FROM (SELECT id,
-                     user_id,
-                     category_id,
-                     article_cover,
-                     article_title,
-                     article_content,
-                     is_top,
-                     is_featured,
-                     is_delete,
-                     status,
-                     create_time,
-                     update_time
-              FROM t_article
-              where is_delete = 0
-                and status in (1, 2)
-              order by id desc
-              LIMIT #{current} , #{size}) a
+        FROM t_article a
                  LEFT JOIN t_article_tag at
                            ON a.id = at.article_id
                  LEFT JOIN t_tag t ON t.id = at.tag_id
                  LEFT JOIN t_category c ON a.category_id = c.id
                  LEFT JOIN t_user_info u ON a.user_id = u.id
+                where is_delete = 0 AND status in (1, 2)
+                order by id desc
+                LIMIT #{current} , #{size}
     </select>
     <select id="getArticlesByCategoryId" resultMap="ArticleCardDTOResultMap">
         SELECT a.id                            AS id,
@@ -505,5 +480,29 @@
         FROM t_article
         GROUP BY date
         ORDER BY date DESC
+    </select>
+    <select id="listArticlesWithPagination" resultMap="ArticleCardDTOResultMap">
+        SELECT a.id                            AS id,
+               article_cover,
+               article_title,
+               SUBSTR(article_content, 1, 500) AS article_content,
+               is_top,
+               is_featured,
+               status,
+               a.create_time                   AS create_time,
+               a.update_time                   AS update_time,
+               u.nickname                      AS author_nickname,
+               u.website                       AS author_website,
+               u.avatar                        AS author_avatar,
+               c.category_name                 AS category_name,
+               tag_name
+        FROM t_article a
+                 LEFT JOIN t_article_tag at
+        ON a.id = at.article_id
+            LEFT JOIN t_tag t ON t.id = at.tag_id
+            LEFT JOIN t_category c ON a.category_id = c.id
+            LEFT JOIN t_user_info u ON a.user_id = u.id
+        where is_delete = 0 AND status = 1
+        order by id desc
     </select>
 </mapper>

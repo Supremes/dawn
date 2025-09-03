@@ -1,5 +1,7 @@
 package com.dawn.mapper;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dawn.model.dto.ArticleAdminDTO;
 import com.dawn.model.dto.ArticleCardDTO;
 import com.dawn.model.dto.ArticleDTO;
@@ -20,6 +22,8 @@ public interface ArticleMapper extends BaseMapper<Article> {
     List<ArticleCardDTO> listTopAndFeaturedArticles();
 
     List<ArticleCardDTO> listArticles(@Param("current") Long current, @Param("size") Long size);
+
+    IPage<ArticleCardDTO> listArticlesWithPagination(Page<ArticleCardDTO> page);
 
     List<ArticleCardDTO> getArticlesByCategoryId(@Param("current") Long current, @Param("size") Long size, @Param("categoryId") Integer categoryId);
 
