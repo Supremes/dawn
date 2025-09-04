@@ -194,6 +194,12 @@ public Binding bindingEmailDirect() {
 - **复杂条件**：用Headers
 
 ## 死信队列 + TTL = 延迟队列
+=======
+## TODO
+
+替换成kafka
+
+## 死信队列 + TTL - 延迟队列
 
 - **让“TTL队列”没有消费者，TTL 过期后自动转入“有消费者”的死信队列**
 
@@ -216,3 +222,5 @@ public Binding bindingEmailDirect() {
 ## TODO
 
 替换成kafka
+
+  3. 消费者在处理完消息后，需要告诉RabbitMQ消息是否处理成功，RabbitMQ根据确认结果决定是否删除消息或者重新投递。

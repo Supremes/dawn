@@ -231,7 +231,6 @@ Menu表单:
 Resource表单：
 
 
-
 ## DDL
 
 ### 行格式
@@ -558,7 +557,6 @@ WHERE job_name = 'BackupTask'  -- 只匹配完全相同的大小写
 - 提供更好的用户体验
 
 这就是为什么大多数业务表都选择 `utf8mb4_general_ci` 作为默认 COLLATE 规则！
-
 
 
 ## 1. 核心业务表
