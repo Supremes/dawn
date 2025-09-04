@@ -120,7 +120,8 @@ CREATE TABLE `t_job`  (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '备注信息',
-  PRIMARY KEY (`id`, `job_name`, `job_group`) USING BTREE
+  PRIMARY KEY (`id`)
+  UNIQUE KEY `uniq_job` (`job_name`, `job_group`),
 ) ENGINE = InnoDB AUTO_INCREMENT = 86 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '定时任务调度表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
