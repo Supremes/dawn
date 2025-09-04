@@ -232,6 +232,335 @@ Resource表单：
 
 
 
+## DDL
+
+### 行格式
+
+ROW_FORMAT=DYNAMIC 详解
+
+`ROW_FORMAT=DYNAMIC` 是 MySQL InnoDB 存储引擎的**行格式**配置，用于控制数据在磁盘上的存储方式，也是 MySQL8.0+的默认行格式。
+
+#### 什么是行格式？
+
+行格式决定了：
+- 数据行在物理存储中的组织方式
+- 变长字段的存储策略
+- 大字段的处理方式
+
+#### InnoDB 支持的行格式
+
+| 行格式      | 特点                   | 适用场景       |
+| ----------- | ---------------------- | -------------- |
+| **DYNAMIC** | 现代格式，完全离页存储 | **推荐使用**   |
+| COMPRESSED  | 支持压缩               | 节省空间       |
+| REDUNDANT   | 旧格式，兼容性好       | 历史遗留       |
+| COMPACT     | 紧凑格式               | MySQL 5.0 默认 |
+
+#### DYNAMIC 格式的特点
+
+##### 1. **完全离页存储**
+```sql
+-- 对于 TEXT、BLOB、VARCHAR 等变长字段
+CREATE TABLE example (
+  id int,
+  content TEXT,           -- 大字段
+  description VARCHAR(1000) -- 长字符串
+) ROW_FORMAT=DYNAMIC;
+```
+
+**存储策略**：
+- 短数据：直接存储在数据页中
+- 长数据：存储在**溢出页**中，数据页只保留 20 字节的指针
+
+##### 2. **动态行长度**
+```
+小数据行：[id][短content][短description] → 存储在同一页
+大数据行：[id][指针→content][指针→description] → 内容存储在溢出页
+```
+
+##### 3. **优化的空间利用**
+- 自动判断字段是否需要离页存储
+- 最大化数据页的利用率
+- 减少页分裂
+
+#### 与其他格式的对比
+
+##### COMPACT vs DYNAMIC
+```sql
+-- COMPACT 格式 (旧)
+ROW_FORMAT=COMPACT
+-- 变长字段前768字节存储在数据页，剩余部分存储在溢出页
+
+-- DYNAMIC 格式 (新)
+ROW_FORMAT=DYNAMIC  
+-- 变长字段完全存储在溢出页，数据页只保留指针
+```
+
+##### 实际影响示例
+
+```sql
+-- 这个表有大字段
+CREATE TABLE `t_job` (
+  `invoke_target` varchar(500),  -- 较长字符串
+  `cron_expression` varchar(255),
+  `remark` varchar(500)          -- 较长字符串
+) ROW_FORMAT=DYNAMIC;
+```
+
+**DYNAMIC 的优势**：
+- 当 `invoke_target` 或 `remark` 很长时，完全存储在溢出页
+- 数据页可以容纳更多的记录
+- 提高缓存效率
+
+#### 为什么选择 DYNAMIC？
+
+##### 1. **MySQL 8.0+ 默认格式**
+```sql
+-- MySQL 8.0 中，这两句是等价的
+CREATE TABLE t1 (...);
+CREATE TABLE t1 (...) ROW_FORMAT=DYNAMIC;
+```
+
+##### 2. **适合现代应用**
+- 支持更大的索引前缀 (3072 字节)
+- 优化的变长字段处理
+- 更好的空间利用率
+
+##### 3. **性能优势**
+```sql
+-- 查询只需要基本字段时
+SELECT id, job_name, status FROM t_job WHERE status = 1;
+-- DYNAMIC: 不需要读取大字段的溢出页，性能更好
+```
+
+#### 实际影响
+
+##### 对于 t_job 表：
+```sql
+-- 这些字段可能触发离页存储：
+`invoke_target` varchar(500)    -- 调用目标字符串（可能很长）
+`remark` varchar(500)          -- 备注信息（可能很长）
+
+-- 当这些字段内容较长时：
+-- DYNAMIC: 完全存储在溢出页，主页面更紧凑
+-- COMPACT: 前768字节在主页面，可能造成页面浪费
+```
+
+#### 总结
+
+`ROW_FORMAT=DYNAMIC` 的作用：
+
+1. **现代化存储**：MySQL 8.0+ 推荐格式
+2. **智能存储**：自动决定大字段的存储位置
+3. **性能优化**：减少不必要的 I/O 操作
+4. **空间效率**：更好的页面利用率
+
+对于包含 `TEXT`、`BLOB` 或长 `VARCHAR` 字段的表，**DYNAMIC 是最佳选择**！
+
+
+
+### COLLATE详解
+
+`COLLATE` 是 MySQL 中用于指定**字符串比较和排序规则**的关键字。它决定了如何比较、排序和匹配字符串数据。
+
+#### 在 t_job 表中的 COLLATE 使用
+
+让我分析 `t_job` 表中的 COLLATE 设置：
+
+```sql
+CREATE TABLE `t_job` (
+  `job_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
+  `job_group` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'DEFAULT',
+  `invoke_target` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `cron_expression` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '',
+  `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT ''
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci;
+```
+
+####  COLLATE 的作用
+
+#####  1. **字符串比较规则**
+```sql
+-- 不同 COLLATE 的比较结果不同
+SELECT 'A' = 'a';  -- 结果取决于 COLLATE 设置
+
+-- utf8mb4_general_ci: 不区分大小写
+'Hello' = 'HELLO'  -- TRUE
+'Hello' = 'hello'  -- TRUE
+
+-- utf8mb4_bin: 区分大小写
+'Hello' = 'HELLO'  -- FALSE  
+'Hello' = 'hello'  -- FALSE
+```
+
+#####  2. **排序规则**
+```sql
+-- utf8mb4_general_ci 排序
+SELECT job_name FROM t_job ORDER BY job_name;
+-- 结果: Apple, apple, Banana, banana
+
+-- utf8mb4_bin 排序  
+SELECT job_name FROM t_job ORDER BY job_name;
+-- 结果: Apple, Banana, apple, banana (大写字母优先)
+```
+
+
+
+#### 默认的 COLLATE 规则
+
+在这个数据库中，默认的 COLLATE 规则是 **`utf8mb4_0900_ai_ci`**。
+
+##### 两种 COLLATE 规则对比
+
+| 特性 | `utf8mb4_0900_ai_ci` | `utf8mb4_general_ci` |
+|------|---------------------|---------------------|
+| **MySQL 版本** | 8.0+ 默认 | 5.7 及以前的默认 |
+| **性能** | 稍慢 | 更快 |
+| **准确性** | 更准确的 Unicode 排序 | 简化的排序规则 |
+| **语言支持** | 更好的多语言支持 | 基本多语言支持 |
+
+##### COLLATE 规则解析
+
+`utf8mb4_0900_ai_ci` (主要默认规则)
+
+- **utf8mb4**: 完整 UTF-8 字符集（支持 emoji）
+- **0900**: Unicode 9.0 标准
+- **ai**: Accent Insensitive（口音不敏感）
+- **ci**: Case Insensitive（大小写不敏感）
+
+`utf8mb4_general_ci` (部分表使用)
+
+- **general**: 通用规则，性能优化
+- **ci**: Case Insensitive（大小写不敏感）
+
+##### 为什么有两种不同的 COLLATE？
+
+##### 历史兼容性
+
+```sql
+-- 可能的迁移过程：
+-- 1. 最初使用 MySQL 5.7，默认 utf8mb4_general_ci
+-- 2. 升级到 MySQL 8.0 后，新表使用 utf8mb4_0900_ai_ci
+-- 3. 定时任务等系统表保持原有配置
+```
+
+##### 性能 vs 准确性权衡
+
+- **业务数据**：用户内容需要准确的国际化支持 → `utf8mb4_0900_ai_ci`
+- **系统数据**：任务名称等系统配置优先性能 → `utf8mb4_general_ci`
+
+##### 总结
+
+1. **主要默认规则**：`utf8mb4_0900_ai_ci`（MySQL 8.0 标准）
+2. **部分系统表**：`utf8mb4_general_ci`（性能优先）
+3. **选择建议**：新项目建议统一使用 `utf8mb4_0900_ai_ci`
+4. **兼容性**：两种规则可以共存，但建议保持一致性
+
+####  COLLATE 规则详解
+
+#####  `utf8mb4_general_ci` (t_job 表使用的)
+- **ci** = Case Insensitive (不区分大小写)
+- **general** = 通用规则，性能较好
+- **utf8mb4** = 支持完整的 UTF-8 字符集(包括 emoji)
+
+```sql
+-- 实际效果示例
+WHERE job_name = 'BACKUP'     -- 能匹配 'backup', 'Backup', 'BACKUP'
+WHERE job_name LIKE '%task%'  -- 能匹配 'Task', 'TASK', 'task'
+```
+
+#####  其他常见的 COLLATE 规则对比
+
+| COLLATE 规则         | 特点                            | 使用场景           |
+| -------------------- | ------------------------------- | ------------------ |
+| `utf8mb4_general_ci` | 不区分大小写，通用规则          | **一般业务推荐**   |
+| `utf8mb4_bin`        | 区分大小写，按二进制比较        | 密码字段、精确匹配 |
+| `utf8mb4_unicode_ci` | 不区分大小写，严格 Unicode 规则 | 多语言应用         |
+| `utf8mb4_0900_ai_ci` | MySQL 8.0 默认，口音不敏感      | 现代应用推荐       |
+
+####  实际影响示例
+
+#####  查询行为对比
+```sql
+-- 假设 job_name 字段有这些数据：
+-- 'BackupTask', 'backuptask', 'BACKUPTASK'
+
+-- 使用 utf8mb4_general_ci (t_job 表的设置)
+SELECT * FROM t_job WHERE job_name = 'backuptask';
+-- 结果：返回所有三条记录
+
+-- 如果使用 utf8mb4_bin
+SELECT * FROM t_job WHERE job_name = 'backuptask';  
+-- 结果：只返回完全匹配 'backuptask' 的记录
+```
+
+#####  唯一约束的影响
+```sql
+-- t_job 表中的唯一约束
+UNIQUE KEY `uniq_job` (`job_name`, `job_group`)
+
+-- 由于使用 utf8mb4_general_ci，这些被认为是重复的：
+('BackupTask', 'system')
+('backuptask', 'system')  -- ❌ 违反唯一约束
+('BACKUPTASK', 'system')  -- ❌ 违反唯一约束
+```
+
+####  表级别 vs 字段级别的 COLLATE
+
+##### 字段级别 COLLATE
+```sql
+`job_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci
+```
+- 只影响该字段的比较和排序
+
+#####  表级别 COLLATE  
+```sql
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci;
+```
+- 作为新字段的默认 COLLATE
+- 字段级别设置会覆盖表级别设置
+
+####  性能考量
+
+#####  `utf8mb4_general_ci` vs `utf8mb4_unicode_ci`
+```sql
+-- general_ci: 更快，但可能在某些语言排序上不够精确
+-- unicode_ci: 更慢，但更符合 Unicode 标准
+
+-- 对于英文为主的应用，general_ci 通常足够
+-- 对于多语言应用，推荐 unicode_ci
+```
+
+####  修改 COLLATE 示例
+
+#####  修改字段的 COLLATE
+```sql
+-- 如果要让 job_name 区分大小写
+ALTER TABLE t_job 
+MODIFY job_name varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
+
+-- 修改后的行为
+WHERE job_name = 'BackupTask'  -- 只匹配完全相同的大小写
+```
+
+####  总结
+
+在 `t_job` 表中使用 `utf8mb4_general_ci` 的**优势**：
+
+1. **用户友好**：不区分大小写，查询更宽松
+2. **性能良好**：比 unicode_ci 更快
+3. **兼容性好**：适合大多数业务场景
+4. **支持 emoji**：utf8mb4 支持完整 Unicode
+
+**适用场景**：
+- 任务名称查询不需要严格区分大小写
+- 用户输入 "backup" 或 "BACKUP" 都能找到相同任务
+- 提供更好的用户体验
+
+这就是为什么大多数业务表都选择 `utf8mb4_general_ci` 作为默认 COLLATE 规则！
+
+
+
 ## 1. 核心业务表
 
 ### 1.1 文章管理模块
