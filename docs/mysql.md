@@ -682,8 +682,6 @@ FROM monthly_sales;
 
 本文档总结了关于 MySQL `JSON` 数据类型的推出时间、核心用法、生成列（Generated Columns）的原理与选择，以及相关注意事项。
 
----
-
 ## 1. MySQL JSON 类型的推出时间
 
 - **推出版本**：MySQL 5.7
@@ -807,3 +805,85 @@ SELECT name FROM users WHERE lang = 'en';
 3. **必须使用生成列+索引**：这是提升 JSON 内部字段查询性能的**唯一高效途径**。
 4. **优先选择 `STORED`**：在 JSON 提取场景下，`STORED` 生成列能提供最佳的查询性能和稳定性。
 
+
+
+# 索引
+
+- 覆盖索引 : 查询所需的所有字段都包含在索引中，MySQL可以完全通过索引获取数据，而无需回表查询实际数据行。
+
+  **场景： 文章列表查询优化**
+
+  原始查询：
+
+  ```sql
+  SELECT id, article_title, status, create_time, is_top, is_featured 
+  
+  FROM t_article WHERE status IN (1,2) AND is_delete = 0 
+  
+  ORDER BY is_top DESC, is_featured DESC, create_time DESC
+  ```
+
+  建立覆盖索引：
+
+  ```sql
+  CREATE INDEX IDX_ARTICLE ON t_article (
+  	id,  -- SELECT 字段
+      article_title, -- SELECT 字段
+      create_time, -- ORDER BY 字段
+      is_top, -- ORDER BY 字段
+      is_featured, -- ORDER BY 字段
+      status, -- where 字段
+      is_delete -- where 字段
+  )
+  ```
+
+  
+
+- 前缀索引 : 前缀匹配，如果是`'%SQL%' `或`'%SQL'`，一般需要用到其他INDEX，例如覆盖索引
+
+  ```sql
+  CREATE INDEX IDX_PREFIX_ARTICLE_TITLE ON t_article(article_title(20))
+  ```
+
+  示例:
+
+  ```sql
+  SELECT article_title from t_article where article_title LIKE 'SQL%'
+  ```
+
+  
+
+- 复合索引 : 包含覆盖索引和非覆盖索引
+
+  ```sql
+  CREATE INDEX IDX_ARTICLE_STATUS_TIME ON t_article(status, is_delete, create_time DESC);
+  ```
+
+  
+
+- 索引监控:
+
+  
+
+
+
+```mermaid
+graph TD
+    A[索引类型] --> B[复合索引 - 结构层面]
+    A --> C[单列索引 - 结构层面]
+    
+    B --> D[覆盖索引效果]
+    B --> E[非覆盖索引效果]
+    
+    C --> F[覆盖索引效果]
+    C --> G[非覆盖索引效果]
+    
+    D --> H[不需要回表]
+    E --> I[需要回表]
+    F --> J[不需要回表]
+    G --> K[需要回表]
+```
+
+# 锁
+
+**MDL - Meta Data Lock 锁 (元数据锁)**：保护的是**表结构（Schema）**。它确保在你读取或修改数据的过程中，表的结构（比如列名、列类型、索引）不会突然改变或消失。

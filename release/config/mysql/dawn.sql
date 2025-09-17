@@ -925,4 +925,43 @@ CREATE TABLE `t_exception_log`  (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
+
+DROP PROCEDURE IF EXISTS `CleanHistoryData`;
+
+DELIMITER //
+CREATE PROCEDURE CleanHistoryData(IN DAY_TO_KEEP INT)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;  -- 1. 回滚当前事务
+        RESIGNAL;  -- 2. 重新抛出异常
+    END;
+
+    START TRANSACTION;
+
+    SELECT * FROM t_operation_log;
+
+    SELECT 'Starting cleanup of old logs' AS message;
+
+    DELETE FROM t_operation_log
+    WHERE create_time < NOW() - INTERVAL DAY_TO_KEEP DAY;
+
+    SELECT 'SHOW AFTER DELETE' AS message;
+    SELECT * FROM t_operation_log;
+
+
+    SELECT * FROM t_job_log;
+    SELECT 'Starting cleanup of old job logs' AS message;
+    DELETE FROM t_job_log
+    WHERE create_time < NOW() - INTERVAL DAY_TO_KEEP DAY;
+
+    SELECT 'SHOW AFTER DELETE' AS message;
+    SELECT * FROM t_job_log;
+
+    COMMIT;
+
+END //
+DELIMITER ;
+
+
 SET FOREIGN_KEY_CHECKS = 1;
