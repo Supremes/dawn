@@ -1,6 +1,8 @@
 package com.dawn.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dawn.model.dto.*;
 import com.dawn.entity.Article;
 import com.dawn.entity.ArticleTag;
@@ -97,12 +99,18 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @SneakyThrows
     @Override
     public PageResultDTO<ArticleCardDTO> listArticles() {
-        LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<Article>()
-                .eq(Article::getIsDelete, 0)
-                .eq(Article::getStatus, 1);
-        CompletableFuture<Integer> asyncCount = CompletableFuture.supplyAsync(() -> articleMapper.selectCount(queryWrapper));
-        List<ArticleCardDTO> articles = articleMapper.listArticles(PageUtil.getLimitCurrent(), PageUtil.getSize());
-        return new PageResultDTO<>(articles, asyncCount.get());
+//        LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<Article>()
+//                .eq(Article::getIsDelete, 0)
+//                .eq(Article::getStatus, 1);
+//        CompletableFuture<Integer> asyncCount = CompletableFuture.supplyAsync(() -> articleMapper.selectCount(queryWrapper));
+//        List<ArticleCardDTO> articles = articleMapper.listArticles(PageUtil.getLimitCurrent(), PageUtil.getSize());
+//        return new PageResultDTO<>(articles, asyncCount.get());
+
+        // Use Pagination Plugin
+        IPage<ArticleCardDTO> articleCardDTOS = articleMapper.listArticlesWithPagination(new Page<>(PageUtil.getCurrent(), PageUtil.getSize()));
+        articleCardDTOS.getSize();
+        articleCardDTOS.getRecords();
+        return new PageResultDTO<>(articleCardDTOS.getRecords(), (int) articleCardDTOS.getTotal());
     }
 
     @SneakyThrows
@@ -248,7 +256,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         this.saveOrUpdate(article);
         saveArticleTag(articleVO, article.getId());
         if (article.getStatus().equals(1)) {
-            rabbitTemplate.convertAndSend(SUBSCRIBE_EXCHANGE, "*", new Message(JSON.toJSONBytes(article.getId()), new MessageProperties()));
+            rabbitTemplate.convertAndSend(SUBSCRIBE_EXCHANGE, "*", new Message(JSON.toJSONBytes(article), new MessageProperties()));
         }
     }
 

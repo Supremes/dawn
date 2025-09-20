@@ -9,7 +9,7 @@ User表单
 
 - t_user_auth:用户的auth信息（用户名及密码信息）
 - t_user_info:用户的基本信息
-- t_user_role: 用户userid和roleid
+- t_user_role: 用户userid和roleid, 支持一对多，即一个用户对应多个角色
 
 Role表单
 
@@ -193,11 +193,7 @@ public Binding bindingEmailDirect() {
 - **灵活路由**：用Topic
 - **复杂条件**：用Headers
 
-## 死信队列 + TTL = 延迟队列
-=======
-## TODO
 
-替换成kafka
 
 ## 死信队列 + TTL - 延迟队列
 

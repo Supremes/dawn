@@ -17,7 +17,7 @@ CREATE TABLE `t_about`  (
 -- ----------------------------
 -- Records of t_about
 -- ----------------------------
-INSERT INTO `t_about` VALUES (1, '{\"content\":\"this is about\"}', '2022-07-24 17:22:13', '2022-09-23 14:37:34');
+INSERT INTO `t_about` VALUES (1, '{\"content\":\"this is about\"}', '2025-07-24 17:22:13', '2025-09-23 14:37:34');
 
 -- ----------------------------
 -- Table structure for t_article
@@ -66,6 +66,21 @@ CREATE TABLE `t_category`  (
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 217 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+
+-- 推荐的分类设置
+INSERT INTO `t_category` (category_name, create_time, update_time) VALUES
+('技术开发', NOW(), NOW()),
+('前端技术', NOW(), NOW()),
+('后端技术', NOW(), NOW()),
+('数据库', NOW(), NOW()),
+('运维部署', NOW(), NOW()),
+('算法数据结构', NOW(), NOW()),
+('项目实战', NOW(), NOW()),
+('学习笔记', NOW(), NOW()),
+('生活随笔', NOW(), NOW()),
+('读书心得', NOW(), NOW()),
+('职场思考', NOW(), NOW()),
+('技术分享', NOW(), NOW());
 
 -- ----------------------------
 -- Table structure for t_comment
@@ -120,18 +135,18 @@ CREATE TABLE `t_job`  (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '备注信息',
-  PRIMARY KEY (`id`)
-  UNIQUE KEY `uniq_job` (`job_name`, `job_group`),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniq_job` (`job_name`, `job_group`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 86 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '定时任务调度表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of t_job
 -- ----------------------------
-INSERT INTO `t_job` VALUES (81, '统计用户地域分布', '默认', 'dawnQuartz.statisticalUserArea', '0 0,30 * * * ?', 3, 1, 1, '2022-08-11 21:49:27', '2022-08-13 08:49:47', '统计用户的地域分布');
-INSERT INTO `t_job` VALUES (82, '统计访问量', '默认', 'dawnQuartz.saveUniqueView', '0 0 0 * * ?', 3, 1, 1, '2022-08-12 16:35:11', NULL, '向数据库中写入每天的访问量');
-INSERT INTO `t_job` VALUES (83, '清空redis访客记录', '默认', 'dawnQuartz.clear', '0 0 1 * * ?', 3, 1, 1, '2022-08-12 16:36:30', '2022-08-13 08:47:48', '清空redis访客记录');
-INSERT INTO `t_job` VALUES (84, '百度SEO', '默认', 'dawnQuartz.baiduSeo', '0 0/10 * * * ?', 3, 1, 1, '2022-08-13 21:19:08', '2022-08-19 14:13:52', '百度SEO');
-INSERT INTO `t_job` VALUES (85, '清理定时任务日志', '默认', 'dawnQuartz.clearJobLogs', '0 0 0 * * ?', 3, 1, 1, '2022-08-13 21:26:21', NULL, '清理定时任务日志');
+INSERT INTO `t_job` VALUES (81, '统计用户地域分布', '默认', 'dawnQuartz.statisticalUserArea', '0 0,30 * * * ?', 3, 1, 1, '2025-08-11 21:49:27', '2025-08-13 08:49:47', '统计用户的地域分布 - 每30分钟执行一次');
+INSERT INTO `t_job` VALUES (82, '统计访问量', '默认', 'dawnQuartz.saveUniqueView', '0 0/10 0 * * ?', 3, 1, 1, '2025-08-12 16:35:11', NULL, '向数据库中写入每天的访问量 - 每隔10分钟执行一次');
+INSERT INTO `t_job` VALUES (83, '清空redis访客记录', '默认', 'dawnQuartz.clear', '0 0 1 * * ?', 3, 1, 1, '2025-08-12 16:36:30', '2025-08-13 08:47:48', '清空redis访客记录 - 每天1点执行一次');
+INSERT INTO `t_job` VALUES (84, '百度SEO', '默认', 'dawnQuartz.baiduSeo', '0 0 0 1 * ?', 3, 1, 1, '2025-08-13 21:19:08', '2025-08-19 14:13:52', '百度SEO - 每月1号 0点执行一次');
+INSERT INTO `t_job` VALUES (85, '清理定时任务日志', '默认', 'dawnQuartz.clearJobLogs', '0 0 0 * * ?', 3, 1, 1, '2025-08-13 21:26:21', NULL, '清理定时任务日志 - 每天0点执行一次');
 
 -- ----------------------------
 -- Table structure for t_job_log
@@ -173,13 +188,13 @@ CREATE TABLE `t_menu`  (
 -- ----------------------------
 -- Records of t_menu
 -- ----------------------------
-INSERT INTO `t_menu` VALUES (1, '首页', '/', '/home/Home.vue', 'el-icon-myshouye', '2021-01-26 17:06:51', '2022-07-27 16:33:11', 1, NULL, 0);
-INSERT INTO `t_menu` VALUES (2, '文章管理', '/article-submenu', 'Layout', 'el-icon-mywenzhang-copy', '2021-01-25 20:43:07', '2022-07-27 16:32:55', 2, NULL, 0);
-INSERT INTO `t_menu` VALUES (3, '消息管理', '/message-submenu', 'Layout', 'el-icon-myxiaoxi', '2021-01-25 20:44:17', '2022-07-27 16:32:57', 3, NULL, 0);
+INSERT INTO `t_menu` VALUES (1, '首页', '/', '/home/Home.vue', 'el-icon-myshouye', '2021-01-26 17:06:51', '2025-07-27 16:33:11', 1, NULL, 0);
+INSERT INTO `t_menu` VALUES (2, '文章管理', '/article-submenu', 'Layout', 'el-icon-mywenzhang-copy', '2021-01-25 20:43:07', '2025-07-27 16:32:55', 2, NULL, 0);
+INSERT INTO `t_menu` VALUES (3, '消息管理', '/message-submenu', 'Layout', 'el-icon-myxiaoxi', '2021-01-25 20:44:17', '2025-07-27 16:32:57', 3, NULL, 0);
 INSERT INTO `t_menu` VALUES (4, '系统管理', '/system-submenu', 'Layout', 'el-icon-myshezhi', '2021-01-25 20:45:57', '2021-01-25 20:45:59', 5, NULL, 0);
 INSERT INTO `t_menu` VALUES (5, '个人中心', '/setting', '/setting/Setting.vue', 'el-icon-myuser', '2021-01-26 17:22:38', '2021-01-26 17:22:41', 7, NULL, 0);
 INSERT INTO `t_menu` VALUES (6, '发布文章', '/articles', '/article/Article.vue', 'el-icon-myfabiaowenzhang', '2021-01-26 14:30:48', '2021-01-26 14:30:51', 1, 2, 0);
-INSERT INTO `t_menu` VALUES (7, '修改文章', '/articles/*', '/article/Article.vue', 'el-icon-myfabiaowenzhang', '2021-01-26 14:31:32', '2022-07-28 16:28:06', 2, 2, 1);
+INSERT INTO `t_menu` VALUES (7, '修改文章', '/articles/*', '/article/Article.vue', 'el-icon-myfabiaowenzhang', '2021-01-26 14:31:32', '2025-07-28 16:28:06', 2, 2, 1);
 INSERT INTO `t_menu` VALUES (8, '文章列表', '/article-list', '/article/ArticleList.vue', 'el-icon-mywenzhangliebiao', '2021-01-26 14:32:13', '2021-01-26 14:32:16', 3, 2, 0);
 INSERT INTO `t_menu` VALUES (9, '分类管理', '/categories', '/category/Category.vue', 'el-icon-myfenlei', '2021-01-26 14:33:42', '2021-01-26 14:33:43', 4, 2, 0);
 INSERT INTO `t_menu` VALUES (10, '标签管理', '/tags', '/tag/Tag.vue', 'el-icon-myicontag', '2021-01-26 14:34:33', '2021-01-26 14:34:36', 5, 2, 0);
@@ -191,9 +206,9 @@ INSERT INTO `t_menu` VALUES (16, '菜单管理', '/menus', '/menu/Menu.vue', 'el
 INSERT INTO `t_menu` VALUES (17, '友链管理', '/links', '/friendLink/FriendLink.vue', 'el-icon-mydashujukeshihuaico-', '2021-01-26 14:41:35', '2021-01-26 14:41:37', 3, 4, 0);
 INSERT INTO `t_menu` VALUES (18, '关于我', '/about', '/about/About.vue', 'el-icon-myguanyuwo', '2021-01-26 14:42:05', '2021-01-26 14:42:10', 4, 4, 0);
 INSERT INTO `t_menu` VALUES (19, '日志管理', '/log-submenu', 'Layout', 'el-icon-myguanyuwo', '2021-01-31 21:33:56', '2021-01-31 21:33:59', 6, NULL, 0);
-INSERT INTO `t_menu` VALUES (20, '操作日志', '/operation/log', '/log/OperationLog.vue', 'el-icon-myguanyuwo', '2021-01-31 15:53:21', '2022-07-28 10:51:28', 1, 19, 0);
+INSERT INTO `t_menu` VALUES (20, '操作日志', '/operation/log', '/log/OperationLog.vue', 'el-icon-myguanyuwo', '2021-01-31 15:53:21', '2025-07-28 10:51:28', 1, 19, 0);
 INSERT INTO `t_menu` VALUES (201, '在线用户', '/online/users', '/user/Online.vue', 'el-icon-myyonghuliebiao', '2021-02-05 14:59:51', '2021-02-05 14:59:53', 7, 202, 0);
-INSERT INTO `t_menu` VALUES (202, '用户管理', '/users-submenu', 'Layout', 'el-icon-myyonghuliebiao', '2021-02-06 23:44:59', '2022-07-27 16:32:59', 4, NULL, 0);
+INSERT INTO `t_menu` VALUES (202, '用户管理', '/users-submenu', 'Layout', 'el-icon-myyonghuliebiao', '2021-02-06 23:44:59', '2025-07-27 16:32:59', 4, NULL, 0);
 INSERT INTO `t_menu` VALUES (205, '相册管理', '/album-submenu', 'Layout', 'el-icon-myimage-fill', '2021-08-03 15:10:54', '2021-08-07 20:02:06', 5, NULL, 0);
 INSERT INTO `t_menu` VALUES (206, '相册列表', '/albums', '/album/Album.vue', 'el-icon-myzhaopian', '2021-08-03 20:29:19', '2021-08-04 11:45:47', 1, 205, 0);
 INSERT INTO `t_menu` VALUES (208, '照片管理', '/albums/:albumId', '/album/Photo.vue', 'el-icon-myzhaopian', '2021-08-03 21:37:47', '2021-08-05 10:24:08', 1, 205, 1);
@@ -201,12 +216,12 @@ INSERT INTO `t_menu` VALUES (209, '定时任务', '/quartz', '/quartz/Quartz.vue
 INSERT INTO `t_menu` VALUES (210, '照片回收站', '/photos/delete', '/album/Delete.vue', 'el-icon-myhuishouzhan', '2021-08-05 13:55:19', NULL, 3, 205, 1);
 INSERT INTO `t_menu` VALUES (213, '权限管理', '/permission-submenu', 'Layout', 'el-icon-mydaohanglantubiao_quanxianguanli', '2021-08-07 19:56:55', '2021-08-07 19:59:40', 4, NULL, 0);
 INSERT INTO `t_menu` VALUES (214, '网站管理', '/website', '/website/Website.vue', 'el-icon-myxitong', '2021-08-07 20:06:41', NULL, 1, 4, 0);
-INSERT INTO `t_menu` VALUES (220, '定时任务日志', '/quartz/log/:quartzId', '/log/QuartzLog.vue', 'el-icon-myguanyuwo', '2022-07-28 10:53:23', '2022-08-05 10:27:47', 2, 19, 1);
-INSERT INTO `t_menu` VALUES (221, '说说管理', '/talk-submenu', 'Layout', 'el-icon-mypinglun', '2022-08-15 17:27:10', '2022-08-15 17:27:39', 3, NULL, 0);
-INSERT INTO `t_menu` VALUES (222, '说说列表', '/talk-list', '/talk/TalkList.vue', 'el-icon-myiconfontdongtaidianji', '2022-08-15 17:29:05', NULL, 1, 221, 0);
-INSERT INTO `t_menu` VALUES (223, '发布说说', '/talks', '/talk/Talk.vue', 'el-icon-myfabusekuai', '2022-08-15 17:34:26', '2022-08-16 16:06:04', 2, 221, 0);
-INSERT INTO `t_menu` VALUES (224, '修改说说', '/talks/:talkId', '/talk/Talk.vue', 'el-icon-myfabusekuai', '2022-08-16 16:06:59', '2022-08-16 16:08:21', 3, 221, 1);
-INSERT INTO `t_menu` VALUES (225, '异常日志', '/exception/log', '/log/ExceptionLog.vue', 'el-icon-myguanyuwo', '2022-08-25 13:40:08', '2022-08-25 13:40:31', 1, 19, 0);
+INSERT INTO `t_menu` VALUES (220, '定时任务日志', '/quartz/log/:quartzId', '/log/QuartzLog.vue', 'el-icon-myguanyuwo', '2025-07-28 10:53:23', '2025-08-05 10:27:47', 2, 19, 1);
+INSERT INTO `t_menu` VALUES (221, '说说管理', '/talk-submenu', 'Layout', 'el-icon-mypinglun', '2025-08-15 17:27:10', '2025-08-15 17:27:39', 3, NULL, 0);
+INSERT INTO `t_menu` VALUES (222, '说说列表', '/talk-list', '/talk/TalkList.vue', 'el-icon-myiconfontdongtaidianji', '2025-08-15 17:29:05', NULL, 1, 221, 0);
+INSERT INTO `t_menu` VALUES (223, '发布说说', '/talks', '/talk/Talk.vue', 'el-icon-myfabusekuai', '2025-08-15 17:34:26', '2025-08-16 16:06:04', 2, 221, 0);
+INSERT INTO `t_menu` VALUES (224, '修改说说', '/talks/:talkId', '/talk/Talk.vue', 'el-icon-myfabusekuai', '2025-08-16 16:06:59', '2025-08-16 16:08:21', 3, 221, 1);
+INSERT INTO `t_menu` VALUES (225, '异常日志', '/exception/log', '/log/ExceptionLog.vue', 'el-icon-myguanyuwo', '2025-08-25 13:40:08', '2025-08-25 13:40:31', 1, 19, 0);
 
 -- ----------------------------
 -- Table structure for t_operation_log
@@ -282,145 +297,145 @@ CREATE TABLE `t_resource`  (
 -- ----------------------------
 -- Records of t_resource
 -- ----------------------------
-INSERT INTO `t_resource` VALUES (1050, 'dawn信息', NULL, NULL, NULL, 0, '2022-08-19 22:26:21', NULL);
-INSERT INTO `t_resource` VALUES (1051, '分类模块', NULL, NULL, NULL, 0, '2022-08-19 22:26:21', NULL);
-INSERT INTO `t_resource` VALUES (1052, '友链模块', NULL, NULL, NULL, 0, '2022-08-19 22:26:21', NULL);
-INSERT INTO `t_resource` VALUES (1053, '定时任务日志模块', NULL, NULL, NULL, 0, '2022-08-19 22:26:21', NULL);
-INSERT INTO `t_resource` VALUES (1054, '定时任务模块', NULL, NULL, NULL, 0, '2022-08-19 22:26:21', NULL);
-INSERT INTO `t_resource` VALUES (1055, '异常处理模块', NULL, NULL, NULL, 0, '2022-08-19 22:26:21', NULL);
-INSERT INTO `t_resource` VALUES (1056, '操作日志模块', NULL, NULL, NULL, 0, '2022-08-19 22:26:21', NULL);
-INSERT INTO `t_resource` VALUES (1057, '文章模块', NULL, NULL, NULL, 0, '2022-08-19 22:26:21', NULL);
-INSERT INTO `t_resource` VALUES (1058, '标签模块', NULL, NULL, NULL, 0, '2022-08-19 22:26:21', NULL);
-INSERT INTO `t_resource` VALUES (1059, '照片模块', NULL, NULL, NULL, 0, '2022-08-19 22:26:21', NULL);
-INSERT INTO `t_resource` VALUES (1060, '用户信息模块', NULL, NULL, NULL, 0, '2022-08-19 22:26:21', NULL);
-INSERT INTO `t_resource` VALUES (1061, '用户账号模块', NULL, NULL, NULL, 0, '2022-08-19 22:26:21', NULL);
-INSERT INTO `t_resource` VALUES (1062, '相册模块', NULL, NULL, NULL, 0, '2022-08-19 22:26:21', NULL);
-INSERT INTO `t_resource` VALUES (1063, '菜单模块', NULL, NULL, NULL, 0, '2022-08-19 22:26:21', NULL);
-INSERT INTO `t_resource` VALUES (1064, '角色模块', NULL, NULL, NULL, 0, '2022-08-19 22:26:21', NULL);
-INSERT INTO `t_resource` VALUES (1065, '评论模块', NULL, NULL, NULL, 0, '2022-08-19 22:26:21', NULL);
-INSERT INTO `t_resource` VALUES (1066, '说说模块', NULL, NULL, NULL, 0, '2022-08-19 22:26:21', NULL);
-INSERT INTO `t_resource` VALUES (1067, '资源模块', NULL, NULL, NULL, 0, '2022-08-19 22:26:21', NULL);
-INSERT INTO `t_resource` VALUES (1068, '获取系统信息', '/', 'GET', 1050, 1, '2022-08-19 22:26:22', '2022-08-19 22:26:55');
-INSERT INTO `t_resource` VALUES (1069, '查看关于我信息', '/about', 'GET', 1050, 1, '2022-08-19 22:26:22', '2022-08-19 22:26:57');
-INSERT INTO `t_resource` VALUES (1070, '获取系统后台信息', '/admin', 'GET', 1050, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1071, '修改关于我信息', '/admin/about', 'PUT', 1050, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1072, '获取后台文章', '/admin/articles', 'GET', 1057, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1073, '保存和修改文章', '/admin/articles', 'POST', 1057, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1074, '删除或者恢复文章', '/admin/articles', 'PUT', 1057, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1075, '物理删除文章', '/admin/articles/delete', 'DELETE', 1057, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1076, '导出文章', '/admin/articles/export', 'POST', 1057, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1077, '上传文章图片', '/admin/articles/images', 'POST', 1057, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1078, '导入文章', '/admin/articles/import', 'POST', 1057, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1079, '修改文章是否置顶和推荐', '/admin/articles/topAndFeatured', 'PUT', 1057, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1080, '根据id查看后台文章', '/admin/articles/*', 'GET', 1057, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1081, '查看后台分类列表', '/admin/categories', 'GET', 1051, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1082, '添加或修改分类', '/admin/categories', 'POST', 1051, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1083, '删除分类', '/admin/categories', 'DELETE', 1051, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1084, '搜索文章分类', '/admin/categories/search', 'GET', 1051, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1085, '查询后台评论', '/admin/comments', 'GET', 1065, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1086, '删除评论', '/admin/comments', 'DELETE', 1065, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1087, '审核评论', '/admin/comments/review', 'PUT', 1065, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1088, '上传博客配置图片', '/admin/config/images', 'POST', 1050, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1089, '获取定时任务的日志列表', '/admin/jobLogs', 'GET', 1053, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1090, '删除定时任务的日志', '/admin/jobLogs', 'DELETE', 1053, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1091, '清除定时任务的日志', '/admin/jobLogs/clean', 'DELETE', 1053, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1092, '获取定时任务日志的所有组名', '/admin/jobLogs/jobGroups', 'GET', 1053, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1093, '获取任务列表', '/admin/jobs', 'GET', 1054, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1094, '添加定时任务', '/admin/jobs', 'POST', 1054, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1095, '修改定时任务', '/admin/jobs', 'PUT', 1054, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1096, '删除定时任务', '/admin/jobs', 'DELETE', 1054, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1097, '获取所有job分组', '/admin/jobs/jobGroups', 'GET', 1054, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1098, '执行某个任务', '/admin/jobs/run', 'PUT', 1054, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1099, '更改任务的状态', '/admin/jobs/status', 'PUT', 1054, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1100, '根据id获取任务', '/admin/jobs/*', 'GET', 1054, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1101, '查看后台友链列表', '/admin/links', 'GET', 1052, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1102, '保存或修改友链', '/admin/links', 'POST', 1052, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1103, '删除友链', '/admin/links', 'DELETE', 1052, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1104, '查看菜单列表', '/admin/menus', 'GET', 1063, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1105, '新增或修改菜单', '/admin/menus', 'POST', 1063, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1106, '修改目录是否隐藏', '/admin/menus/isHidden', 'PUT', 1063, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1107, '删除菜单', '/admin/menus/*', 'DELETE', 1063, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1108, '查看操作日志', '/admin/operation/logs', 'GET', 1056, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1109, '删除操作日志', '/admin/operation/logs', 'DELETE', 1056, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1110, '根据相册id获取照片列表', '/admin/photos', 'GET', 1059, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1111, '保存照片', '/admin/photos', 'POST', 1059, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1112, '更新照片信息', '/admin/photos', 'PUT', 1059, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1113, '删除照片', '/admin/photos', 'DELETE', 1059, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1114, '移动照片相册', '/admin/photos/album', 'PUT', 1059, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1115, '查看后台相册列表', '/admin/photos/albums', 'GET', 1062, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1116, '保存或更新相册', '/admin/photos/albums', 'POST', 1062, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1117, '上传相册封面', '/admin/photos/albums/cover', 'POST', 1062, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1118, '获取后台相册列表信息', '/admin/photos/albums/info', 'GET', 1062, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1119, '根据id删除相册', '/admin/photos/albums/*', 'DELETE', 1062, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1120, '根据id获取后台相册信息', '/admin/photos/albums/*/info', 'GET', 1062, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1121, '更新照片删除状态', '/admin/photos/delete', 'PUT', 1059, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1122, '查看资源列表', '/admin/resources', 'GET', 1067, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1123, '新增或修改资源', '/admin/resources', 'POST', 1067, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1124, '删除资源', '/admin/resources/*', 'DELETE', 1067, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1125, '保存或更新角色', '/admin/role', 'POST', 1064, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1126, '查看角色菜单选项', '/admin/role/menus', 'GET', 1063, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1127, '查看角色资源选项', '/admin/role/resources', 'GET', 1067, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1128, '查询角色列表', '/admin/roles', 'GET', 1064, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1129, '删除角色', '/admin/roles', 'DELETE', 1064, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1130, '查询后台标签列表', '/admin/tags', 'GET', 1058, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1131, '添加或修改标签', '/admin/tags', 'POST', 1058, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1132, '删除标签', '/admin/tags', 'DELETE', 1058, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1133, '搜索文章标签', '/admin/tags/search', 'GET', 1058, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1134, '查看后台说说', '/admin/talks', 'GET', 1066, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1135, '保存或修改说说', '/admin/talks', 'POST', 1066, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1136, '删除说说', '/admin/talks', 'DELETE', 1066, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1137, '上传说说图片', '/admin/talks/images', 'POST', 1066, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1138, '根据id查看后台说说', '/admin/talks/*', 'GET', 1066, 1, '2022-08-19 22:26:22', '2022-08-19 22:33:52');
-INSERT INTO `t_resource` VALUES (1139, '查看当前用户菜单', '/admin/user/menus', 'GET', 1063, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1140, '查询后台用户列表', '/admin/users', 'GET', 1061, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1141, '获取用户区域分布', '/admin/users/area', 'GET', 1061, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1142, '修改用户禁用状态', '/admin/users/disable', 'PUT', 1060, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1143, '查看在线用户', '/admin/users/online', 'GET', 1060, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1144, '修改管理员密码', '/admin/users/password', 'PUT', 1061, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1145, '查询用户角色选项', '/admin/users/role', 'GET', 1064, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1146, '修改用户角色', '/admin/users/role', 'PUT', 1060, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1147, '下线用户', '/admin/users/*/online', 'DELETE', 1060, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1148, '获取网站配置', '/admin/website/config', 'GET', 1050, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1149, '更新网站配置', '/admin/website/config', 'PUT', 1050, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1150, '根据相册id查看照片列表', '/albums/*/photos', 'GET', 1059, 1, '2022-08-19 22:26:22', '2022-08-19 22:27:54');
-INSERT INTO `t_resource` VALUES (1151, '获取所有文章归档', '/archives/all', 'GET', 1057, 1, '2022-08-19 22:26:22', '2022-08-19 22:27:35');
-INSERT INTO `t_resource` VALUES (1152, '获取所有文章', '/articles/all', 'GET', 1057, 1, '2022-08-19 22:26:22', '2022-08-19 22:27:37');
-INSERT INTO `t_resource` VALUES (1153, '根据分类id获取文章', '/articles/categoryId', 'GET', 1057, 1, '2022-08-19 22:26:22', '2022-08-19 22:27:38');
-INSERT INTO `t_resource` VALUES (1154, '搜索文章', '/articles/search', 'GET', 1057, 1, '2022-08-19 22:26:22', '2022-08-19 22:27:40');
-INSERT INTO `t_resource` VALUES (1155, '根据标签id获取文章', '/articles/tagId', 'GET', 1057, 1, '2022-08-19 22:26:22', '2022-08-19 22:27:40');
-INSERT INTO `t_resource` VALUES (1156, '获取置顶和推荐文章', '/articles/topAndFeatured', 'GET', 1057, 1, '2022-08-19 22:26:22', '2022-08-19 22:27:41');
-INSERT INTO `t_resource` VALUES (1157, '根据id获取文章', '/articles/*', 'GET', 1057, 1, '2022-08-19 22:26:22', '2022-08-19 22:27:42');
-INSERT INTO `t_resource` VALUES (1158, '/处理BizException', '/bizException', 'GET', 1055, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1159, '/处理BizException', '/bizException', 'HEAD', 1055, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1160, '/处理BizException', '/bizException', 'POST', 1055, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1161, '/处理BizException', '/bizException', 'PUT', 1055, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1162, '/处理BizException', '/bizException', 'DELETE', 1055, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1163, '/处理BizException', '/bizException', 'OPTIONS', 1055, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1164, '/处理BizException', '/bizException', 'PATCH', 1055, 0, '2022-08-19 22:26:22', NULL);
-INSERT INTO `t_resource` VALUES (1165, '获取所有分类', '/categories/all', 'GET', 1051, 1, '2022-08-19 22:26:22', '2022-08-19 22:27:05');
-INSERT INTO `t_resource` VALUES (1166, '获取评论', '/comments', 'GET', 1065, 1, '2022-08-19 22:26:22', '2022-08-19 22:33:50');
-INSERT INTO `t_resource` VALUES (1167, '添加评论', '/comments/save', 'POST', 1065, 0, '2022-08-19 22:26:22', '2022-08-19 22:33:47');
-INSERT INTO `t_resource` VALUES (1168, '获取前七个评论', '/comments/topSeven', 'GET', 1065, 1, '2022-08-19 22:26:22', '2022-08-19 22:33:44');
-INSERT INTO `t_resource` VALUES (1169, '查看友链列表', '/links', 'GET', 1052, 1, '2022-08-19 22:26:22', '2022-08-19 22:27:13');
-INSERT INTO `t_resource` VALUES (1170, '获取相册列表', '/photos/albums', 'GET', 1062, 1, '2022-08-19 22:26:22', '2022-08-19 22:28:25');
-INSERT INTO `t_resource` VALUES (1171, 'report', '/report', 'POST', 1050, 1, '2022-08-19 22:26:22', '2022-08-19 22:27:00');
-INSERT INTO `t_resource` VALUES (1172, '获取所有标签', '/tags/all', 'GET', 1058, 1, '2022-08-19 22:26:22', '2022-08-19 22:31:23');
-INSERT INTO `t_resource` VALUES (1173, '获取前十个标签', '/tags/topTen', 'GET', 1058, 1, '2022-08-19 22:26:22', '2022-08-19 22:31:27');
-INSERT INTO `t_resource` VALUES (1174, '查看说说列表', '/talks', 'GET', 1066, 1, '2022-08-19 22:26:22', '2022-08-19 22:28:38');
-INSERT INTO `t_resource` VALUES (1175, '根据id查看说说', '/talks/*', 'GET', 1066, 1, '2022-08-19 22:26:22', '2022-08-19 22:28:38');
-INSERT INTO `t_resource` VALUES (1176, '更新用户头像', '/users/avatar', 'POST', 1060, 1, '2022-08-19 22:26:22', '2022-08-19 22:28:05');
-INSERT INTO `t_resource` VALUES (1177, '发送邮箱验证码', '/users/code', 'GET', 1061, 1, '2022-08-19 22:26:22', '2022-08-19 22:28:15');
-INSERT INTO `t_resource` VALUES (1178, '绑定用户邮箱', '/users/email', 'PUT', 1060, 1, '2022-08-19 22:26:22', '2022-08-19 22:28:06');
-INSERT INTO `t_resource` VALUES (1179, '更新用户信息', '/users/info', 'PUT', 1060, 1, '2022-08-19 22:26:22', '2022-08-19 22:28:07');
-INSERT INTO `t_resource` VALUES (1180, '根据id获取用户信息', '/users/info/*', 'GET', 1060, 1, '2022-08-19 22:26:22', '2022-08-19 22:28:07');
-INSERT INTO `t_resource` VALUES (1181, '用户登出', '/users/logout', 'POST', 1061, 1, '2022-08-19 22:26:22', '2022-08-19 22:28:15');
-INSERT INTO `t_resource` VALUES (1182, 'qq登录', '/users/oauth/qq', 'POST', 1061, 1, '2022-08-19 22:26:22', '2022-08-19 22:28:16');
-INSERT INTO `t_resource` VALUES (1183, '修改密码', '/users/password', 'PUT', 1061, 1, '2022-08-19 22:26:22', '2022-08-19 22:28:18');
-INSERT INTO `t_resource` VALUES (1184, '用户注册', '/users/register', 'POST', 1061, 1, '2022-08-19 22:26:22', '2022-08-19 22:28:17');
-INSERT INTO `t_resource` VALUES (1185, '修改用户的订阅状态', '/users/subscribe', 'PUT', 1060, 1, '2022-08-19 22:26:22', '2022-08-19 22:28:08');
-INSERT INTO `t_resource` VALUES (1186, '异常日志模块', NULL, NULL, NULL, 0, '2022-08-25 15:13:40', NULL);
-INSERT INTO `t_resource` VALUES (1187, '获取异常日志', '/admin/exception/logs', 'GET', 1186, 0, '2022-08-25 15:14:27', NULL);
-INSERT INTO `t_resource` VALUES (1188, '删除异常日志', '/admin/exception/logs', 'DELETE', 1186, 0, '2022-08-25 15:14:59', NULL);
+INSERT INTO `t_resource` VALUES (1050, 'dawn信息', NULL, NULL, NULL, 0, '2025-08-19 22:26:21', NULL);
+INSERT INTO `t_resource` VALUES (1051, '分类模块', NULL, NULL, NULL, 0, '2025-08-19 22:26:21', NULL);
+INSERT INTO `t_resource` VALUES (1052, '友链模块', NULL, NULL, NULL, 0, '2025-08-19 22:26:21', NULL);
+INSERT INTO `t_resource` VALUES (1053, '定时任务日志模块', NULL, NULL, NULL, 0, '2025-08-19 22:26:21', NULL);
+INSERT INTO `t_resource` VALUES (1054, '定时任务模块', NULL, NULL, NULL, 0, '2025-08-19 22:26:21', NULL);
+INSERT INTO `t_resource` VALUES (1055, '异常处理模块', NULL, NULL, NULL, 0, '2025-08-19 22:26:21', NULL);
+INSERT INTO `t_resource` VALUES (1056, '操作日志模块', NULL, NULL, NULL, 0, '2025-08-19 22:26:21', NULL);
+INSERT INTO `t_resource` VALUES (1057, '文章模块', NULL, NULL, NULL, 0, '2025-08-19 22:26:21', NULL);
+INSERT INTO `t_resource` VALUES (1058, '标签模块', NULL, NULL, NULL, 0, '2025-08-19 22:26:21', NULL);
+INSERT INTO `t_resource` VALUES (1059, '照片模块', NULL, NULL, NULL, 0, '2025-08-19 22:26:21', NULL);
+INSERT INTO `t_resource` VALUES (1060, '用户信息模块', NULL, NULL, NULL, 0, '2025-08-19 22:26:21', NULL);
+INSERT INTO `t_resource` VALUES (1061, '用户账号模块', NULL, NULL, NULL, 0, '2025-08-19 22:26:21', NULL);
+INSERT INTO `t_resource` VALUES (1062, '相册模块', NULL, NULL, NULL, 0, '2025-08-19 22:26:21', NULL);
+INSERT INTO `t_resource` VALUES (1063, '菜单模块', NULL, NULL, NULL, 0, '2025-08-19 22:26:21', NULL);
+INSERT INTO `t_resource` VALUES (1064, '角色模块', NULL, NULL, NULL, 0, '2025-08-19 22:26:21', NULL);
+INSERT INTO `t_resource` VALUES (1065, '评论模块', NULL, NULL, NULL, 0, '2025-08-19 22:26:21', NULL);
+INSERT INTO `t_resource` VALUES (1066, '说说模块', NULL, NULL, NULL, 0, '2025-08-19 22:26:21', NULL);
+INSERT INTO `t_resource` VALUES (1067, '资源模块', NULL, NULL, NULL, 0, '2025-08-19 22:26:21', NULL);
+INSERT INTO `t_resource` VALUES (1068, '获取系统信息', '/', 'GET', 1050, 1, '2025-08-19 22:26:22', '2025-08-19 22:26:55');
+INSERT INTO `t_resource` VALUES (1069, '查看关于我信息', '/about', 'GET', 1050, 1, '2025-08-19 22:26:22', '2025-08-19 22:26:57');
+INSERT INTO `t_resource` VALUES (1070, '获取系统后台信息', '/admin', 'GET', 1050, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1071, '修改关于我信息', '/admin/about', 'PUT', 1050, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1072, '获取后台文章', '/admin/articles', 'GET', 1057, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1073, '保存和修改文章', '/admin/articles', 'POST', 1057, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1074, '删除或者恢复文章', '/admin/articles', 'PUT', 1057, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1075, '物理删除文章', '/admin/articles/delete', 'DELETE', 1057, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1076, '导出文章', '/admin/articles/export', 'POST', 1057, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1077, '上传文章图片', '/admin/articles/images', 'POST', 1057, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1078, '导入文章', '/admin/articles/import', 'POST', 1057, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1079, '修改文章是否置顶和推荐', '/admin/articles/topAndFeatured', 'PUT', 1057, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1080, '根据id查看后台文章', '/admin/articles/*', 'GET', 1057, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1081, '查看后台分类列表', '/admin/categories', 'GET', 1051, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1082, '添加或修改分类', '/admin/categories', 'POST', 1051, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1083, '删除分类', '/admin/categories', 'DELETE', 1051, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1084, '搜索文章分类', '/admin/categories/search', 'GET', 1051, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1085, '查询后台评论', '/admin/comments', 'GET', 1065, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1086, '删除评论', '/admin/comments', 'DELETE', 1065, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1087, '审核评论', '/admin/comments/review', 'PUT', 1065, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1088, '上传博客配置图片', '/admin/config/images', 'POST', 1050, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1089, '获取定时任务的日志列表', '/admin/jobLogs', 'GET', 1053, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1090, '删除定时任务的日志', '/admin/jobLogs', 'DELETE', 1053, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1091, '清除定时任务的日志', '/admin/jobLogs/clean', 'DELETE', 1053, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1092, '获取定时任务日志的所有组名', '/admin/jobLogs/jobGroups', 'GET', 1053, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1093, '获取任务列表', '/admin/jobs', 'GET', 1054, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1094, '添加定时任务', '/admin/jobs', 'POST', 1054, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1095, '修改定时任务', '/admin/jobs', 'PUT', 1054, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1096, '删除定时任务', '/admin/jobs', 'DELETE', 1054, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1097, '获取所有job分组', '/admin/jobs/jobGroups', 'GET', 1054, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1098, '执行某个任务', '/admin/jobs/run', 'PUT', 1054, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1099, '更改任务的状态', '/admin/jobs/status', 'PUT', 1054, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1100, '根据id获取任务', '/admin/jobs/*', 'GET', 1054, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1101, '查看后台友链列表', '/admin/links', 'GET', 1052, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1102, '保存或修改友链', '/admin/links', 'POST', 1052, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1103, '删除友链', '/admin/links', 'DELETE', 1052, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1104, '查看菜单列表', '/admin/menus', 'GET', 1063, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1105, '新增或修改菜单', '/admin/menus', 'POST', 1063, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1106, '修改目录是否隐藏', '/admin/menus/isHidden', 'PUT', 1063, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1107, '删除菜单', '/admin/menus/*', 'DELETE', 1063, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1108, '查看操作日志', '/admin/operation/logs', 'GET', 1056, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1109, '删除操作日志', '/admin/operation/logs', 'DELETE', 1056, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1110, '根据相册id获取照片列表', '/admin/photos', 'GET', 1059, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1111, '保存照片', '/admin/photos', 'POST', 1059, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1112, '更新照片信息', '/admin/photos', 'PUT', 1059, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1113, '删除照片', '/admin/photos', 'DELETE', 1059, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1114, '移动照片相册', '/admin/photos/album', 'PUT', 1059, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1115, '查看后台相册列表', '/admin/photos/albums', 'GET', 1062, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1116, '保存或更新相册', '/admin/photos/albums', 'POST', 1062, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1117, '上传相册封面', '/admin/photos/albums/cover', 'POST', 1062, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1118, '获取后台相册列表信息', '/admin/photos/albums/info', 'GET', 1062, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1119, '根据id删除相册', '/admin/photos/albums/*', 'DELETE', 1062, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1120, '根据id获取后台相册信息', '/admin/photos/albums/*/info', 'GET', 1062, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1121, '更新照片删除状态', '/admin/photos/delete', 'PUT', 1059, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1122, '查看资源列表', '/admin/resources', 'GET', 1067, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1123, '新增或修改资源', '/admin/resources', 'POST', 1067, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1124, '删除资源', '/admin/resources/*', 'DELETE', 1067, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1125, '保存或更新角色', '/admin/role', 'POST', 1064, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1126, '查看角色菜单选项', '/admin/role/menus', 'GET', 1063, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1127, '查看角色资源选项', '/admin/role/resources', 'GET', 1067, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1128, '查询角色列表', '/admin/roles', 'GET', 1064, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1129, '删除角色', '/admin/roles', 'DELETE', 1064, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1130, '查询后台标签列表', '/admin/tags', 'GET', 1058, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1131, '添加或修改标签', '/admin/tags', 'POST', 1058, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1132, '删除标签', '/admin/tags', 'DELETE', 1058, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1133, '搜索文章标签', '/admin/tags/search', 'GET', 1058, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1134, '查看后台说说', '/admin/talks', 'GET', 1066, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1135, '保存或修改说说', '/admin/talks', 'POST', 1066, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1136, '删除说说', '/admin/talks', 'DELETE', 1066, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1137, '上传说说图片', '/admin/talks/images', 'POST', 1066, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1138, '根据id查看后台说说', '/admin/talks/*', 'GET', 1066, 1, '2025-08-19 22:26:22', '2025-08-19 22:33:52');
+INSERT INTO `t_resource` VALUES (1139, '查看当前用户菜单', '/admin/user/menus', 'GET', 1063, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1140, '查询后台用户列表', '/admin/users', 'GET', 1061, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1141, '获取用户区域分布', '/admin/users/area', 'GET', 1061, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1142, '修改用户禁用状态', '/admin/users/disable', 'PUT', 1060, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1143, '查看在线用户', '/admin/users/online', 'GET', 1060, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1144, '修改管理员密码', '/admin/users/password', 'PUT', 1061, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1145, '查询用户角色选项', '/admin/users/role', 'GET', 1064, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1146, '修改用户角色', '/admin/users/role', 'PUT', 1060, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1147, '下线用户', '/admin/users/*/online', 'DELETE', 1060, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1148, '获取网站配置', '/admin/website/config', 'GET', 1050, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1149, '更新网站配置', '/admin/website/config', 'PUT', 1050, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1150, '根据相册id查看照片列表', '/albums/*/photos', 'GET', 1059, 1, '2025-08-19 22:26:22', '2025-08-19 22:27:54');
+INSERT INTO `t_resource` VALUES (1151, '获取所有文章归档', '/archives/all', 'GET', 1057, 1, '2025-08-19 22:26:22', '2025-08-19 22:27:35');
+INSERT INTO `t_resource` VALUES (1152, '获取所有文章', '/articles/all', 'GET', 1057, 1, '2025-08-19 22:26:22', '2025-08-19 22:27:37');
+INSERT INTO `t_resource` VALUES (1153, '根据分类id获取文章', '/articles/categoryId', 'GET', 1057, 1, '2025-08-19 22:26:22', '2025-08-19 22:27:38');
+INSERT INTO `t_resource` VALUES (1154, '搜索文章', '/articles/search', 'GET', 1057, 1, '2025-08-19 22:26:22', '2025-08-19 22:27:40');
+INSERT INTO `t_resource` VALUES (1155, '根据标签id获取文章', '/articles/tagId', 'GET', 1057, 1, '2025-08-19 22:26:22', '2025-08-19 22:27:40');
+INSERT INTO `t_resource` VALUES (1156, '获取置顶和推荐文章', '/articles/topAndFeatured', 'GET', 1057, 1, '2025-08-19 22:26:22', '2025-08-19 22:27:41');
+INSERT INTO `t_resource` VALUES (1157, '根据id获取文章', '/articles/*', 'GET', 1057, 1, '2025-08-19 22:26:22', '2025-08-19 22:27:42');
+INSERT INTO `t_resource` VALUES (1158, '/处理BizException', '/bizException', 'GET', 1055, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1159, '/处理BizException', '/bizException', 'HEAD', 1055, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1160, '/处理BizException', '/bizException', 'POST', 1055, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1161, '/处理BizException', '/bizException', 'PUT', 1055, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1162, '/处理BizException', '/bizException', 'DELETE', 1055, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1163, '/处理BizException', '/bizException', 'OPTIONS', 1055, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1164, '/处理BizException', '/bizException', 'PATCH', 1055, 0, '2025-08-19 22:26:22', NULL);
+INSERT INTO `t_resource` VALUES (1165, '获取所有分类', '/categories/all', 'GET', 1051, 1, '2025-08-19 22:26:22', '2025-08-19 22:27:05');
+INSERT INTO `t_resource` VALUES (1166, '获取评论', '/comments', 'GET', 1065, 1, '2025-08-19 22:26:22', '2025-08-19 22:33:50');
+INSERT INTO `t_resource` VALUES (1167, '添加评论', '/comments/save', 'POST', 1065, 0, '2025-08-19 22:26:22', '2025-08-19 22:33:47');
+INSERT INTO `t_resource` VALUES (1168, '获取前七个评论', '/comments/topSeven', 'GET', 1065, 1, '2025-08-19 22:26:22', '2025-08-19 22:33:44');
+INSERT INTO `t_resource` VALUES (1169, '查看友链列表', '/links', 'GET', 1052, 1, '2025-08-19 22:26:22', '2025-08-19 22:27:13');
+INSERT INTO `t_resource` VALUES (1170, '获取相册列表', '/photos/albums', 'GET', 1062, 1, '2025-08-19 22:26:22', '2025-08-19 22:28:25');
+INSERT INTO `t_resource` VALUES (1171, 'report', '/report', 'POST', 1050, 1, '2025-08-19 22:26:22', '2025-08-19 22:27:00');
+INSERT INTO `t_resource` VALUES (1172, '获取所有标签', '/tags/all', 'GET', 1058, 1, '2025-08-19 22:26:22', '2025-08-19 22:31:23');
+INSERT INTO `t_resource` VALUES (1173, '获取前十个标签', '/tags/topTen', 'GET', 1058, 1, '2025-08-19 22:26:22', '2025-08-19 22:31:27');
+INSERT INTO `t_resource` VALUES (1174, '查看说说列表', '/talks', 'GET', 1066, 1, '2025-08-19 22:26:22', '2025-08-19 22:28:38');
+INSERT INTO `t_resource` VALUES (1175, '根据id查看说说', '/talks/*', 'GET', 1066, 1, '2025-08-19 22:26:22', '2025-08-19 22:28:38');
+INSERT INTO `t_resource` VALUES (1176, '更新用户头像', '/users/avatar', 'POST', 1060, 1, '2025-08-19 22:26:22', '2025-08-19 22:28:05');
+INSERT INTO `t_resource` VALUES (1177, '发送邮箱验证码', '/users/code', 'GET', 1061, 1, '2025-08-19 22:26:22', '2025-08-19 22:28:15');
+INSERT INTO `t_resource` VALUES (1178, '绑定用户邮箱', '/users/email', 'PUT', 1060, 1, '2025-08-19 22:26:22', '2025-08-19 22:28:06');
+INSERT INTO `t_resource` VALUES (1179, '更新用户信息', '/users/info', 'PUT', 1060, 1, '2025-08-19 22:26:22', '2025-08-19 22:28:07');
+INSERT INTO `t_resource` VALUES (1180, '根据id获取用户信息', '/users/info/*', 'GET', 1060, 1, '2025-08-19 22:26:22', '2025-08-19 22:28:07');
+INSERT INTO `t_resource` VALUES (1181, '用户登出', '/users/logout', 'POST', 1061, 1, '2025-08-19 22:26:22', '2025-08-19 22:28:15');
+INSERT INTO `t_resource` VALUES (1182, 'qq登录', '/users/oauth/qq', 'POST', 1061, 1, '2025-08-19 22:26:22', '2025-08-19 22:28:16');
+INSERT INTO `t_resource` VALUES (1183, '修改密码', '/users/password', 'PUT', 1061, 1, '2025-08-19 22:26:22', '2025-08-19 22:28:18');
+INSERT INTO `t_resource` VALUES (1184, '用户注册', '/users/register', 'POST', 1061, 1, '2025-08-19 22:26:22', '2025-08-19 22:28:17');
+INSERT INTO `t_resource` VALUES (1185, '修改用户的订阅状态', '/users/subscribe', 'PUT', 1060, 1, '2025-08-19 22:26:22', '2025-08-19 22:28:08');
+INSERT INTO `t_resource` VALUES (1186, '异常日志模块', NULL, NULL, NULL, 0, '2025-08-25 15:13:40', NULL);
+INSERT INTO `t_resource` VALUES (1187, '获取异常日志', '/admin/exception/logs', 'GET', 1186, 0, '2025-08-25 15:14:27', NULL);
+INSERT INTO `t_resource` VALUES (1188, '删除异常日志', '/admin/exception/logs', 'DELETE', 1186, 0, '2025-08-25 15:14:59', NULL);
 
 -- ----------------------------
 -- Table structure for t_role
@@ -438,9 +453,9 @@ CREATE TABLE `t_role`  (
 -- ----------------------------
 -- Records of t_role
 -- ----------------------------
-INSERT INTO `t_role` VALUES (1, 'admin', 0, '2022-07-20 13:25:19', '2022-08-16 16:07:49');
-INSERT INTO `t_role` VALUES (2, 'user', 0, '2022-07-20 13:25:40', '2022-08-19 22:55:26');
-INSERT INTO `t_role` VALUES (14, 'test', 0, '2022-08-19 21:48:14', '2022-08-19 22:38:15');
+INSERT INTO `t_role` VALUES (1, 'admin', 0, '2025-07-20 13:25:19', NULL);
+INSERT INTO `t_role` VALUES (2, 'user', 0, '2025-07-20 13:25:40', NULL);
+INSERT INTO `t_role` VALUES (14, 'test', 0, '2025-08-19 21:48:14', NULL);
 
 -- ----------------------------
 -- Table structure for t_role_menu
@@ -693,6 +708,42 @@ CREATE TABLE `t_tag`  (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 41 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
+INSERT INTO `t_tag` (tag_name, create_time, update_time) VALUES
+('Java', NOW(), NOW()),
+('JavaScript', NOW(), NOW()),
+('Python', NOW(), NOW()),
+('Vue.js', NOW(), NOW()),
+('React', NOW(), NOW()),
+('Spring Boot', NOW(), NOW()),
+('Node.js', NOW(), NOW()),
+('MySQL', NOW(), NOW()),
+('Redis', NOW(), NOW()),
+('Docker', NOW(), NOW()),
+('Nginx', NOW(), NOW()),
+('RabbitMQ', NOW(), NOW()),
+('ElasticSearch', NOW(), NOW()),
+('Git', NOW(), NOW()),
+('微服务', NOW(), NOW()),
+('分布式', NOW(), NOW()),
+('高并发', NOW(), NOW()),
+('性能优化', NOW(), NOW()),
+('设计模式', NOW(), NOW()),
+('数据结构', NOW(), NOW()),
+('算法', NOW(), NOW()),
+('调试技巧', NOW(), NOW()),
+('最佳实践', NOW(), NOW()),
+('代码重构', NOW(), NOW()),
+('单元测试', NOW(), NOW()),
+('API设计', NOW(), NOW()),
+('学习方法', NOW(), NOW()),
+('职业规划', NOW(), NOW()),
+('时间管理', NOW(), NOW()),
+('读书笔记', NOW(), NOW()),
+('生活感悟', NOW(), NOW()),
+('旅行', NOW(), NOW()),
+('摄影', NOW(), NOW()),
+('健身', NOW(), NOW());
+
 -- ----------------------------
 -- Table structure for t_talk
 -- ----------------------------
@@ -743,7 +794,17 @@ CREATE TABLE `t_user_auth`  (
 -- ----------------------------
 -- Records of t_user_auth
 -- ----------------------------
-INSERT INTO `t_user_auth` VALUES (1, 1, 'admin@163.com', '$2a$10$/Z90STxVyGOIfNhTfvzbEuJ9t1yHjrkN6pBMRAqd5g5SdNIrdt5Da', 1, '182.118.236.146', '中国|河南省|洛阳市|联通', '2022-08-19 21:43:46', '2022-08-24 20:33:46', '2022-08-24 20:33:46');
+INSERT INTO `t_user_auth` VALUES (
+    1, 
+    1, 
+    '1017052447@qq.com', 
+    '$2a$10$/Z90STxVyGOIfNhTfvzbEuJ9t1yHjrkN6pBMRAqd5g5SdNIrdt5Da', 
+    1, 
+    '172.28.96.1', 
+    '中国|江苏省|南京市|移动', 
+    NOW(),
+    NULL,
+    NULL);
 
 -- ----------------------------
 -- Table structure for t_user_info
@@ -766,7 +827,18 @@ CREATE TABLE `t_user_info`  (
 -- ----------------------------
 -- Records of t_user_info
 -- ----------------------------
-INSERT INTO `t_user_info` VALUES (1, 'admin@163.com', '演示账号', 'https://static.linhaojun.top/avatar/2af2e2db20740e712f0a011a6f8c9af5.jpg', '演示账号的用户简介', 'https://www.linhaojun.top', 0, 0, '2022-08-19 21:42:04', '2022-08-24 17:11:35');
+INSERT INTO `t_user_info` VALUES (
+    1, 
+    '1017052447@qq.com', 
+    'Supremes', 
+    'https://digicol.dpm.org.cn/cultural/details?id=219564', 
+    '主账号admin', 
+    'https://github.com/Supremes', 
+    0, 
+    0, 
+    NOW(),
+    NULL
+);
 
 -- ----------------------------
 -- Table structure for t_user_role
@@ -799,7 +871,41 @@ CREATE TABLE `t_website_config`  (
 -- ----------------------------
 -- Records of t_website_config
 -- ----------------------------
-INSERT INTO `t_website_config` VALUES (1, '{\"alipayQRCode\":\"https://static.linhaojun.top/config/da4c6d8c13f66a8dd6716ddb48d73299.jpg\",\"author\":\"Supremes\",\"authorAvatar\":\"https://static.linhaojun.top/config/6e4f47f4bb66d2d30722d20e789b220e.jpg\",\"authorIntro\":\"一个疯狂的coder\",\"beianNumber\":\"苏ICP备2022012376号\",\"csdn\":\"\",\"englishName\":\"huaweimian\",\"gitee\":\"https://gitee.com/linhaojun\",\"github\":\"https://github.com/linhaojun857\",\"isCommentReview\":0,\"isEmailNotice\":1,\"isReward\":1,\"juejin\":\"\",\"logo\":\"https://static.linhaojun.top/config/cc36e9fa5aeb214e41495c1e2268f2db.png\",\"multiLanguage\":1,\"name\":\"Supremes\",\"notice\":\"代码已经开源，如果你感觉还行就给一个star吧。。。\",\"qq\":\"\",\"qqLogin\":1,\"stackoverflow\":\"\",\"touristAvatar\":\"https://static.linhaojun.top/config/2af2e2db20740e712f0a011a6f8c9af5.jpg\",\"twitter\":\"\",\"userAvatar\":\"https://static.linhaojun.top/config/0af1901da1e64dfb99bb61db21e716c4.jpeg\",\"weChat\":\"\",\"websiteCreateTime\":\"2022-08-19\",\"weiXinQRCode\":\"https://static.linhaojun.top/config/ed47edae605f74306f751c6fba9f14bd.png\",\"weibo\":\"\",\"zhihu\":\"\"}', '2022-07-24 12:05:33', '2022-08-20 12:48:28');
+INSERT INTO `t_website_config` VALUES (
+    1, 
+    '{
+        "alipayQRCode": "https://digicol.dpm.org.cn/cultural/details?id=219564",
+        "author": "Supremes",
+        "authorAvatar": "https://digicol.dpm.org.cn/cultural/details?id=219564",
+        "authorIntro": "一个疯狂的coder",
+        "beianNumber": "苏ICP备2025012376号",
+        "csdn": "",
+        "englishName": "Supremes",
+        "gitee": "https://github.com/Supremes",
+        "github": "https://github.com/Supremes",
+        "isCommentReview": 0,
+        "isEmailNotice": 1,
+        "isReward": 1,
+        "juejin": "",
+        "logo": "https://digicol.dpm.org.cn/cultural/details?id=219564",
+        "multiLanguage": 1,
+        "name": "Supremes",
+        "notice": "正在完善中",
+        "qq": "1017052447",
+        "qqLogin": 1,
+        "stackoverflow": "",
+        "touristAvatar": "https://digicol.dpm.org.cn/cultural/details?id=219564",
+        "twitter": "",
+        "userAvatar": "https://digicol.dpm.org.cn/cultural/details?id=219564",
+        "weChat": "",
+        "websiteCreateTime": "2025-08-19",
+        "weiXinQRCode": "https://digicol.dpm.org.cn/cultural/details?id=219564",
+        "weibo": "",
+        "zhihu": ""
+    }', 
+    '2025-07-24 12:05:33', 
+    '2025-08-20 12:48:28'
+);
 
 -- ----------------------------
 -- Table structure for t_exception_log
@@ -818,5 +924,44 @@ CREATE TABLE `t_exception_log`  (
   `create_time` datetime NOT NULL COMMENT '操作时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+
+
+DROP PROCEDURE IF EXISTS `CleanHistoryData`;
+
+DELIMITER //
+CREATE PROCEDURE CleanHistoryData(IN DAY_TO_KEEP INT)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;  -- 1. 回滚当前事务
+        RESIGNAL;  -- 2. 重新抛出异常
+    END;
+
+    START TRANSACTION;
+
+    SELECT * FROM t_operation_log;
+
+    SELECT 'Starting cleanup of old logs' AS message;
+
+    DELETE FROM t_operation_log
+    WHERE create_time < NOW() - INTERVAL DAY_TO_KEEP DAY;
+
+    SELECT 'SHOW AFTER DELETE' AS message;
+    SELECT * FROM t_operation_log;
+
+
+    SELECT * FROM t_job_log;
+    SELECT 'Starting cleanup of old job logs' AS message;
+    DELETE FROM t_job_log
+    WHERE create_time < NOW() - INTERVAL DAY_TO_KEEP DAY;
+
+    SELECT 'SHOW AFTER DELETE' AS message;
+    SELECT * FROM t_job_log;
+
+    COMMIT;
+
+END //
+DELIMITER ;
+
 
 SET FOREIGN_KEY_CHECKS = 1;
