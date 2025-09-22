@@ -566,3 +566,93 @@ END;
 ````
 
 存储过程是数据库编程的重要工具，在合适的场景下使用能够显著提高性能和代码复用性。但要注意平衡业务逻辑的分布和系统的可维护性。
+
+
+在 MySQL 中，**trigger（触发器）**是一种特殊的数据库对象，可以在表的 `INSERT`、`UPDATE` 或 `DELETE` 操作发生前或后自动执行一段 SQL 代码。触发器常用于实现数据自动校验、日志记录、级联操作等功能。
+
+---
+
+# MySQL Trigger
+## 1. 触发器的基本语法
+
+```sql
+CREATE TRIGGER trigger_name
+{BEFORE | AFTER} {INSERT | UPDATE | DELETE}
+ON table_name
+FOR EACH ROW
+BEGIN
+    -- 触发器逻辑
+END;
+```
+
+- `BEFORE`：在数据变更前触发
+- `AFTER`：在数据变更后触发
+- `{INSERT | UPDATE | DELETE}`：指定触发类型
+- `FOR EACH ROW`：针对每一行数据触发
+
+---
+
+## 2. 触发器中的特殊变量
+
+- `NEW`：表示新插入或更新后的数据（用于 INSERT/UPDATE）
+- `OLD`：表示被删除或更新前的数据（用于 DELETE/UPDATE）
+
+---
+
+## 3. 示例
+
+### 插入前自动设置字段
+
+```sql
+CREATE TRIGGER before_insert_user
+BEFORE INSERT ON users
+FOR EACH ROW
+SET NEW.created_at = NOW();
+```
+
+### 删除后自动记录日志
+
+```sql
+CREATE TRIGGER after_delete_user
+AFTER DELETE ON users
+FOR EACH ROW
+INSERT INTO user_delete_log(user_id, deleted_at)
+VALUES (OLD.id, NOW());
+```
+
+---
+
+## 4. 应用场景
+
+- 自动维护审计日志
+- 实现复杂的数据校验
+- 实现级联删除或更新（类似外键的 ON DELETE/UPDATE CASCADE，但更灵活）
+- 自动计算和填充字段
+
+---
+
+## 5. 注意事项
+
+- 触发器不能直接调用 `COMMIT` 或 `ROLLBACK`
+- 触发器执行失败会导致原始操作失败
+- 触发器过多或逻辑复杂会影响性能
+- MySQL 不支持 `INSTEAD OF` 触发器（这是 SQL Server 的特性）
+
+---
+
+## 6. 查看和删除触发器
+
+- 查看触发器：
+  ```sql
+  SHOW TRIGGERS;
+  ```
+- 删除触发器：
+  ```sql
+  DROP TRIGGER trigger_name;
+  ```
+
+---
+
+## 总结
+
+MySQL 的触发器是实现自动化数据处理和约束的重要工具，但应合理设计，避免过度依赖，以免影响数据库性能和可维护性。
