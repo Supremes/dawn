@@ -8,14 +8,19 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import javax.persistence.*;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName("t_comment")
+@Entity
+@Table(name = "t_comment")
 public class Comment {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
