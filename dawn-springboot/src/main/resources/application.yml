@@ -102,7 +102,7 @@ logging:
     name: /logs/app.log # name 优先级大于 path
 #    path: /var/logs/myapp
   level:
-    root: INFO
+    root: DEBUG
     com:
       dawn: DEBUG
     org.springframework.security: DEBUG

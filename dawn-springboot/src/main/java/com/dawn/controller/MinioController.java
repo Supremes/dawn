@@ -52,9 +52,8 @@ public class MinioController {
             objectInfo.put("etag", item.etag());
             objectInfo.put("isDir", item.isDir());
             if (item.lastModified() != null) {
-                objectInfo.put("lastModified", 
-                    item.lastModified().atZone(ZoneId.systemDefault())
-                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                objectInfo.put("lastModified",
+                        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(item.lastModified()));
             }
             objectInfo.put("storageClass", item.storageClass());
             return objectInfo;
