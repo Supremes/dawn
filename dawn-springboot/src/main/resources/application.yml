@@ -84,6 +84,7 @@ upload:
   minio:
     url: http://minio:9000/
     endpoint: http://minio:9000
+    externalEndpoint: http://127.0.0.1:9000/test/
     accesskey: minioadmin
     secretKey: Dududu951221
     bucketName: test
