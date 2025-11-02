@@ -1,12 +1,14 @@
 package com.dawn.strategy.impl;
 
 import com.dawn.config.properties.MinioProperties;
+import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.ListObjectsArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.Result;
 import io.minio.StatObjectArgs;
 import io.minio.messages.Item;
+import io.minio.http.Method;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service("minioUploadStrategyImpl")
 public class MinioUploadStrategyImpl extends AbstractUploadStrategyImpl {
@@ -44,7 +47,23 @@ public class MinioUploadStrategyImpl extends AbstractUploadStrategyImpl {
 
     @Override
     public String getFileAccessUrl(String filePath) {
-        return minioProperties.getUrl() + filePath;
+        return minioProperties.getExternalEndpoint() + filePath;
+    }
+
+    /**
+     * 获取文件的预签名URL (File Share URL)
+     * @param objectName 对象名称
+     * @return 预签名的URL
+     */
+    @SneakyThrows
+    public String getPresignedObjectUrl(String objectName) {
+        return getMinioClient().getPresignedObjectUrl(
+                GetPresignedObjectUrlArgs.builder()
+                        .method(Method.GET)
+                        .bucket(minioProperties.getBucketName())
+                        .object(objectName)
+                        .expiry(7, TimeUnit.DAYS) // 设置链接有效期为7天
+                        .build());
     }
 
     private MinioClient getMinioClient() {
@@ -70,7 +89,7 @@ public class MinioUploadStrategyImpl extends AbstractUploadStrategyImpl {
         
         for (Result<Item> result : results) {
             Item item = result.get();
-            objectNames.add(item.objectName());
+            objectNames.add(getPresignedObjectUrl(item.objectName()));
         }
         return objectNames;
     }
@@ -117,5 +136,4 @@ public class MinioUploadStrategyImpl extends AbstractUploadStrategyImpl {
         }
         return objects;
     }
-
 }
