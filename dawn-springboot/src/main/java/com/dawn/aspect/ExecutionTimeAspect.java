@@ -32,7 +32,8 @@ public class ExecutionTimeAspect {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
         ApiOperation apiOperation = method.getAnnotation(ApiOperation.class);
-        log.debug("Method URI: {} , Method name: {}, Swagger Desc: {}, returning with : {}", Objects.requireNonNull(request).getRequestURI(), method.getName(), apiOperation.value(), result);
+        String desc = (apiOperation != null) ? apiOperation.value() : "No description";
+        log.debug("Method URI: {} , Method name: {}, Swagger Desc: {}, returning with : {}", Objects.requireNonNull(request).getRequestURI(), method.getName(), desc, result);
     }
 
 }

@@ -5,9 +5,14 @@ import io.minio.messages.Item;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -80,12 +85,29 @@ public class MinioController {
         
         return statistics;
     }
-    
+
     private String getFileExtension(String fileName) {
         int lastDot = fileName.lastIndexOf('.');
         if (lastDot > 0 && lastDot < fileName.length() - 1) {
             return fileName.substring(lastDot + 1).toLowerCase();
         }
         return "unknown";
+    }
+
+    @ApiOperation("测试SpringBoot序列化行为")
+    @GetMapping("/test/serialize")
+    public TestDTO testSerializeDTO() {
+        return TestDTO.builder()
+                .dateTime(LocalDateTime.now())
+                .name("name")
+                .build();
+    }
+
+    @Builder
+    @AllArgsConstructor
+    @Data
+    public static class TestDTO {
+        LocalDateTime dateTime;
+        String name;
     }
 }
