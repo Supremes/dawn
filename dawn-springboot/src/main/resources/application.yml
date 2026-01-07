@@ -2,6 +2,9 @@ server:
   port: 8080
 
 spring:
+  application:
+    name: dawn
+
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -123,3 +126,12 @@ logging:
 #management:
 #  endpoints:
 #    enabled-by-default: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus, health, info # 暴露 prometheus 端点
+  metrics:
+    tags:
+      application: ${spring.application.name} # 给所有指标加个标签
