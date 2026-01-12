@@ -1,0 +1,45 @@
+name: Java Backend CI
+
+on:
+  push:
+    branches: [ master, main, develop ]
+    paths: 
+      - 'dawn-springboot/**'
+      - '.github/workflows/java-backend-ci.yml'
+  pull_request:
+    branches: [ master, main, develop ]
+    paths: 
+      - 'dawn-springboot/**'
+
+jobs:
+  build:
+    runs-on:  ubuntu-latest
+
+    steps: 
+    - uses: actions/checkout@v3
+
+    - name: Set up JDK 8
+      uses: actions/setup-java@v3
+      with:
+        java-version: '8'
+        distribution: 'adopt'
+        cache: maven
+
+    - name: Build with Maven
+      working-directory: ./dawn-springboot
+      run: mvn clean compile
+
+    - name: Run Unit Tests
+      working-directory: ./dawn-springboot
+      run: mvn test
+
+    - name: Build Package
+      working-directory: ./dawn-springboot
+      run: mvn package -DskipTests
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: build-artifacts
+        path:  dawn-springboot/target/*.jar
