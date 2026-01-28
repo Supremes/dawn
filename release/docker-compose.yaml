@@ -181,6 +181,9 @@ services:
         condition: service_healthy
       minio:
         condition: service_healthy
+      grafana:
+        condition: service_healthy
+        
     # healthcheck:
     #   test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
     #   timeout: 10s
@@ -213,6 +216,60 @@ services:
     #   timeout: 5s
     #   interval: 30s
     #   retries: 3
+
+  # 1. Loki: 接收并存储日志
+  loki:
+    image: grafana/loki:3.0.0
+    container_name: dawn-loki
+    restart: unless-stopped
+    ports:
+      - "${LOKI_PORT:-3100}:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - dawn-network
+
+  # 2. Prometheus: 接收并存储 Metrics (可选，为了完整性)
+  prometheus:
+    image: prom/prometheus:v2.53.0
+    container_name: prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - dawn-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
+      timeout: 5s
+      interval: 30s
+      retries: 3
+      start_period: 30s
+    
+  # 3. Grafana: 展示界面
+  grafana:
+    image: grafana/grafana:11.4.0
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "${GRAFANA_PORT:-3000}:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin # 初始密码
+    depends_on:
+      - loki
+      - prometheus
+    networks:
+      - dawn-network
+    healthcheck:
+      test: ["CMD-SHELL", "wget --quiet --tries=1 --spider http://localhost:3000/api/health || exit 1"]
+      timeout: 5s
+      interval: 30s
+      retries: 3
+      start_period: 30s
 
 # Named Volumes for Data Persistence
 volumes:

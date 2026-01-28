@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+
+    <!-- 从 Spring 配置中读取属性 -->
+    <springProperty scope="context" name="APP_NAME" source="spring.application.name" defaultValue="dawn"/>
+    <springProperty scope="context" name="LOKI_URL" source="loki.url" defaultValue="http://dawn-loki:3100/loki/api/v1/push"/>
+
+    <!-- 控制台/文件日志格式：简洁易读 -->
+    <property name="LOG_PATTERN" value="%d{HH:mm:ss.SSS} [%X{traceId:-},%X{spanId:-}] %-5level %msg%n"/>
+    
+    <!-- Loki JSON 格式：便于查询 -->
+    <property name="LOKI_PATTERN" value='{"ts":"%d{HH:mm:ss.SSS}","tid":"%X{traceId:-}","sid":"%X{spanId:-}","lvl":"%level","msg":"%msg"}'/>
+
+    <!-- 控制台输出 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 文件输出（滚动） -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/${APP_NAME}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/${APP_NAME}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>3GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- Loki Appender：将日志推送到 Grafana Loki -->
+    
+    <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
+        <http class="com.github.loki4j.logback.ApacheHttpSender">
+            <url>${LOKI_URL}</url>
+        </http>
+        <format>
+            <label>
+                <pattern>app=${APP_NAME},level=%level</pattern>
+            </label>
+            <message>
+                <pattern>${LOKI_PATTERN}</pattern>
+            </message>
+            <sortByTime>true</sortByTime>
+        </format>
+    </appender>
+
+    <!-- 开发环境配置 -->
+    <springProfile name="dev">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE"/>
+            <appender-ref ref="LOKI"/>
+        </root>
+        <!-- 开发环境显示 SQL -->
+        <logger name="com.dawn.mapper" level="DEBUG"/>
+        <logger name="org.springframework.web" level="DEBUG"/>
+        <logger name="org.springframework.security" level="DEBUG"/>
+        <logger name="org.springframework.amqp" level="DEBUG"/>
+        <logger name="com.baomidou.mybatisplus" level="DEBUG"/>
+
+         <!-- 禁用第三方库的 DEBUG 日志 -->
+        <logger name="org.apache.http" level="WARN"/>
+        <logger name="org.apache.http.wire" level="WARN"/>
+        <logger name="org.apache.http.headers" level="WARN"/>
+        <logger name="com.github.loki4j" level="INFO"/>
+        <logger name="springfox.documentation" level="WARN"/>
+    </springProfile>
+
+    <!-- 生产环境配置 -->
+    <springProfile name="prod">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE"/>
+            <appender-ref ref="LOKI"/>
+        </root>
+        <logger name="com.dawn" level="INFO"/>
+        <logger name="org.springframework" level="WARN"/>
+        
+        <!-- 禁用第三方库的 DEBUG 日志 -->
+        <logger name="org.apache.http" level="WARN"/>
+        <logger name="org.apache.http.wire" level="WARN"/>
+        <logger name="org.apache.http.headers" level="WARN"/>
+        <logger name="com.github.loki4j" level="INFO"/>
+        <logger name="springfox.documentation" level="WARN"/>
+    </springProfile>
+
+    <!-- 默认配置（无 profile 时使用） -->
+    <springProfile name="default">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE"/>
+            <appender-ref ref="LOKI"/>
+        </root>
+        
+        <!-- 禁用第三方库的 DEBUG 日志 -->
+        <logger name="org.apache.http" level="WARN"/>
+        <logger name="com.github.loki4j" level="INFO"/>
+        <logger name="springfox.documentation" level="WARN"/>
+    </springProfile>
+
+</configuration>
