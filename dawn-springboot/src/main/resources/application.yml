@@ -5,6 +5,9 @@ spring:
   application:
     name: dawn
 
+  profiles:
+    active: dev # 或者prod
+
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -135,3 +138,7 @@ management:
   metrics:
     tags:
       application: ${spring.application.name} # 给所有指标加个标签
+  
+  tracing:
+    sampling:
+      probability: 1 # 100 的采样率, 生产环境建议调整为 0.1 或更低
