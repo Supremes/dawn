@@ -2,9 +2,9 @@ package com.dawn.controller;
 
 import com.dawn.strategy.impl.MinioUploadStrategyImpl;
 import io.minio.messages.Item;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  * MinIO 对象存储管理控制器
  * @author dawn
  */
-@Api(tags = "MinIO对象存储管理")
+@Tag(name = "MinIO对象存储管理")
 @RestController
 @RequestMapping("/admin/minio")
 public class MinioController {
@@ -32,20 +32,20 @@ public class MinioController {
     @Autowired
     private MinioUploadStrategyImpl minioUploadStrategy;
 
-    @ApiOperation("列出所有对象名称")
+    @Operation(summary = "列出所有对象名称")
     @GetMapping("/objects")
     public List<String> listAllObjects() {
         return minioUploadStrategy.listAllObjects();
     }
 
-    @ApiOperation("根据前缀列出对象")
+    @Operation(summary = "根据前缀列出对象")
     @GetMapping("/objects/prefix/{prefix}")
     public List<String> listObjectsWithPrefix(
-            @ApiParam("对象名前缀") @PathVariable String prefix) {
+            @Parameter(description = "对象名前缀") @PathVariable String prefix) {
         return minioUploadStrategy.listObjectsWithPrefix(prefix);
     }
 
-    @ApiOperation("列出所有对象的详细信息")
+    @Operation(summary = "列出所有对象的详细信息")
     @GetMapping("/objects/details")
     public List<Map<String, Object>> listAllObjectsWithDetails() {
         List<Item> items = minioUploadStrategy.listAllObjectsWithDetails();
@@ -65,7 +65,7 @@ public class MinioController {
         }).collect(Collectors.toList());
     }
 
-    @ApiOperation("统计对象信息")
+    @Operation(summary = "统计对象信息")
     @GetMapping("/objects/statistics")
     public Map<String, Object> getObjectStatistics() {
         List<Item> items = minioUploadStrategy.listAllObjectsWithDetails();
@@ -94,7 +94,7 @@ public class MinioController {
         return "unknown";
     }
 
-    @ApiOperation("测试SpringBoot序列化行为")
+    @Operation(summary = "测试SpringBoot序列化行为")
     @GetMapping("/test/serialize")
     public TestDTO testSerializeDTO() {
         return TestDTO.builder()

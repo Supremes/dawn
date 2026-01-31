@@ -1,36 +1,35 @@
 package com.dawn.model.vo;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(description = "评论")
+@Schema(description = "评论")
 public class CommentVO {
 
-    @ApiModelProperty(name = "replyUserId", value = "回复用户id", dataType = "Integer")
+    @Schema(description = "回复用户id")
     private Integer replyUserId;
 
-    @ApiModelProperty(name = "topicId", value = "主题id", dataType = "Integer")
+    @Schema(description = "主题id")
     private Integer topicId;
 
     @NotBlank(message = "评论内容不能为空")
-    @ApiModelProperty(name = "commentContent", value = "评论内容", required = true, dataType = "String")
+    @Schema(description = "评论内容", requiredMode = Schema.RequiredMode.REQUIRED)
     private String commentContent;
 
-    @ApiModelProperty(name = "parentId", value = "评论父id", dataType = "Integer")
+    @Schema(description = "评论父id")
     private Integer parentId;
 
     @NotNull(message = "评论类型不能为空")
-    @ApiModelProperty(name = "type", value = "评论类型", dataType = "Integer")
+    @Schema(description = "评论类型")
     private Integer type;
 }

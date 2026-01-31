@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.dawn.model.dto.ArticleSearchDTO;
 import com.dawn.model.dto.UserAreaDTO;
 import com.dawn.entity.*;
-import com.dawn.mapper.ElasticsearchMapper;
+import com.dawn.repository.CustomElasticSearchMapper;
 import com.dawn.mapper.UniqueViewMapper;
 import com.dawn.mapper.UserAuthMapper;
 import com.dawn.service.*;
@@ -58,7 +58,7 @@ public class DawnQuartz {
     private RestTemplate restTemplate;
 
     @Autowired
-    private ElasticsearchMapper elasticsearchMapper;
+    private CustomElasticSearchMapper elasticsearchMapper;
 
 
     @Value("${website.url}")

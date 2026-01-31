@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.dawn.model.dto.ArticleSearchDTO;
 import com.dawn.model.dto.MaxwellDataDTO;
 import com.dawn.entity.Article;
-import com.dawn.mapper.ElasticsearchMapper;
+import com.dawn.repository.CustomElasticSearchMapper;
 import com.dawn.util.BeanCopyUtil;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -18,7 +18,7 @@ import static com.dawn.constant.RabbitMQConstant.MAXWELL_QUEUE;
 public class MaxWellConsumer {
 
     @Autowired
-    private ElasticsearchMapper elasticsearchMapper;
+    private CustomElasticSearchMapper elasticsearchMapper;
 
     @RabbitHandler
     public void process(byte[] data) {

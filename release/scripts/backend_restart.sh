@@ -14,7 +14,7 @@ fi
 cd $RELEASE_PATH
 cp ../dawn-springboot/target/dawn-springboot-1.0.jar .
 
-if docker compose up -d --build dawn; then
+if docker compose up -d --build nginx; then
     echo "✅ 成功重新创建并运行主程序 dawn"
 else
     echo "❌ Docker Compose 启动失败"

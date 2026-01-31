@@ -1,55 +1,53 @@
 package com.dawn.model.vo;
 
-
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(description = "文章")
+@Schema(description = "文章")
 public class ArticleVO {
 
-    @ApiModelProperty(name = "id", value = "文章id", dataType = "Integer")
+    @Schema(description = "文章id")
     private Integer id;
 
     @NotBlank(message = "文章标题不能为空")
-    @ApiModelProperty(name = "articleTitle", value = "文章标题", required = true, dataType = "String")
+    @Schema(description = "文章标题", requiredMode = Schema.RequiredMode.REQUIRED)
     private String articleTitle;
 
     @NotBlank(message = "文章内容不能为空")
-    @ApiModelProperty(name = "articleContent", value = "文章内容", required = true, dataType = "String")
+    @Schema(description = "文章内容", requiredMode = Schema.RequiredMode.REQUIRED)
     private String articleContent;
 
-    @ApiModelProperty(name = "articleCover", value = "文章缩略图", dataType = "String")
+    @Schema(description = "文章缩略图")
     private String articleCover;
 
-    @ApiModelProperty(name = "category", value = "文章分类", dataType = "Integer")
+    @Schema(description = "文章分类")
     private String categoryName;
 
-    @ApiModelProperty(name = "tagNameList", value = "文章标签", dataType = "List<Integer>")
+    @Schema(description = "文章标签")
     private List<String> tagNames;
 
-    @ApiModelProperty(name = "isTop", value = "是否置顶", dataType = "Integer")
+    @Schema(description = "是否置顶")
     private Integer isTop;
 
-    @ApiModelProperty(name = "isFeatured", value = "是否推荐", dataType = "Integer")
+    @Schema(description = "是否推荐")
     private Integer isFeatured;
 
-    @ApiModelProperty(name = "status", value = "文章状态", dataType = "String")
+    @Schema(description = "文章状态")
     private Integer status;
 
-    @ApiModelProperty(name = "type", value = "文章类型", dataType = "Integer")
+    @Schema(description = "文章类型")
     private Integer type;
 
-    @ApiModelProperty(name = "originalUrl", value = "原文链接", dataType = "String")
+    @Schema(description = "原文链接")
     private String originalUrl;
 
-    @ApiModelProperty(name = "password", value = "文章访问密码", dataType = "String")
+    @Schema(description = "文章访问密码")
     private String password;
 }

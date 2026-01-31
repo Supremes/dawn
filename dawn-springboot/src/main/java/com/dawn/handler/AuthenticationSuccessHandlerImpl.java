@@ -8,21 +8,17 @@ import com.dawn.entity.UserAuth;
 import com.dawn.mapper.UserAuthMapper;
 import com.dawn.service.TokenService;
 import com.dawn.util.BeanCopyUtil;
-import com.dawn.util.UserUtil;
 import com.dawn.model.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Objects;
 
 
 @Component

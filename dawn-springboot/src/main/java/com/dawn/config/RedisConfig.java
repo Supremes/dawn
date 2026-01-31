@@ -36,6 +36,9 @@ public class RedisConfig {
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
         BasicPolymorphicTypeValidator validator = BasicPolymorphicTypeValidator.builder()
                 .allowIfSubType("com.dawn")
+                // 开放常用的 JDK 集合类型（通常是安全的）
+                .allowIfSubType("java.util.ArrayList")
+                .allowIfSubType("java.util.HashMap")
                 .build();
         ObjectMapper objectMapper = JsonMapper.builder().activateDefaultTyping(
                 validator, ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY

@@ -53,7 +53,7 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
         this.remove(null);
         roleResourceMapper.delete(null);
         List<Resource> resources = new ArrayList<>();
-        Map<String, Object> data = restTemplate.getForObject("http://localhost:8080/v2/api-docs", Map.class);
+        Map<String, Object> data = restTemplate.getForObject("http://localhost:8080/v3/api-docs", Map.class);
         List<Map<String, String>> tagList = (List<Map<String, String>>) data.get("tags");
         tagList.forEach(item -> {
             Resource resource = Resource.builder()
@@ -94,7 +94,7 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
 
     @Override
     public void deleteResource(Integer resourceId) {
-        Integer count = roleResourceMapper.selectCount(new LambdaQueryWrapper<RoleResource>()
+        Long count = roleResourceMapper.selectCount(new LambdaQueryWrapper<RoleResource>()
                 .eq(RoleResource::getResourceId, resourceId));
         if (count > 0) {
             throw new BizException("该资源下存在角色");

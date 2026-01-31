@@ -1,7 +1,7 @@
 package com.dawn.model.dto;
 
 
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(description = "文章")
+@Schema(description = "文章")
 public class ArticleAdminViewDTO {
 
     private Integer id;
