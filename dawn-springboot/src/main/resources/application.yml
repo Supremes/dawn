@@ -24,17 +24,18 @@ spring:
       connection-timeout: 30000
       connection-test-query: SELECT 1
 
-  redis:
-    host: redis
-    port: 6379
-    password: 123456
-    database: 1
-    lettuce:
-      pool:
-        min-idle: 10
-        max-idle: 100
-        max-active: 100
-        max-wait: 10000
+  data:
+    redis:
+      host: redis
+      port: 6379
+      password: 123456
+      database: 1
+      lettuce:
+        pool:
+          min-idle: 10
+          max-idle: 100
+          max-active: 100
+          max-wait: 10000
 
   rabbitmq:
     host: rabbitmq
@@ -50,8 +51,7 @@ spring:
           initial-interval: 3000
 
   elasticsearch:
-    rest:
-      uris: elasticsearch:9200
+    uris: elasticsearch:9200
 
   mail:
     host: smtp.163.com
@@ -109,7 +109,7 @@ logging:
     name: /logs/app.log # name 优先级大于 path
 #    path: /var/logs/myapp
   level:
-    root: DEBUG
+    root: INFO
     com:
       dawn: DEBUG
     org.springframework.security: DEBUG

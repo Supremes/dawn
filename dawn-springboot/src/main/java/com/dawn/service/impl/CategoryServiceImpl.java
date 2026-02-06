@@ -41,13 +41,13 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     @SneakyThrows
     @Override
     public PageResultDTO<CategoryAdminDTO> listCategoriesAdmin(ConditionVO conditionVO) {
-        Integer count = categoryMapper.selectCount(new LambdaQueryWrapper<Category>()
+        Long count = categoryMapper.selectCount(new LambdaQueryWrapper<Category>()
                 .like(StringUtils.isNotBlank(conditionVO.getKeywords()), Category::getCategoryName, conditionVO.getKeywords()));
         if (count == 0) {
             return new PageResultDTO<>();
         }
         List<CategoryAdminDTO> categoryList = categoryMapper.listCategoriesAdmin(PageUtil.getLimitCurrent(), PageUtil.getSize(), conditionVO);
-        return new PageResultDTO<>(categoryList, count);
+        return new PageResultDTO<>(categoryList, count.intValue());
     }
 
     @SneakyThrows
@@ -62,7 +62,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
 
     @Override
     public void deleteCategories(List<Integer> categoryIds) {
-        Integer count = articleMapper.selectCount(new LambdaQueryWrapper<Article>()
+        Long count = articleMapper.selectCount(new LambdaQueryWrapper<Article>()
                 .in(Article::getCategoryId, categoryIds));
         if (count > 0) {
             throw new BizException("删除失败，该分类下存在文章");

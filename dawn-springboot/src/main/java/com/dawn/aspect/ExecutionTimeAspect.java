@@ -4,9 +4,8 @@ import com.dawn.constant.MetricsConstant;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -14,7 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.Objects;
 
@@ -47,8 +46,8 @@ public class ExecutionTimeAspect {
         Method method = signature.getMethod();
         String methodName = method.getName();
         String uri = request.getRequestURI();
-        ApiOperation apiOperation = method.getAnnotation(ApiOperation.class);
-        String desc = (apiOperation != null) ? apiOperation.value() : "No description";
+        Operation operation = method.getAnnotation(Operation.class);
+        String desc = (operation != null) ? operation.summary() : "No description";
 
         // 开始计时
         Timer.Sample sample = Timer.start(meterRegistry);

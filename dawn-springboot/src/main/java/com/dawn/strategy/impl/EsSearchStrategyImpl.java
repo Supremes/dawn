@@ -5,14 +5,17 @@ import com.dawn.strategy.SearchStrategy;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import lombok.extern.log4j.Log4j2;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.core.SearchHits;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.HighlightQuery;
+import org.springframework.data.elasticsearch.core.query.highlight.Highlight;
+import org.springframework.data.elasticsearch.core.query.highlight.HighlightField;
+import org.springframework.data.elasticsearch.core.query.highlight.HighlightParameters;
 import org.springframework.stereotype.Service;
+import co.elastic.clients.elasticsearch._types.query_dsl.BoolQuery;
+import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +29,7 @@ import static com.dawn.enums.ArticleStatusEnum.PUBLIC;
 public class EsSearchStrategyImpl implements SearchStrategy {
 
     @Autowired
-    private ElasticsearchRestTemplate elasticsearchRestTemplate;
+    private ElasticsearchTemplate elasticsearchTemplate;
 
     @Override
     public List<ArticleSearchDTO> searchArticle(String keywords) {
@@ -36,28 +39,38 @@ public class EsSearchStrategyImpl implements SearchStrategy {
         return search(buildQuery(keywords));
     }
 
-    private NativeSearchQueryBuilder buildQuery(String keywords) {
-        NativeSearchQueryBuilder nativeSearchQueryBuilder = new NativeSearchQueryBuilder();
-        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-        boolQueryBuilder.must(QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("articleTitle", keywords))
-                        .should(QueryBuilders.matchQuery("articleContent", keywords)))
-                .must(QueryBuilders.termQuery("isDelete", FALSE))
-                .must(QueryBuilders.termQuery("status", PUBLIC.getStatus()));
-        nativeSearchQueryBuilder.withQuery(boolQueryBuilder);
-        return nativeSearchQueryBuilder;
+    private NativeQuery buildQuery(String keywords) {
+        // 构建布尔查询
+        Query matchTitle = Query.of(q -> q.match(m -> m.field("articleTitle").query(keywords)));
+        Query matchContent = Query.of(q -> q.match(m -> m.field("articleContent").query(keywords)));
+        Query isDeleteQuery = Query.of(q -> q.term(t -> t.field("isDelete").value(FALSE)));
+        Query statusQuery = Query.of(q -> q.term(t -> t.field("status").value(PUBLIC.getStatus())));
+
+        BoolQuery boolQuery = BoolQuery.of(b -> b
+                .must(Query.of(q -> q.bool(bb -> bb.should(matchTitle).should(matchContent))))
+                .must(isDeleteQuery)
+                .must(statusQuery));
+
+        // 构建高亮
+        List<HighlightField> highlightFields = List.of(
+                new HighlightField("articleTitle"),
+                new HighlightField("articleContent")
+        );
+        HighlightParameters highlightParameters = HighlightParameters.builder()
+                .withPreTags(PRE_TAG)
+                .withPostTags(POST_TAG)
+                .build();
+        Highlight highlight = new Highlight(highlightParameters, highlightFields);
+
+        return NativeQuery.builder()
+                .withQuery(Query.of(q -> q.bool(boolQuery)))
+                .withHighlightQuery(new HighlightQuery(highlight, ArticleSearchDTO.class))
+                .build();
     }
 
-    private List<ArticleSearchDTO> search(NativeSearchQueryBuilder nativeSearchQueryBuilder) {
-        HighlightBuilder.Field titleField = new HighlightBuilder.Field("articleTitle");
-        titleField.preTags(PRE_TAG);
-        titleField.postTags(POST_TAG);
-        HighlightBuilder.Field contentField = new HighlightBuilder.Field("articleContent");
-        contentField.preTags(PRE_TAG);
-        contentField.postTags(POST_TAG);
-        contentField.fragmentSize(50);
-        nativeSearchQueryBuilder.withHighlightFields(titleField, contentField);
+    private List<ArticleSearchDTO> search(NativeQuery nativeQuery) {
         try {
-            SearchHits<ArticleSearchDTO> search = elasticsearchRestTemplate.search(nativeSearchQueryBuilder.build(), ArticleSearchDTO.class);
+            SearchHits<ArticleSearchDTO> search = elasticsearchTemplate.search(nativeQuery, ArticleSearchDTO.class);
             return search.getSearchHits().stream().map(hit -> {
                 ArticleSearchDTO article = hit.getContent();
                 List<String> titleHighLightList = hit.getHighlightFields().get("articleTitle");

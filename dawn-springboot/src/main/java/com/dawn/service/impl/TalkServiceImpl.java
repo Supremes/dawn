@@ -42,7 +42,7 @@ public class TalkServiceImpl extends ServiceImpl<TalkMapper, Talk> implements Ta
 
     @Override
     public PageResultDTO<TalkDTO> listTalks() {
-        Integer count = talkMapper.selectCount((new LambdaQueryWrapper<Talk>()
+        Long count = talkMapper.selectCount((new LambdaQueryWrapper<Talk>()
                 .eq(Talk::getStatus, PUBLIC.getStatus())));
         if (count == 0) {
             return new PageResultDTO<>();
@@ -60,7 +60,7 @@ public class TalkServiceImpl extends ServiceImpl<TalkMapper, Talk> implements Ta
                 item.setImgs(CommonUtil.castList(JSON.parseObject(item.getImages(), List.class), String.class));
             }
         });
-        return new PageResultDTO<>(talkDTOs, count);
+        return new PageResultDTO<>(talkDTOs, count.intValue());
     }
 
     @Override
@@ -93,7 +93,7 @@ public class TalkServiceImpl extends ServiceImpl<TalkMapper, Talk> implements Ta
 
     @Override
     public PageResultDTO<TalkAdminDTO> listBackTalks(ConditionVO conditionVO) {
-        Integer count = talkMapper.selectCount(new LambdaQueryWrapper<Talk>()
+        Long count = talkMapper.selectCount(new LambdaQueryWrapper<Talk>()
                 .eq(Objects.nonNull(conditionVO.getStatus()), Talk::getStatus, conditionVO.getStatus()));
         if (count == 0) {
             return new PageResultDTO<>();
@@ -104,7 +104,7 @@ public class TalkServiceImpl extends ServiceImpl<TalkMapper, Talk> implements Ta
                 item.setImgs(CommonUtil.castList(JSON.parseObject(item.getImages(), List.class), String.class));
             }
         });
-        return new PageResultDTO<>(talkDTOs, count);
+        return new PageResultDTO<>(talkDTOs, count.intValue());
     }
 
     @Override

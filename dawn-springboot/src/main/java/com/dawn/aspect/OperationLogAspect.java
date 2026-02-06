@@ -6,8 +6,8 @@ import com.dawn.entity.OperationLog;
 import com.dawn.event.OperationLogEvent;
 import com.dawn.util.IpUtil;
 import com.dawn.util.UserUtil;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -20,7 +20,7 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.Objects;
 
@@ -43,12 +43,12 @@ public class OperationLogAspect {
         OperationLog operationLog = new OperationLog();
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
-        Api api = (Api) signature.getDeclaringType().getAnnotation(Api.class);
-        ApiOperation apiOperation = method.getAnnotation(ApiOperation.class);
+        Tag tag = (Tag) signature.getDeclaringType().getAnnotation(Tag.class);
+        Operation operation = method.getAnnotation(Operation.class);
         OptLog optLog = method.getAnnotation(OptLog.class);
-        operationLog.setOptModule(api.tags()[0]);
+        operationLog.setOptModule(tag.description());
         operationLog.setOptType(optLog.optType());
-        operationLog.setOptDesc(apiOperation.value());
+        operationLog.setOptDesc(operation.summary());
         String className = joinPoint.getTarget().getClass().getName();
         String methodName = method.getName();
         methodName = className + "." + methodName;

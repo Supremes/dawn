@@ -1,7 +1,6 @@
 package com.dawn.model.vo;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,91 +10,90 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ApiModel(description = "网站配置")
+@Schema(description = "网站配置")
 public class WebsiteConfigVO {
 
-    @ApiModelProperty(name = "name", value = "网站名称", required = true, dataType = "String")
+    @Schema(description = "网站名称", requiredMode = Schema.RequiredMode.REQUIRED)
     private String name;
 
-    @ApiModelProperty(name = "nickName", value = "网站作者昵称", required = true, dataType = "String")
+    @Schema(description = "网站作者昵称", requiredMode = Schema.RequiredMode.REQUIRED)
     private String englishName;
 
-    @ApiModelProperty(name = "author", value = "网站作者", required = true, dataType = "String")
+    @Schema(description = "网站作者", requiredMode = Schema.RequiredMode.REQUIRED)
     private String author;
 
-    @ApiModelProperty(name = "avatar", value = "网站头像", required = true, dataType = "String")
+    @Schema(description = "网站头像", requiredMode = Schema.RequiredMode.REQUIRED)
     private String authorAvatar;
 
-    @ApiModelProperty(name = "description", value = "网站作者介绍", required = true, dataType = "String")
+    @Schema(description = "网站作者介绍", requiredMode = Schema.RequiredMode.REQUIRED)
     private String authorIntro;
 
-    @ApiModelProperty(name = "logo", value = "网站logo", required = true, dataType = "String")
+    @Schema(description = "网站logo", requiredMode = Schema.RequiredMode.REQUIRED)
     private String logo;
 
-    @ApiModelProperty(name = "multiLanguage", value = "多语言", required = true, dataType = "Integer")
+    @Schema(description = "多语言", requiredMode = Schema.RequiredMode.REQUIRED)
     private Integer multiLanguage;
 
-    @ApiModelProperty(name = "notice", value = "网站公告", required = true, dataType = "String")
+    @Schema(description = "网站公告", requiredMode = Schema.RequiredMode.REQUIRED)
     private String notice;
 
-    @ApiModelProperty(name = "websiteCreateTime", value = "网站创建时间", required = true, dataType = "LocalDateTime")
+    @Schema(description = "网站创建时间", requiredMode = Schema.RequiredMode.REQUIRED)
     private String websiteCreateTime;
 
-    @ApiModelProperty(name = "beianNumber", value = "网站备案号", required = true, dataType = "String")
+    @Schema(description = "网站备案号", requiredMode = Schema.RequiredMode.REQUIRED)
     private String beianNumber;
 
-    @ApiModelProperty(name = "qqLogin", value = "QQ登录", required = true, dataType = "Integer")
+    @Schema(description = "QQ登录", requiredMode = Schema.RequiredMode.REQUIRED)
     private Integer qqLogin;
 
-    @ApiModelProperty(name = "github", value = "github", required = true, dataType = "String")
+    @Schema(description = "github", requiredMode = Schema.RequiredMode.REQUIRED)
     private String github;
 
-    @ApiModelProperty(name = "gitee", value = "gitee", required = true, dataType = "String")
+    @Schema(description = "gitee", requiredMode = Schema.RequiredMode.REQUIRED)
     private String gitee;
 
-    @ApiModelProperty(name = "qq", value = "qq", required = true, dataType = "String")
+    @Schema(description = "qq", requiredMode = Schema.RequiredMode.REQUIRED)
     private String qq;
 
-    @ApiModelProperty(name = "weChat", value = "微信", required = true, dataType = "String")
+    @Schema(description = "微信", requiredMode = Schema.RequiredMode.REQUIRED)
     private String weChat;
 
-    @ApiModelProperty(name = "weibo", value = "微博", required = true, dataType = "String")
+    @Schema(description = "微博", requiredMode = Schema.RequiredMode.REQUIRED)
     private String weibo;
 
-    @ApiModelProperty(name = "csdn", value = "csdn", required = true, dataType = "String")
+    @Schema(description = "csdn", requiredMode = Schema.RequiredMode.REQUIRED)
     private String csdn;
 
-    @ApiModelProperty(name = "zhihu", value = "zhihu", required = true, dataType = "String")
+    @Schema(description = "zhihu", requiredMode = Schema.RequiredMode.REQUIRED)
     private String zhihu;
 
-    @ApiModelProperty(name = "juejin", value = "juejin", required = true, dataType = "String")
+    @Schema(description = "juejin", requiredMode = Schema.RequiredMode.REQUIRED)
     private String juejin;
 
-    @ApiModelProperty(name = "twitter", value = "twitter", required = true, dataType = "String")
+    @Schema(description = "twitter", requiredMode = Schema.RequiredMode.REQUIRED)
     private String twitter;
 
-    @ApiModelProperty(name = "stackoverflow", value = "stackoverflow", required = true, dataType = "String")
+    @Schema(description = "stackoverflow", requiredMode = Schema.RequiredMode.REQUIRED)
     private String stackoverflow;
 
-    @ApiModelProperty(name = "touristAvatar", value = "游客头像", required = true, dataType = "String")
+    @Schema(description = "游客头像", requiredMode = Schema.RequiredMode.REQUIRED)
     private String touristAvatar;
 
-    @ApiModelProperty(name = "userAvatar", value = "用户头像", required = true, dataType = "String")
+    @Schema(description = "用户头像", requiredMode = Schema.RequiredMode.REQUIRED)
     private String userAvatar;
 
-    @ApiModelProperty(name = "isCommentReview", value = "是否评论审核", required = true, dataType = "Integer")
+    @Schema(description = "是否评论审核", requiredMode = Schema.RequiredMode.REQUIRED)
     private Integer isCommentReview;
 
-    @ApiModelProperty(name = "isEmailNotice", value = "是否邮箱通知", required = true, dataType = "Integer")
+    @Schema(description = "是否邮箱通知", requiredMode = Schema.RequiredMode.REQUIRED)
     private Integer isEmailNotice;
 
-    @ApiModelProperty(name = "isReward", value = "是否打赏", required = true, dataType = "Integer")
+    @Schema(description = "是否打赏", requiredMode = Schema.RequiredMode.REQUIRED)
     private Integer isReward;
 
-    @ApiModelProperty(name = "weiXinQRCode", value = "微信二维码", required = true, dataType = "String")
+    @Schema(description = "微信二维码", requiredMode = Schema.RequiredMode.REQUIRED)
     private String weiXinQRCode;
 
-    @ApiModelProperty(name = "alipayQRCode", value = "支付宝二维码", required = true, dataType = "String")
+    @Schema(description = "支付宝二维码", requiredMode = Schema.RequiredMode.REQUIRED)
     private String alipayQRCode;
-
 }

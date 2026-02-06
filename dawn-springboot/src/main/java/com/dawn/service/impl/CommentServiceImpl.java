@@ -33,7 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -101,7 +101,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
     @Override
     public PageResultDTO<CommentDTO> listComments(CommentVO commentVO) {
-        Integer commentCount = commentMapper.selectCount(new LambdaQueryWrapper<Comment>()
+        Long commentCount = commentMapper.selectCount(new LambdaQueryWrapper<Comment>()
                 .eq(Objects.nonNull(commentVO.getTopicId()), Comment::getTopicId, commentVO.getTopicId())
                 .eq(Comment::getType, commentVO.getType())
                 .isNull(Comment::getParentId)
@@ -120,7 +120,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         Map<Integer, List<ReplyDTO>> replyMap = replyDTOS.stream()
                 .collect(Collectors.groupingBy(ReplyDTO::getParentId));
         commentDTOs.forEach(item -> item.setReplyDTOs(replyMap.get(item.getId())));
-        return new PageResultDTO<>(commentDTOs, commentCount);
+        return new PageResultDTO<>(commentDTOs, commentCount.intValue());
     }
 
     @Override
@@ -136,9 +136,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @SneakyThrows
     @Override
     public PageResultDTO<CommentAdminDTO> listCommentsAdmin(ConditionVO conditionVO) {
-        CompletableFuture<Integer> asyncCount = CompletableFuture.supplyAsync(() -> commentMapper.countComments(conditionVO));
+        CompletableFuture<Long> asyncCount = CompletableFuture.supplyAsync(() -> (long) commentMapper.countComments(conditionVO));
         List<CommentAdminDTO> commentBackDTOList = commentMapper.listCommentsAdmin(PageUtil.getLimitCurrent(), PageUtil.getSize(), conditionVO);
-        return new PageResultDTO<>(commentBackDTOList, asyncCount.get());
+        return new PageResultDTO<>(commentBackDTOList, asyncCount.get().intValue());
     }
 
     @Override

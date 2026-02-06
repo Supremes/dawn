@@ -1,6 +1,6 @@
 package com.dawn.model.vo;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,21 +12,21 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class JobLogSearchVO {
 
-    @ApiModelProperty(name = "任务Id", value = "jobId", dataType = "Integer")
+    @Schema(description = "任务Id")
     private Integer jobId;
 
-    @ApiModelProperty(name = "任务名称", value = "jobName", dataType = "String")
+    @Schema(description = "任务名称")
     private String jobName;
 
-    @ApiModelProperty(name = "任务的组别", value = "jobGroup", dataType = "String")
+    @Schema(description = "任务的组别")
     private String jobGroup;
 
-    @ApiModelProperty(name = "任务状态", value = "status", dataType = "Integer")
+    @Schema(description = "任务状态")
     private Integer status;
 
-    @ApiModelProperty(name = "开始时间", value = "startTime", dataType = "String")
+    @Schema(description = "开始时间")
     private String startTime;
 
-    @ApiModelProperty(name = "结束时间", value = "endTime", dataType = "String")
+    @Schema(description = "结束时间")
     private String endTime;
 }

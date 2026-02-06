@@ -14,7 +14,7 @@ public interface JobService extends IService<Job> {
 
     void updateJob(JobVO jobVO);
 
-    void deleteJobs(List<Integer> tagIds);
+    void deleteJobs(List<Integer> jobIds);
 
     JobDTO getJobById(Integer jobId);
 

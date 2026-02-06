@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -92,20 +92,20 @@ public class DawnInfoServiceImpl implements DawnInfoService {
     @SneakyThrows
     @Override
     public DawnHomeInfoDTO getDawnHomeInfo() {
-        CompletableFuture<Integer> asyncArticleCount = CompletableFuture.supplyAsync(() -> articleMapper.selectCount(new LambdaQueryWrapper<Article>().eq(Article::getIsDelete, FALSE)));
-        CompletableFuture<Integer> asyncCategoryCount = CompletableFuture.supplyAsync(() -> categoryMapper.selectCount(null));
-        CompletableFuture<Integer> asyncTagCount = CompletableFuture.supplyAsync(() -> tagMapper.selectCount(null));
-        CompletableFuture<Integer> asyncTalkCount = CompletableFuture.supplyAsync(() -> talkMapper.selectCount(null));
+        CompletableFuture<Long> asyncArticleCount = CompletableFuture.supplyAsync(() -> articleMapper.selectCount(new LambdaQueryWrapper<Article>().eq(Article::getIsDelete, FALSE)));
+        CompletableFuture<Long> asyncCategoryCount = CompletableFuture.supplyAsync(() -> categoryMapper.selectCount(null));
+        CompletableFuture<Long> asyncTagCount = CompletableFuture.supplyAsync(() -> tagMapper.selectCount(null));
+        CompletableFuture<Long> asyncTalkCount = CompletableFuture.supplyAsync(() -> talkMapper.selectCount(null));
         CompletableFuture<WebsiteConfigDTO> asyncWebsiteConfig = CompletableFuture.supplyAsync(this::getWebsiteConfig);
         CompletableFuture<Integer> asyncViewCount = CompletableFuture.supplyAsync(() -> {
             Object count = redisService.get(BLOG_VIEWS_COUNT);
             return Integer.parseInt(Optional.ofNullable(count).orElse(0).toString());
         });
         return DawnHomeInfoDTO.builder()
-                .articleCount(asyncArticleCount.get())
-                .categoryCount(asyncCategoryCount.get())
-                .tagCount(asyncTagCount.get())
-                .talkCount(asyncTalkCount.get())
+                .articleCount(asyncArticleCount.get().intValue())
+                .categoryCount(asyncCategoryCount.get().intValue())
+                .tagCount(asyncTagCount.get().intValue())
+                .talkCount(asyncTalkCount.get().intValue())
                 .websiteConfigDTO(asyncWebsiteConfig.get())
                 .viewCount(asyncViewCount.get()).build();
     }
@@ -114,9 +114,9 @@ public class DawnInfoServiceImpl implements DawnInfoService {
     public DawnAdminInfoDTO getDawnAdminInfo() {
         Object count = redisService.get(BLOG_VIEWS_COUNT);
         Integer viewsCount = Integer.parseInt(Optional.ofNullable(count).orElse(0).toString());
-        Integer messageCount = commentMapper.selectCount(new LambdaQueryWrapper<Comment>().eq(Comment::getType, 2));
-        Integer userCount = userInfoMapper.selectCount(null);
-        Integer articleCount = articleMapper.selectCount(new LambdaQueryWrapper<Article>()
+        Long messageCount = commentMapper.selectCount(new LambdaQueryWrapper<Comment>().eq(Comment::getType, 2));
+        Long userCount = userInfoMapper.selectCount(null);
+        Long articleCount = articleMapper.selectCount(new LambdaQueryWrapper<Article>()
                 .eq(Article::getIsDelete, FALSE));
         List<UniqueViewDTO> uniqueViews = uniqueViewService.listUniqueViews();
         List<ArticleStatisticsDTO> articleStatisticsDTOs = articleMapper.listArticleStatistics();
@@ -127,9 +127,9 @@ public class DawnInfoServiceImpl implements DawnInfoService {
                 .articleStatisticsDTOs(articleStatisticsDTOs)
                 .tagDTOs(tagDTOs)
                 .viewsCount(viewsCount)
-                .messageCount(messageCount)
-                .userCount(userCount)
-                .articleCount(articleCount)
+                .messageCount(messageCount.intValue())
+                .userCount(userCount.intValue())
+                .articleCount(articleCount.intValue())
                 .categoryDTOs(categoryDTOs)
                 .uniqueViewDTOs(uniqueViews)
                 .build();

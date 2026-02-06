@@ -62,9 +62,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     public PageResultDTO<RoleDTO> listRoles(ConditionVO conditionVO) {
         LambdaQueryWrapper<Role> queryWrapper = new LambdaQueryWrapper<Role>()
                 .like(StringUtils.isNotBlank(conditionVO.getKeywords()), Role::getRoleName, conditionVO.getKeywords());
-        CompletableFuture<Integer> asyncCount = CompletableFuture.supplyAsync(() -> roleMapper.selectCount(queryWrapper));
+        CompletableFuture<Long> asyncCount = CompletableFuture.supplyAsync(() -> roleMapper.selectCount(queryWrapper));
         List<RoleDTO> roleDTOs = roleMapper.listRoles(PageUtil.getLimitCurrent(), PageUtil.getSize(), conditionVO);
-        return new PageResultDTO<>(roleDTOs, asyncCount.get());
+        return new PageResultDTO<>(roleDTOs, asyncCount.get().intValue());
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -112,7 +112,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Override
     public void deleteRoles(List<Integer> roleIdList) {
-        Integer count = userRoleMapper.selectCount(new LambdaQueryWrapper<UserRole>()
+        Long count = userRoleMapper.selectCount(new LambdaQueryWrapper<UserRole>()
                 .in(UserRole::getRoleId, roleIdList));
         if (count > 0) {
             throw new BizException("该角色下存在用户");
