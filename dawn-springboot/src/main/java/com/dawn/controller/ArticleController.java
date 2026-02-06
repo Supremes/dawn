@@ -117,7 +117,7 @@ public class ArticleController {
     @Operation(summary = "上传文章图片")
     @Parameter(name = "file", description = "文章图片", required = true)
     @PostMapping("/admin/articles/images")
-    public ResultVO<String> saveArticleImages(MultipartFile file) {
+    public ResultVO<String> saveArticleImages(@RequestParam("file") MultipartFile file) {
         return ResultVO.ok(uploadStrategyContext.executeUploadStrategy(file, FilePathEnum.ARTICLE.getPath()));
     }
 
@@ -131,7 +131,7 @@ public class ArticleController {
     @OptLog(optType = UPLOAD)
     @Operation(summary = "导入文章")
     @PostMapping("/admin/articles/import")
-    public ResultVO<?> importArticles(MultipartFile file, @RequestParam(required = false) String type) {
+    public ResultVO<?> importArticles(@RequestParam("file") MultipartFile file, @RequestParam(required = false) String type) {
         articleImportStrategyContext.importArticles(file, type);
         return ResultVO.ok();
     }
