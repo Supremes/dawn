@@ -38,7 +38,7 @@ public class CustomAuthorizationManager implements AuthorizationManager<RequestA
     @PostConstruct
     private void loadResourceRoleList() {
         resourceRoleList = roleMapper.listResourceRoles();
-        log.info("加载资源角色列表完成，共 {} 条记录", resourceRoleList != null ? resourceRoleList.size() : 0);
+        log.debug("加载资源角色列表完成，共 {} 条记录", resourceRoleList != null ? resourceRoleList.size() : 0);
     }
 
     /**
@@ -46,7 +46,7 @@ public class CustomAuthorizationManager implements AuthorizationManager<RequestA
      */
     public void clearDataSource() {
         resourceRoleList = null;
-        log.info("资源角色列表缓存已清除");
+        log.debug("资源角色列表缓存已清除");
     }
 
     @Override
@@ -65,7 +65,10 @@ public class CustomAuthorizationManager implements AuthorizationManager<RequestA
 
         // 如果没有匹配的权限配置，放行
         if (requiredRoles == null) {
-            log.debug("URL: {} [{}] 无权限配置，放行", url, method);
+            if (!url.contains("/actuator/")) {
+                // 排除监控端点的日志，避免过多无用日志干扰
+                log.debug("URL: {} [{}] 无权限配置，放行", url, method);
+            }
             return new AuthorizationDecision(true);
         }
 

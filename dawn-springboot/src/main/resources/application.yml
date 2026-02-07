@@ -112,8 +112,8 @@ logging:
     root: INFO
     com:
       dawn: DEBUG
-    org.springframework.security: DEBUG
-    org.springframework.amqp: DEBUG
+    # org.springframework.security: DEBUG
+    # org.springframework.amqp: DEBUG
     com.baomidou.mybatisplus: DEBUG
 
 #management:

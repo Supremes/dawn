@@ -2,7 +2,7 @@ global:
   scrape_interval: 5s # 压测时建议设短一点，默认是 1m，5s 能看到更实时的波动
 
 scrape_configs:
-  - job_name: 'spring-boot-app'
+  - job_name: 'dawn-server'
     metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: ['dawn-app:8080'] 

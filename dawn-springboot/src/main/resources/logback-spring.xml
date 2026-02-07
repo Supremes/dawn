@@ -9,8 +9,8 @@
     <property name="LOG_PATTERN" value="%d{HH:mm:ss.SSS} [%X{traceId:-},%X{spanId:-}] %-5level [%F:%L] %msg%n"/>
     
     <!-- Loki JSON 格式：便于查询 -->
-    <property name="LOKI_PATTERN" value='{"ts":"%d{HH:mm:ss.SSS}","tid":"%X{traceId:-}","sid":"%X{spanId:-}","lvl":"%level","msg":"%msg"}'/>
-
+    <property name="LOKI_PATTERN" value='{"ts":"%d{HH:mm:ss.SSS}","tid":"%X{traceId:-}","sid":"%X{spanId:-}","lvl":"%level","file":"%F","line":"%L","msg":"%msg"}'/>
+    
     <!-- 控制台输出 -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
