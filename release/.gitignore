@@ -39,3 +39,6 @@ Thumbs.db
 
 # Node modules（如果有）
 node_modules/
+
+# 前端构建产物
+vue/
