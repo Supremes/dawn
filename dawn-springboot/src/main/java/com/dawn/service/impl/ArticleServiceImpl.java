@@ -29,6 +29,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.SneakyThrows;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -42,6 +44,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
+import static com.dawn.constant.MetricsConstant.*;
 import static com.dawn.constant.RabbitMQConstant.SUBSCRIBE_EXCHANGE;
 import static com.dawn.constant.RedisConstant.*;
 import static com.dawn.enums.ArticleStatusEnum.*;
@@ -79,6 +82,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Autowired
     private SearchStrategyContext searchStrategyContext;
+
+    @Autowired
+    private MeterRegistry meterRegistry;
 
     @SneakyThrows
     @Override
@@ -119,6 +125,15 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<Article>().eq(Article::getCategoryId, categoryId);
         CompletableFuture<Long> asyncCount = CompletableFuture.supplyAsync(() -> articleMapper.selectCount(queryWrapper));
         List<ArticleCardDTO> articles = articleMapper.getArticlesByCategoryId(PageUtil.getLimitCurrent(), PageUtil.getSize(), categoryId);
+        // 业务指标：按分类统计文档访问次数
+        Category category = categoryMapper.selectById(categoryId);
+        String categoryName = (category != null) ? category.getCategoryName() : "unknown";
+        Counter.builder(DOC_CATEGORY_ACCESS_COUNT)
+                .description("按文档分类统计访问次数")
+                .tag("category_id", String.valueOf(categoryId))
+                .tag("category_name", categoryName)
+                .register(meterRegistry)
+                .increment();
         return new PageResultDTO<>(articles, asyncCount.get().intValue());
     }
 
@@ -166,6 +181,15 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         }
         article.setPreArticleCard(asyncPreArticle.get());
         article.setNextArticleCard(asyncNextArticle.get());
+        // 业务指标：按文章分类统计单篇文章访问次数
+        Category category = categoryMapper.selectById(articleForCheck.getCategoryId());
+        String categoryName = (category != null) ? category.getCategoryName() : "unknown";
+        Counter.builder(DOC_ARTICLE_VIEW_COUNT)
+                .description("单篇文章访问次数（含分类信息）")
+                .tag("article_id", String.valueOf(articleId))
+                .tag("category_name", categoryName)
+                .register(meterRegistry)
+                .increment();
         return article;
     }
 
@@ -188,6 +212,15 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         LambdaQueryWrapper<ArticleTag> queryWrapper = new LambdaQueryWrapper<ArticleTag>().eq(ArticleTag::getTagId, tagId);
         CompletableFuture<Long> asyncCount = CompletableFuture.supplyAsync(() -> articleTagMapper.selectCount(queryWrapper));
         List<ArticleCardDTO> articles = articleMapper.listArticlesByTagId(PageUtil.getLimitCurrent(), PageUtil.getSize(), tagId);
+        // 业务指标：按标签统计文档访问次数
+        Tag tag = tagMapper.selectById(tagId);
+        String tagName = (tag != null) ? tag.getTagName() : "unknown";
+        Counter.builder(DOC_TAG_ACCESS_COUNT)
+                .description("按文档标签统计访问次数")
+                .tag("tag_id", String.valueOf(tagId))
+                .tag("tag_name", tagName)
+                .register(meterRegistry)
+                .increment();
         return new PageResultDTO<>(articles, asyncCount.get().intValue());
     }
 
