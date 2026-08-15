@@ -20,7 +20,6 @@ yarn-error.log*
 *.sw?
 
 target
-dawn-springboot/src/test
 dawn-springboot/target
 release/*.jar
 release/vue

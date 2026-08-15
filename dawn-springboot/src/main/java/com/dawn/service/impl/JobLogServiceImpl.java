@@ -52,7 +52,7 @@ public class JobLogServiceImpl extends ServiceImpl<JobLogMapper, JobLog> impleme
 
     @Override
     public void cleanJobLogs() {
-        jobLogMapper.delete(null);
+        jobLogMapper.delete(new LambdaQueryWrapper<JobLog>().isNotNull(JobLog::getId));
     }
 
     @Override

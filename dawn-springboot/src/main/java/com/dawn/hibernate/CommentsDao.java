@@ -3,8 +3,6 @@ package com.dawn.hibernate;
 import com.dawn.entity.Comment;
 import com.dawn.model.vo.CommentVO;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.StatelessSession;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
@@ -16,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class CommentsDao extends GenericDao<Comment, Long> {
+public class CommentsDao extends GenericDao<Comment, Integer> {
     public CommentsDao() {
         super(Comment.class);
     }
@@ -60,44 +58,27 @@ public class CommentsDao extends GenericDao<Comment, Long> {
     }
 
     public Integer getCommentsCountUsingHibernateAPI(CommentVO commentVO) {
-        // 1. HQL（Hibernate Query Language，JPA 也支持 JPQL 这一子集）
-        Long count1 = em.createQuery(
-                "select count(c) from Comment c where c.type = :type and c.isDelete = 0",
-                Long.class
-        ).setParameter("type", commentVO.getType()).getSingleResult();
-
-        // 2. Hibernate Session + 原生 SQL
         Session session = em.unwrap(Session.class);
-        Integer count2 = ((Number) session.createNativeQuery(
-                        "SELECT COUNT(*) FROM t_comment WHERE type = :type AND is_delete = 0")
-                .setParameter("type", commentVO.getType())
-                .getSingleResult()
-        ).intValue();
-
-        // 3. Hibernate 特有 Hint / Fetch Size / Scroll
-        Session session2 = em.unwrap(Session.class);
-        Query<Comment> q = session.createQuery("from Comment c where c.isDelete = 0", Comment.class)
-                .setFetchSize(200)
-                .setHint("org.hibernate.cacheable", true);
-        List<Comment> list = q.list();
-
-        // 4. StatelessSession（大批量只读/批量写优化）
-        SessionFactory sf = em.getEntityManagerFactory().unwrap(SessionFactory.class);
-        try (StatelessSession ss = sf.openStatelessSession()) {
-            List<Object[]> rows = ss.createNativeQuery("select id, comment_content from t_comment").list();
+        StringBuilder hql = new StringBuilder("""
+                select count(comment)
+                from Comment comment
+                where comment.isDelete = 0
+                  and comment.isReview = 1
+                  and comment.parentId is null
+                """);
+        if (commentVO.getType() != null) {
+            hql.append(" and comment.type = :type");
         }
-
-        return count2;
+        if (commentVO.getTopicId() != null) {
+            hql.append(" and comment.topicId = :topicId");
+        }
+        Query<Long> query = session.createQuery(hql.toString(), Long.class);
+        if (commentVO.getType() != null) {
+            query.setParameter("type", commentVO.getType());
+        }
+        if (commentVO.getTopicId() != null) {
+            query.setParameter("topicId", commentVO.getTopicId());
+        }
+        return query.getSingleResult().intValue();
     }
-
-//    public Integer getCommentsCountHibernate(CommentVO vo) {
-//        Session session = em.unwrap(Session.class);
-//        StringBuilder hql = new StringBuilder(\"select count(c) from Comment c where c.isDelete = 0\");
-//        if (vo.getType() != null) hql.append(\" and c.type = :type\");
-//        if (vo.getTopicId() != null) hql.append(\" and c.topicId = :topicId \");
-//                Query<Long> q = session.createQuery(hql.toString(), Long.class);
-//        if (vo.getType() != null) q.setParameter(\"type\", vo.getType());
-//        if (vo.getTopicId() != null) q.setParameter(\"topicId\", vo.getTopicId());
-//        return q.getSingleResult().intValue();
-//    }
 }

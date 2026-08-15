@@ -925,6 +925,55 @@ CREATE TABLE `t_exception_log`  (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
+-- ----------------------------
+-- Spring Data JPA / Hibernate feature examples
+-- ----------------------------
+DROP TABLE IF EXISTS `t_jpa_feature_article`;
+DROP TABLE IF EXISTS `t_jpa_feature_author`;
+
+CREATE TABLE `t_jpa_feature_author` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) NOT NULL,
+  `version` bigint NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `uk_jpa_feature_author_name` (`name` ASC)
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+
+CREATE TABLE `t_jpa_feature_article` (
+  `id` binary(16) NOT NULL,
+  `author_id` bigint NOT NULL,
+  `title` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `status` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `published_at` datetime(6) NULL DEFAULT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) NOT NULL,
+  `version` bigint NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  INDEX `idx_jpa_feature_article_author` (`author_id` ASC),
+  INDEX `idx_jpa_feature_article_status_created` (`status` ASC, `created_at` DESC),
+  CONSTRAINT `fk_jpa_feature_article_author`
+    FOREIGN KEY (`author_id`) REFERENCES `t_jpa_feature_author` (`id`) ON DELETE CASCADE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- MyBatis-Plus feature example
+-- ----------------------------
+DROP TABLE IF EXISTS `t_mp_feature_record`;
+CREATE TABLE `t_mp_feature_record` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `status` int NOT NULL DEFAULT 0,
+  `version` int NOT NULL DEFAULT 0,
+  `deleted` tinyint(1) NOT NULL DEFAULT 0,
+  `create_time` datetime(6) NOT NULL,
+  `update_time` datetime(6) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `idx_mp_feature_status_deleted` (`status` ASC, `deleted` ASC)
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+
 
 DROP PROCEDURE IF EXISTS `CleanHistoryData`;
 

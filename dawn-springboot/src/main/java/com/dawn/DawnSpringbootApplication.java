@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
-@MapperScan("com.dawn.mapper")
+@MapperScan({"com.dawn.mapper", "com.dawn.persistence.mybatis.mapper"})
 public class DawnSpringbootApplication {
 
     public static void main(String[] args) {

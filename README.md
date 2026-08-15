@@ -8,7 +8,7 @@
 
 * **开发语言**: Java 17
 * **Web 框架**: Spring Boot 3.4.2
-* **ORM 框架**: MyBatis Plus 3.5.5
+* **持久层框架**: MyBatis-Plus 3.5.5、Spring Data JPA 3.4、Hibernate 6.6
 * **安全框架**: Spring Security 6 (配合 JWT 实现无状态认证)
 * **API 文档**: Knife4j 4.5.0 (基于 OpenAPI 3 / SpringDoc)
 
@@ -131,6 +131,28 @@ java -jar target/dawn-springboot-1.0.jar
 ```
 
 启动成功后，访问 API 文档：`http://localhost:8080/doc.html`
+
+---
+
+## 🧪 持久层特性示例
+
+项目提供彼此隔离的 Spring Data JPA/Hibernate 与 MyBatis-Plus 示例模型，避免两个
+Persistence Context 同时修改同一张业务表。示例覆盖 Repository、Specification、
+EntityGraph、审计、乐观锁、Hibernate 原生 API、批处理、二级缓存、逻辑删除、
+枚举映射、分页和防全表更新/删除。
+
+```bash
+# 运行全部持久层特性测试
+./dawn-springboot/scripts/test-persistence-features.sh all
+
+# 也可以按框架运行
+./dawn-springboot/scripts/test-persistence-features.sh jpa
+./dawn-springboot/scripts/test-persistence-features.sh hibernate
+./dawn-springboot/scripts/test-persistence-features.sh mybatis-plus
+```
+
+详细特性矩阵与使用边界见
+[`docs/learning/persistence-frameworks.md`](docs/learning/persistence-frameworks.md)。
 
 ---
 

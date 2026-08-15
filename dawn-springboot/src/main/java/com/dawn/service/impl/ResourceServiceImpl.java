@@ -50,8 +50,9 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void importSwagger() {
-        this.remove(null);
-        roleResourceMapper.delete(null);
+        this.remove(new LambdaQueryWrapper<Resource>().isNotNull(Resource::getId));
+        roleResourceMapper.delete(
+                new LambdaQueryWrapper<RoleResource>().isNotNull(RoleResource::getId));
         List<Resource> resources = new ArrayList<>();
         Map<String, Object> data = restTemplate.getForObject("http://localhost:8080/v3/api-docs", Map.class);
         List<Map<String, String>> tagList = (List<Map<String, String>>) data.get("tags");

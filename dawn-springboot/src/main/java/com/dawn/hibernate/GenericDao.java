@@ -2,7 +2,7 @@ package com.dawn.hibernate;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +14,7 @@ public abstract class GenericDao<T, ID> {
     // Spring 会自动管理其生命周期和事务绑定
     @PersistenceContext
     protected EntityManager em;
-    private Class<T> clazz;
+    private final Class<T> clazz;
 
     protected GenericDao(Class<T> clazz) {
         this.clazz = clazz;
@@ -61,8 +61,8 @@ public abstract class GenericDao<T, ID> {
         em.remove(em.contains(entity) ? entity : em.merge(entity));
     }
 
+    @Transactional
     public void deleteById(ID id) {
-//        em.remove(em.find(clazz, id));
         findById(id).ifPresent(this::delete);
     }
 }
